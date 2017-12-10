@@ -2,7 +2,6 @@
 .unit {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
 }
 
 .unit .unit-info {
@@ -23,4 +22,8 @@
 
 .unit-info p {
     margin: 0;
+}
+
+.unit-info h4 {
+    margin-top: 5px;
 }

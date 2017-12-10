@@ -51,6 +51,18 @@ class App : RComponent<RProps, AppState>() {
             }
         }
 
+        p {
+            +"All images and data is copyrighted by "
+            a("http://legiontd2.com") {
+                +"Legion 2 TD"
+            }
+            +". For the source code see "
+            a(href = "https://github.com/attrib/legion2-builder") {
+                +"https://github.com/attrib/legion2-builder"
+            }
+            +"."
+        }
+
         if (!state.loaded) {
             div {
                 +"Loading data"
@@ -180,7 +192,7 @@ class App : RComponent<RProps, AppState>() {
                             }
                         }
                     }
-                    div {
+                    div("selection") {
                         h3 { +"available" }
 
                         if (state.build.legion == null) {
@@ -227,7 +239,7 @@ class App : RComponent<RProps, AppState>() {
                             }
                         }
                     }
-                    div {
+                    div("selection") {
                         h3 { +"available" }
                         ul {
                             for ((id, unit) in state.game.mercenaries) {

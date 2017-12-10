@@ -6,6 +6,8 @@ import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.dom.div
+import react.dom.h4
+import react.dom.img
 import react.dom.p
 
 interface UnitEventHandler {
@@ -18,8 +20,14 @@ fun RBuilder.unitUi(id: String, unit: Unit, unitEventHandler: UnitEventHandler) 
         attrs.onClickFunction = {
             unitEventHandler.onClick(unit)
         }
-        +unit.name
+        img(alt = unit.name, src = unit.iconpath) {
+            attrs {
+                width = "64px"
+                height = "64px"
+            }
+        }
         div("unit-info") {
+            h4 { +unit.name }
             p {
                 +"HP: "
                 +unit.hp.toString()

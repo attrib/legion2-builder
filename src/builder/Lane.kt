@@ -8,11 +8,11 @@ class Lane {
     private val mercenaries: MutableList<Unit> = mutableListOf()
 
     fun getTotalHp(level: Int): Int {
-        return fighters.sumBy { if (it.buildLevel!! <= level) it.hp else 0 }
+        return fighters.filter { !it.name.contains("Worker") }.sumBy { if (it.buildLevel!! <= level) it.hp else 0 }
     }
 
     fun getTotalDps(level: Int): Double {
-        return fighters.sumByDouble { if (it.buildLevel!! <= level) it.dps else 0.0 }
+        return fighters.filter { !it.name.contains("Worker") }.sumByDouble { if (it.buildLevel!! <= level) it.dps else 0.0 }
     }
 
     fun getCosts(level: Int): Int {

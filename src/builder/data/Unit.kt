@@ -26,7 +26,7 @@ class Unit(val json: Json) {
         val isenabled: String by jp(json)
         val legion_id: String by jp(json)
 
-        val isEnabled: Boolean get() = isenabled == "True"
+        val isEnabled: Boolean get() = isenabled == "True" && !name.startsWith("Test")
         var buildLevel: Int? = null
         var amount = 1
 

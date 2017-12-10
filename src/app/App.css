@@ -45,10 +45,20 @@ body {
   display: flex;
 }
 
+.lane > div:first-child {
+  flex-grow: 2;
+}
+
 .lane > div {
   flex-grow: 1;
 }
 
 .lane ul {
   list-style: none;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.area .selection {
+  min-width: 150px;
 }
