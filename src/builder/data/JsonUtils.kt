@@ -63,10 +63,10 @@ class JsonObjectPropertyLoader<T>(val json: Json, val name: String? = null, val 
 }
 
 fun jpInt(json: Json, name: String? = null) =
-        JsonPropertyLoader(json, name, { (it as String).toInt() })
+        JsonPropertyLoader(json, name, { (it as String).toIntOrNull() ?: 0 })
 
 fun jpDouble(json: Json, name: String? = null) =
-        JsonPropertyLoader(json, name, { (it as String).toDouble() })
+        JsonPropertyLoader(json, name, { (it as String).toDoubleOrNull() ?: 0.0 })
 
 fun <T> jp(json: Json, factory: (Any?) -> T = { it as T }, name: String? = null): JsonPropertyLoader<T> {
     return JsonPropertyLoader(json, name, factory)

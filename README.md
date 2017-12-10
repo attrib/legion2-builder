@@ -4,6 +4,8 @@ See live version [attrib.github.io](https://attrib.github.io)
 
 Test your build before playing [Legion 2 TD](https://legiontd2.com)
 
+All images and data is copyrighted by [Legion 2 TD](https://legiontd2.com)
+
 ## Working
 
 * Read values from Legion 2 TD map file (currently 1.62)
