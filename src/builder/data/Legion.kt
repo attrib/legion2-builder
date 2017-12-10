@@ -1,10 +1,11 @@
 package builder.data
 
-class Legion(
-        val name: String,
-        val iconpath: String,
-        val playable: String
-) {
+import kotlin.js.Json
+
+class Legion(json: Json) {
+    val name: String by jp(json)
+    val iconpath: String by jp(json)
+    val playable: String by jp(json)
 
     val fighters: MutableMap<String, Unit> = mutableMapOf()
 

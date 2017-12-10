@@ -1,10 +1,10 @@
 package builder.data
 
 enum class DefenseType {
-    SWIFT,
-    NATURAL,
-    FORTIFIED,
-    ARCANE,
-    IMMATERIAL,
-    UNKNOWN,
+    Swift,
+    Natural,
+    Fortified,
+    Arcane,
+    Immaterial,
+    Unknown,
 }
