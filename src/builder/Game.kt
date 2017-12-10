@@ -9,8 +9,6 @@ interface GameEventHandler {
     fun loaded()
 }
 
-data class test(val a:String, val b:List<String>, val c: Map<String, String>)
-
 class Game(gameEventHandler: GameEventHandler) {
 
     val legions: MutableMap<String, Legion> = mutableMapOf()

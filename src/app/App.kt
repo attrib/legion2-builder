@@ -3,12 +3,13 @@ package app
 import builder.Build
 import builder.Game
 import builder.GameEventHandler
-import builder.data.Unit
-import builder.data.UnitClass
-import kotlinx.html.id
+import builder.ui.unitUi
+import kotlinx.html.InputType
+import kotlinx.html.js.onChangeFunction
+import logo.logo
+import org.w3c.dom.HTMLInputElement
 import react.*
 import react.dom.*
-import logo.*
 
 //import ticker.*
 
@@ -26,8 +27,8 @@ class App : RComponent<RProps, AppState>() {
                 setState {
                     loaded = true
                     build = Build()
-                    build.legionId = "element_legion_id";
-                    build.legion = game.legions["element_legion_id"];
+                    build.legionId = "element_legion_id"
+                    build.legion = game.legions["element_legion_id"]
                 }
             }
         })
@@ -51,19 +52,24 @@ class App : RComponent<RProps, AppState>() {
         div("info") {
             div {
                 h3 { +"Select Legion" }
-                select {
-                    for ((legionId, legion) in state.game.legions) {
-                        if (!legion.isPlayable()) {
-                            continue
-                        }
-                        option {
-                            attrs.value = legionId
-                            if (state.build.legionId == legionId) {
-                                attrs.selected = true
+                for ((legionId, legion) in state.game.legions) {
+                    if (!legion.isPlayable()) {
+                        continue
+                    }
+                    input(type = InputType.radio, name = "legion") {
+                        attrs.onChangeFunction = {
+                            val target = it.target as HTMLInputElement
+                            setState {
+                                build.legionId = target.value
+                                build.legion = game.legions[build.legionId]
                             }
-                            +legion.name
+                        }
+                        attrs.value = legionId
+                        if (state.build.legionId == legionId) {
+                            attrs.checked = true
                         }
                     }
+                    +legion.name
                 }
             }
             div {
@@ -146,42 +152,3 @@ class App : RComponent<RProps, AppState>() {
 }
 
 fun RBuilder.app() = child(App::class) {}
-
-fun RBuilder.unitUi(id: String, unit: Unit) {
-    div("unit") {
-        attrs.id = id
-        +unit.name
-        div("unit-info") {
-            p {
-                +"HP: "
-                +unit.hp.toString()
-            }
-            p {
-                +"DPS: "
-                +(unit.dps ?: 0.0).toString()
-            }
-            p {
-                +"Costs: "
-                +when (unit.unitClass) {
-                    UnitClass.Fighter -> (unit.totalvalue ?: 0).toString()
-                    UnitClass.Mercenary -> (unit.mythiumcost ?: 0).toString()
-                    else -> ""
-                }
-            }
-            if (unit.unitClass == UnitClass.Fighter) {
-                p {
-                    +"Food: "
-                    +(unit.totalfood ?: 0).toString()
-                }
-            }
-            p {
-                +"AttackType: "
-                +unit.attackType.toString()
-            }
-            p {
-                +"DefenseType: "
-                +unit.armorType.toString()
-            }
-        }
-    }
-}
