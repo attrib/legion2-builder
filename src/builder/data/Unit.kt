@@ -2,7 +2,7 @@ package builder.data
 
 import kotlin.js.Json
 
-class Unit(json: Json) {
+class Unit(val json: Json) {
         val name: String by jp(json)
         val legion: List<String> by jp(json)
         val description: String by jp(json)
@@ -27,5 +27,14 @@ class Unit(json: Json) {
         val legion_id: String by jp(json)
 
         val isEnabled: Boolean get() = isenabled == "True"
+        var buildLevel: Int? = null
+        var amount = 1
 
+
+        fun copy(): Unit {
+                val cloned = Unit(json)
+                cloned.buildLevel = buildLevel
+                cloned.amount = amount
+                return cloned
+        }
 }

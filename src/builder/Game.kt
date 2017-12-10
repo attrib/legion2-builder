@@ -14,7 +14,7 @@ class Game(gameEventHandler: GameEventHandler) {
     val mercenaries: MutableMap<String, Unit> = mutableMapOf()
     val creatures: MutableMap<String, Unit> = mutableMapOf()
     val globals: MutableMap<String, Global> = mutableMapOf()
-    var defaultGlobal: String = ""
+    val waves: MutableMap<Int, Wave> = mutableMapOf()
 
     init {
         val request = XMLHttpRequest()
@@ -37,10 +37,28 @@ class Game(gameEventHandler: GameEventHandler) {
                     legions.forEach { it.value.fighters[e.key] = e.value }
                 }
 
+                for ((key, wave) in foo.waves) {
+                    if (creatures.containsKey(wave.unit_id)) {
+                        val creature = creatures[wave.unit_id]!!
+                        creature.amount = wave.amount
+                        wave.creatures.add(creature)
+                    }
+                    if (creatures.containsKey(wave.spellunit2_id)) {
+                        val creature = creatures[wave.spellunit2_id]!!
+                        creature.amount = wave.amount2
+                        wave.creatures.add(creature)
+                    }
+                    waves.put(wave.levelnum, wave)
+                }
+
                 gameEventHandler.loaded()
             }
         }
         request.send()
+    }
+
+    fun getWave(level: Int): Wave? {
+        return waves[level]
     }
 
 }

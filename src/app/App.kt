@@ -31,19 +31,23 @@ class App : RComponent<RProps, AppState>() {
             override fun loaded() {
                 setState {
                     loaded = true
-                    build = Build()
-                    build.legionId = "element_legion_id"
-                    build.legion = game.legions["element_legion_id"]
+                    resetBuild()
                 }
             }
         })
+    }
+
+    fun AppState.resetBuild() {
+        build = Build(game.waves)
+        build.legionId = "element_legion_id"
+        build.legion = game.legions["element_legion_id"]
     }
 
     override fun RBuilder.render() {
         div("App-header") {
             logo()
             h1 {
-                +"Welcome to Legion 2 Builder"
+                +"Welcome to Legion TD 2 Builder"
             }
         }
 
@@ -82,9 +86,7 @@ class App : RComponent<RProps, AppState>() {
                     +"reset"
                     attrs.onClickFunction = {
                         setState {
-                            build = Build()
-                            build.legionId = "element_legion_id"
-                            build.legion = game.legions["element_legion_id"]
+                            resetBuild()
                         }
                     }
                 }
@@ -97,11 +99,15 @@ class App : RComponent<RProps, AppState>() {
                 h3 { +"Lane info" }
                 p {
                     +"Total HP: "
-                    +state.build.lane.totalHp.toString()
+                    +state.build.totalHp.toString()
                 }
                 p {
                     +"Total DPS: "
-                    +state.build.lane.totalDps.format(2)
+                    +state.build.totalDps.format(2)
+                }
+                p {
+                    +"Survivability Chance: "
+                    +state.build.survivability(state.game.getWave(state.build.currentLevel)!!)
                 }
             }
             div {
@@ -118,6 +124,10 @@ class App : RComponent<RProps, AppState>() {
                     +"Available: "
                     +state.build.available.toString()
                 }
+                p {
+                    +"Income: "
+                    +state.build.income.toString()
+                }
             }
             div {
                 h3 { +"Wave Info" }
@@ -126,14 +136,24 @@ class App : RComponent<RProps, AppState>() {
                     +state.build.currentLevel.toString()
                 }
                 p {
-                    +"Income: "
-                    +state.build.income.toString()
+                    +"Total HP: "
+                    +state.game.getWave(state.build.currentLevel)!!.totalHp.toString()
+                }
+                p {
+                    +"Total DPS: "
+                    +state.game.getWave(state.build.currentLevel)!!.totalDps.format(2)
                 }
                 button {
                     +"+"
+                    attrs.onClickFunction = {
+                        setState { state.build.levelIncrease() }
+                    }
                 }
                 button {
                     +"-"
+                    attrs.onClickFunction = {
+                        setState { state.build.levelDecrease() }
+                    }
                 }
             }
         }
@@ -144,14 +164,14 @@ class App : RComponent<RProps, AppState>() {
                 div("lane") {
                     div {
                         h3 { +"build area" }
-                        if (state.build.lane.fighters.size > 0) {
+                        if (state.build.getFighters().isNotEmpty()) {
                             ul {
-                                for (unit in state.build.lane.fighters) {
+                                for ((index, unit) in state.build.getFighters()) {
                                     li {
                                         unitUi("", unit, object : UnitEventHandler {
                                             override fun onClick(unit: Unit) {
                                                 setState {
-                                                    build.lane.fighters.remove(unit)
+                                                    build.removeFighter(index)
                                                 }
                                             }
                                         })
@@ -173,7 +193,7 @@ class App : RComponent<RProps, AppState>() {
                                             unitUi(id, unit, object : UnitEventHandler {
                                                 override fun onClick(unit: Unit) {
                                                     setState {
-                                                        build.lane.fighters.add(unit)
+                                                        build.addFighter(unit)
                                                     }
                                                 }
                                             })
@@ -191,14 +211,14 @@ class App : RComponent<RProps, AppState>() {
                 div("lane") {
                     div {
                         h3 { +"selected" }
-                        if (state.build.lane.mercenaries.size > 0) {
+                        if (state.build.getMerchenaries().isNotEmpty()) {
                             ul {
-                                for (unit in state.build.lane.mercenaries) {
+                                for ((index, unit) in state.build.getMerchenaries()) {
                                     li {
                                         unitUi("", unit, object : UnitEventHandler {
                                             override fun onClick(unit: Unit) {
                                                 setState {
-                                                    build.lane.mercenaries.remove(unit)
+                                                    build.removeMerchenary(index)
                                                 }
                                             }
                                         })
@@ -216,7 +236,7 @@ class App : RComponent<RProps, AppState>() {
                                         unitUi(id, unit, object : UnitEventHandler {
                                             override fun onClick(unit: Unit) {
                                                 setState {
-                                                    build.lane.mercenaries.add(unit)
+                                                    build.addMerchenary(unit)
                                                 }
                                             }
                                         })
