@@ -48,13 +48,16 @@ class App : RComponent<RProps, AppState>() {
             div {
                 h3 { +"Select Legion" }
                 select {
-                    for (legionId in state.game.data.legions.keys) {
+                    for (legionId in state.game.legions.keys) {
+                        if (!state.game.legions[legionId]!!.isPlayable()) {
+                            continue
+                        }
                         option {
                             attrs.value = legionId
                             if (state.build.legionId == legionId) {
                                 attrs.selected = true
                             }
-                            +state.game.data.legions[legionId]!!.name
+                            +state.game.legions[legionId]!!.name
                         }
                     }
                 }
@@ -96,13 +99,18 @@ class App : RComponent<RProps, AppState>() {
                 h2 { +"Lane" }
                 div("lane") {
                     div {
-                        h3 {+"build area"}
+                        h3 { +"build area" }
                     }
                     div {
                         h3 { +"available" }
-                        ul {
-                            for (unit in state.build.legion!!.creatures) {
-                                li { unitUi(unit) }
+
+                        if (state.build.legion == null) {
+                            +"Please select legion"
+                        } else {
+                            ul {
+                                for (unit in state.build.legion!!.creatures) {
+                                    li { unitUi(unit) }
+                                }
                             }
                         }
                     }
@@ -113,10 +121,10 @@ class App : RComponent<RProps, AppState>() {
                 h2 { +"Mercenaries" }
                 div("lane") {
                     div {
-                        h3 {+"selected"}
+                        h3 { +"selected" }
                     }
                     div {
-                        h3 {+"available"}
+                        h3 { +"available" }
                         ul {
                             for (unit in state.game.mercenaries) {
                                 li { unitUi(unit) }
