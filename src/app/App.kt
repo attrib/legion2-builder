@@ -3,15 +3,20 @@ package app
 import builder.Build
 import builder.Game
 import builder.GameEventHandler
+import builder.data.Unit
+import builder.ui.UnitEventHandler
 import builder.ui.unitUi
 import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
+import kotlinx.html.js.onClickFunction
 import logo.logo
 import org.w3c.dom.HTMLInputElement
 import react.*
 import react.dom.*
 
 //import ticker.*
+
+fun Double.format(digits: Int): String = this.asDynamic().toFixed(digits)
 
 interface AppState : RState {
     var build: Build
@@ -52,35 +57,62 @@ class App : RComponent<RProps, AppState>() {
         div("info") {
             div {
                 h3 { +"Select Legion" }
-                for ((legionId, legion) in state.game.legions) {
-                    if (!legion.isPlayable()) {
-                        continue
-                    }
-                    input(type = InputType.radio, name = "legion") {
-                        attrs.onChangeFunction = {
-                            val target = it.target as HTMLInputElement
-                            setState {
-                                build.legionId = target.value
-                                build.legion = game.legions[build.legionId]
+                p {
+                    for ((legionId, legion) in state.game.legions) {
+                        if (!legion.isPlayable()) {
+                            continue
+                        }
+                        input(type = InputType.radio, name = "legion") {
+                            attrs.onChangeFunction = {
+                                val target = it.target as HTMLInputElement
+                                setState {
+                                    build.legionId = target.value
+                                    build.legion = game.legions[build.legionId]
+                                }
+                            }
+                            attrs.value = legionId
+                            if (state.build.legionId == legionId) {
+                                attrs.checked = true
                             }
                         }
-                        attrs.value = legionId
-                        if (state.build.legionId == legionId) {
-                            attrs.checked = true
+                        +legion.name
+                    }
+                }
+                button {
+                    +"reset"
+                    attrs.onClickFunction = {
+                        setState {
+                            build = Build()
+                            build.legionId = "element_legion_id"
+                            build.legion = game.legions["element_legion_id"]
                         }
                     }
-                    +legion.name
+                }
+                a(href = "") {
+                    +"Link"
+                }
+
+            }
+            div {
+                h3 { +"Lane info" }
+                p {
+                    +"Total HP: "
+                    +state.build.lane.totalHp.toString()
+                }
+                p {
+                    +"Total DPS: "
+                    +state.build.lane.totalDps.format(2)
                 }
             }
             div {
                 h3 { +"Build info" }
                 p {
-                    +"Level: "
-                    +state.build.currentLevel.toString()
-                }
-                p {
                     +"Cost: "
                     +state.build.costs.toString()
+                }
+                p {
+                    +"Food: "
+                    +state.build.foodCosts.toString()
                 }
                 p {
                     +"Available: "
@@ -88,18 +120,20 @@ class App : RComponent<RProps, AppState>() {
                 }
             }
             div {
-                h3 { +"Actions" }
+                h3 { +"Wave Info" }
+                p {
+                    +"Level: "
+                    +state.build.currentLevel.toString()
+                }
+                p {
+                    +"Income: "
+                    +state.build.income.toString()
+                }
                 button {
                     +"+"
                 }
                 button {
                     +"-"
-                }
-                button {
-                    +"reset"
-                }
-                a(href = "") {
-                    +"Link"
                 }
             }
         }
@@ -110,6 +144,21 @@ class App : RComponent<RProps, AppState>() {
                 div("lane") {
                     div {
                         h3 { +"build area" }
+                        if (state.build.lane.fighters.size > 0) {
+                            ul {
+                                for (unit in state.build.lane.fighters) {
+                                    li {
+                                        unitUi("", unit, object : UnitEventHandler {
+                                            override fun onClick(unit: Unit) {
+                                                setState {
+                                                    build.lane.fighters.remove(unit)
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
+                            }
+                        }
                     }
                     div {
                         h3 { +"available" }
@@ -120,7 +169,15 @@ class App : RComponent<RProps, AppState>() {
                             ul {
                                 for ((id, unit) in state.build.legion!!.fighters) {
                                     if (unit.isEnabled) {
-                                        li { unitUi(id, unit) }
+                                        li {
+                                            unitUi(id, unit, object : UnitEventHandler {
+                                                override fun onClick(unit: Unit) {
+                                                    setState {
+                                                        build.lane.fighters.add(unit)
+                                                    }
+                                                }
+                                            })
+                                        }
                                     }
                                 }
                             }
@@ -134,13 +191,36 @@ class App : RComponent<RProps, AppState>() {
                 div("lane") {
                     div {
                         h3 { +"selected" }
+                        if (state.build.lane.mercenaries.size > 0) {
+                            ul {
+                                for (unit in state.build.lane.mercenaries) {
+                                    li {
+                                        unitUi("", unit, object : UnitEventHandler {
+                                            override fun onClick(unit: Unit) {
+                                                setState {
+                                                    build.lane.mercenaries.remove(unit)
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
+                            }
+                        }
                     }
                     div {
                         h3 { +"available" }
                         ul {
                             for ((id, unit) in state.game.mercenaries) {
                                 if (unit.isEnabled) {
-                                    li { unitUi(id, unit) }
+                                    li {
+                                        unitUi(id, unit, object : UnitEventHandler {
+                                            override fun onClick(unit: Unit) {
+                                                setState {
+                                                    build.lane.mercenaries.add(unit)
+                                                }
+                                            }
+                                        })
+                                    }
                                 }
                             }
                         }

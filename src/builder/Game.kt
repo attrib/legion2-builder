@@ -98,6 +98,11 @@ class Game(gameEventHandler: GameEventHandler) {
                             }
                             unit.legion_id
                         }
+                        UnitClass.Worker -> {
+                            for (legion in legions) {
+                                legion.value.fighters.put(k, unit)
+                            }
+                        }
                     }
                 }
 

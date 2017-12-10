@@ -3,13 +3,21 @@ package builder.ui
 import builder.data.Unit
 import builder.data.UnitClass
 import kotlinx.html.id
+import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.dom.div
 import react.dom.p
 
-fun RBuilder.unitUi(id: String, unit: Unit) {
+interface UnitEventHandler {
+    fun onClick(unit: Unit)
+}
+
+fun RBuilder.unitUi(id: String, unit: Unit, unitEventHandler: UnitEventHandler) {
     div("unit") {
         attrs.id = id
+        attrs.onClickFunction = {
+            unitEventHandler.onClick(unit)
+        }
         +unit.name
         div("unit-info") {
             p {
@@ -23,12 +31,13 @@ fun RBuilder.unitUi(id: String, unit: Unit) {
             p {
                 +"Costs: "
                 +when (unit.unitClass) {
+                    UnitClass.Worker -> (unit.totalvalue ?: 0).toString()
                     UnitClass.Fighter -> (unit.totalvalue ?: 0).toString()
                     UnitClass.Mercenary -> (unit.mythiumcost ?: 0).toString()
                     else -> ""
                 }
             }
-            if (unit.unitClass == UnitClass.Fighter) {
+            if (unit.unitClass == UnitClass.Fighter || unit.unitClass == UnitClass.Worker) {
                 p {
                     +"Food: "
                     +(unit.totalfood ?: 0).toString()
