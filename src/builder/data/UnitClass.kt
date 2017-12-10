@@ -6,5 +6,9 @@ enum class UnitClass {
     Mercenary,
     None,
     King,
-    Worker
+    Worker;
+
+    companion object {
+
+    }
 }

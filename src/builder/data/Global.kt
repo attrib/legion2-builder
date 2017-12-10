@@ -1,10 +1,12 @@
 package builder.data
 
-data class Global(
-        val name: String,
-        val attackchartpierce: String,
-        val attackchartnormal: String,
-        val attackchartmagic: String,
-        val attackchartsiege: String,
-        val attackchartchaos: String
-)
+import kotlin.js.Json
+
+class Global(json: Json) {
+    val name: String by jp(json)
+    val attackchartpierce: String by jp(json)
+    val attackchartnormal: String by jp(json)
+    val attackchartmagic: String by jp(json)
+    val attackchartsiege: String by jp(json)
+    val attackchartchaos: String by jp(json)
+}

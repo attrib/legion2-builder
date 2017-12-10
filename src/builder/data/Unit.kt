@@ -1,53 +1,31 @@
 package builder.data
 
-class Unit(
-        val name: String,
-        val legion: List<String>,
-        val description: String,
-        val iconpath: String,
-        val hp: Int,
-        val dps: Double?,
-        val attackType: AttackType,
-        val armorType: DefenseType,
-        val attackMode: String,
-        val range: Int?,
-        val unitClass: UnitClass,
-        val upgradesTo: List<String>,
-        val upgradesFrom: List<String>,
-        val goldcost: Int?,
-        val foodcost: Int?,
-        val totalvalue: Int?,
-        val totalfood: Int?,
-        val goldvalue: Int?,
-        val mythiumcost: Int?,
-        val incomebonus: Int?,
-        val isenabled: String,
-        val legion_id: String
-        )
-{
+import kotlin.js.Json
+
+class Unit(json: Json) {
+        val name: String by jp(json)
+        val legion: List<String> by jp(json)
+        val description: String by jp(json)
+        val iconpath: String by jp(json)
+        val hp: Int by jpInt(json)
+        val dps: Double by jpDouble(json)
+        val attackType: AttackType? by jp(json, { s -> AttackType.values().find { it.name == s as String } })
+        val armorType: DefenseType? by jp(json, { s -> DefenseType.values().find { it.name == s as String } })
+        val attackMode: String? by jp(json)
+        val range: Int by jpInt(json)
+        val unitClass: UnitClass? by jp(json, { UnitClass.valueOf(it as String) })
+        val upgradesTo: List<String> by jp(json)
+        val upgradesFrom: List<String> by jp(json)
+        val goldcost: Int by jpInt(json)
+        val foodcost: Int by jpInt(json)
+        val totalvalue: Int? by jpInt(json)
+        val totalfood: Int? by jpInt(json)
+        val goldvalue: Int? by jpInt(json)
+        val mythiumcost: Int? by jpInt(json)
+        val incomebonus: Int? by jpInt(json)
+        val isenabled: String by jp(json)
+        val legion_id: String by jp(json)
 
         val isEnabled: Boolean get() = isenabled == "True"
 
 }
-
-/*
-
-                            unitJson["hp"] as Int,
-                            unitJson["dps"] as Float,
-                            attackType,
-                            armorType,
-                            unitJson["attackmode"] as String,
-                            unitJson["range"] as Int,
-                            unitClass,
-                            mutableListOf(),
-                            mutableListOf(),
-                            unitJson["goldcost"] as Int,
-                            unitJson["foodcost"] as Int,
-                            unitJson["totalvalue"] as Int,
-                            unitJson["totalfood"] as Int,
-                            unitJson["goldvalue"] as Int,
-                            unitJson["mythiumcost"] as Int,
-                            unitJson["incomebonus"] as Int,
-
-
- */
