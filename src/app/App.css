@@ -33,6 +33,10 @@ body {
   display: flex;
 }
 
+.area > div:first-child {
+  flex-grow: 2;
+}
+
 .area > div {
   flex-grow: 1;
 }
@@ -43,6 +47,10 @@ body {
 
 .lane > div {
   flex-grow: 1;
+}
+
+.lane ul {
+  list-style: none;
 }
 
 .unit {

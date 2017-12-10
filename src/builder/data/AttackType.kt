@@ -5,4 +5,5 @@ enum class AttackType {
     PIERCE,
     MAGIC,
     PURE,
+    UNKNOWN
 }

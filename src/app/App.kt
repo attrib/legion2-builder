@@ -4,6 +4,8 @@ import builder.Build
 import builder.Game
 import builder.GameEventHandler
 import builder.data.Unit
+import builder.data.UnitClass
+import kotlinx.html.id
 import react.*
 import react.dom.*
 import logo.*
@@ -24,6 +26,8 @@ class App : RComponent<RProps, AppState>() {
                 setState {
                     loaded = true
                     build = Build()
+                    build.legionId = "element_legion_id";
+                    build.legion = game.legions["element_legion_id"];
                 }
             }
         })
@@ -48,8 +52,8 @@ class App : RComponent<RProps, AppState>() {
             div {
                 h3 { +"Select Legion" }
                 select {
-                    for (legionId in state.game.legions.keys) {
-                        if (!state.game.legions[legionId]!!.isPlayable()) {
+                    for ((legionId, legion) in state.game.legions) {
+                        if (!legion.isPlayable()) {
                             continue
                         }
                         option {
@@ -57,7 +61,7 @@ class App : RComponent<RProps, AppState>() {
                             if (state.build.legionId == legionId) {
                                 attrs.selected = true
                             }
-                            +state.game.legions[legionId]!!.name
+                            +legion.name
                         }
                     }
                 }
@@ -108,8 +112,10 @@ class App : RComponent<RProps, AppState>() {
                             +"Please select legion"
                         } else {
                             ul {
-                                for (unit in state.build.legion!!.creatures) {
-                                    li { unitUi(unit) }
+                                for ((id, unit) in state.build.legion!!.fighters) {
+                                    if (unit.isEnabled) {
+                                        li { unitUi(id, unit) }
+                                    }
                                 }
                             }
                         }
@@ -126,8 +132,10 @@ class App : RComponent<RProps, AppState>() {
                     div {
                         h3 { +"available" }
                         ul {
-                            for (unit in state.game.mercenaries) {
-                                li { unitUi(unit) }
+                            for ((id, unit) in state.game.mercenaries) {
+                                if (unit.isEnabled) {
+                                    li { unitUi(id, unit) }
+                                }
                             }
                         }
                     }
@@ -139,21 +147,32 @@ class App : RComponent<RProps, AppState>() {
 
 fun RBuilder.app() = child(App::class) {}
 
-fun RBuilder.unitUi(unit: Unit) {
+fun RBuilder.unitUi(id: String, unit: Unit) {
     div("unit") {
+        attrs.id = id
         +unit.name
         div("unit-info") {
             p {
                 +"HP: "
-                +unit.hp
+                +unit.hp.toString()
             }
             p {
                 +"DPS: "
-                +unit.dps
+                +(unit.dps ?: 0.0).toString()
             }
             p {
                 +"Costs: "
-                +unit.goldcost
+                +when (unit.unitClass) {
+                    UnitClass.Fighter -> (unit.totalvalue ?: 0).toString()
+                    UnitClass.Mercenary -> (unit.mythiumcost ?: 0).toString()
+                    else -> ""
+                }
+            }
+            if (unit.unitClass == UnitClass.Fighter) {
+                p {
+                    +"Food: "
+                    +(unit.totalfood ?: 0).toString()
+                }
             }
             p {
                 +"AttackType: "

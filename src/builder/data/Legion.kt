@@ -6,7 +6,7 @@ class Legion(
         val playable: String
 ) {
 
-    val creatures: MutableList<Unit> = mutableListOf()
+    val fighters: MutableMap<String, Unit> = mutableMapOf()
 
     fun isPlayable(): Boolean {
         return playable == "Playable"

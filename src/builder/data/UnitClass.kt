@@ -1,7 +1,10 @@
 package builder.data
 
-enum class UnitClass(val string: String) {
-    Fighter("Fighter"),
-    Creature("Creature"),
-    Mercenary("Mercenary")
+enum class UnitClass {
+    Fighter,
+    Creature,
+    Mercenary,
+    None,
+    King,
+    Worker
 }
