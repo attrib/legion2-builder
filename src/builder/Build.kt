@@ -23,7 +23,7 @@ class Build(val waves: Map<Int, Wave>) {
     private fun reward(): Int {
         var reward = 250
         if (currentLevel > 1) {
-            for (i in 1 until (currentLevel - 1)) {
+            for (i in 1 until (currentLevel)) {
                 reward += waves[i]!!.totalreward
                 reward += lane.getIncome(i)
             }

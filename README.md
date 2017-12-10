@@ -21,6 +21,7 @@ Test your build before playing [Legion 2 TD](http://legiontd2.com)
 * Share builds
 * Implement unit placement
 * Read placement from replay file
+* Load / Save builds from session store
 * Better design (PRs welcome)
 
 ## About the project
@@ -32,3 +33,8 @@ Its a fun project for me to play with Kotlin and React.
 Development server: `npm start`
 
 Build: `npm run build`
+
+## Collaborators
+
+* attrib
+* synopia
