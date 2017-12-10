@@ -1,6 +1,8 @@
 # Legion TD 2 Builder
 
-Test a build before playing [Legion 2 TD](http://legiontd2.com)
+See live version [attrib.github.io](https://attrib.github.io)
+
+Test your build before playing [Legion 2 TD](http://legiontd2.com)
 
 ## Working
 
@@ -14,9 +16,11 @@ Test a build before playing [Legion 2 TD](http://legiontd2.com)
 * Add unit icons
 * Add attack and defense type
 * Some refactoring (more modular)
-* upgrade unit
-* sell unit
-* implement unit placement
+* Upgrade unit
+* Sell unit
+* Share builds
+* Implement unit placement
+* Read placement from replay file
 * Better design (PRs welcome)
 
 ## About the project
