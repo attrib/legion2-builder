@@ -4,7 +4,7 @@ import builder.data.Unit
 
 class Lane {
 
-    val fighters: MutableList<Unit> = mutableListOf()
+    private val fighters: MutableList<Unit> = mutableListOf()
     private val mercenaries: MutableList<Unit> = mutableListOf()
 
     fun getTotalHp(level: Int): Int {
