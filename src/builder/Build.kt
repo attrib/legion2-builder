@@ -67,8 +67,9 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
     fun survivability(wave: Wave): String {
         val calc = BattleCalc(global, lane
                 .getFighters(currentLevel).values
-                .filter { it.unitClass != UnitClass.Worker }
-                .toList(), (0 until wave.amount).map { wave.creatures.first() })
+                .toList(), (0 until wave.amount).map { wave.creatures.first() },
+                { it.first() }
+        )
         val result = calc.calc()
 
         val leftHp = result.hpA()

@@ -19,7 +19,7 @@ data class UnitState(val unit: Unit, var hitpoints: Double, var target: UnitStat
     }
 }
 
-class BattleCalc(val global: Global, val unitsA: List<Unit>, val unitsB: List<Unit>) {
+class BattleCalc(val global: Global, val unitsA: List<Unit>, val unitsB: List<Unit>, val targetSelectionStrategy: (List<UnitState>) -> UnitState) {
     fun calc(): Result {
         var unitStatesA = unitsA.map { UnitState(it, it.hp.toDouble()) }
         var unitStatesB = unitsB.map { UnitState(it, it.hp.toDouble()) }
@@ -40,7 +40,7 @@ class BattleCalc(val global: Global, val unitsA: List<Unit>, val unitsB: List<Un
 
     fun assignTargets(list: List<UnitState>, targets: List<UnitState>) {
         list.filter { it.target == null }.forEach {
-            it.target = targets.shuffled().first()
+            it.target = targetSelectionStrategy(targets)
         }
     }
 }
