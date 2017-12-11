@@ -41,8 +41,12 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
         }
     }
 
-    fun getFighters(): MutableMap<Int, Unit> {
-        return lane.getFighters(currentLevel)
+    fun getWorkerCount(): Int {
+        return lane.getWorkerCount(currentLevel)
+    }
+
+    fun getFighters(includeWorkers: Boolean = false): MutableMap<Int, Unit> {
+        return lane.getFighters(currentLevel, includeWorkers)
     }
 
     fun addFighter(unit: Unit) {
@@ -71,9 +75,12 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
                 .toList(), (0 until wave.amount).map { wave.creatures.first() },
                 { it.shuffled().first() }
         )
-        val result = calc.calc()
+        val results:MutableList<Result> = mutableListOf()
+        for (i in 0..2) {
+            results.add(calc.calc())
+        }
 
-        val leftHp = result.hpA()
+        val leftHp = results.sumByDouble { it.hpA() } / results.size
         return if (leftHp > 0) {
             val possibility = (leftHp / totalHp * 100)
             when {
@@ -82,7 +89,7 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
             } + " (${possibility.format(2)}% remaining hp)"
         }
         else {
-            val leftHpCreatures = result.hpB()
+            val leftHpCreatures = results.sumByDouble { it.hpB() } / results.size
             val possibility = leftHpCreatures / wave.totalHp * 100
             "High leak probability (${possibility.format(2)}% remaining hp)"
         }

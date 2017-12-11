@@ -9,6 +9,12 @@ class Lane {
     private val fighters: MutableList<Unit> = mutableListOf()
     private val mercenaries: MutableList<Unit> = mutableListOf()
 
+    fun getWorkerCount(level: Int):Int {
+        return 1 + fighters.filter { it.buildLevel!! <= level }
+                .filter { it.unitClass == UnitClass.Worker }
+                .size
+    }
+
     fun getTotalHp(level: Int): Int {
         return getFighters(level).values.toList().sumBy { if (it.buildLevel!! <= level) it.hp else 0 }
     }
@@ -33,10 +39,10 @@ class Lane {
         return mercenaries.sumBy { if (it.buildLevel!! <= level) it.incomebonus ?: 0 else 0 }
     }
 
-    fun getFighters(level: Int): MutableMap<Int, Unit> {
+    fun getFighters(level: Int, includeWorkers: Boolean = false): MutableMap<Int, Unit> {
         val fighterByLevel: MutableMap<Int, Unit> = mutableMapOf()
         fighters.filter { it.buildLevel!! <= level }
-                .filter { it.unitClass != UnitClass.Worker }
+                .filter { ( includeWorkers && it.buildLevel!! == level ) || it.unitClass != UnitClass.Worker }
                 .forEachIndexed { key, value -> fighterByLevel.put(key, value) }
         return fighterByLevel
     }

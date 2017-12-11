@@ -126,6 +126,10 @@ class App : RComponent<RProps, AppState>() {
                     +"Survivability Chance: "
                     +state.build.survivability(state.game.getWave(state.build.currentLevel)!!)
                 }
+                p {
+                    +"Workers: "
+                    +state.build.getWorkerCount().toString()
+                }
             }
             div {
                 h3 { +"Build info" }
@@ -184,9 +188,9 @@ class App : RComponent<RProps, AppState>() {
                 div("lane") {
                     div {
                         h3 { +"build area" }
-                        if (state.build.getFighters().isNotEmpty()) {
+                        if (state.build.getFighters(true).isNotEmpty()) {
                             ul {
-                                for ((index, unit) in state.build.getFighters()) {
+                                for ((index, unit) in state.build.getFighters(true)) {
                                     li {
                                         unitUi("", unit, object : UnitEventHandler {
                                             override fun onClick(unit: Unit) {
