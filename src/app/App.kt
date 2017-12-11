@@ -3,8 +3,11 @@ package app
 import builder.Build
 import builder.Game
 import builder.GameEventHandler
+import builder.data.Resistance
 import builder.data.Unit
 import builder.ui.UnitEventHandler
+import builder.ui.dpsUi
+import builder.ui.hpUi
 import builder.ui.unitUi
 import kotlinx.html.InputType
 import kotlinx.html.js.onChangeFunction
@@ -112,10 +115,12 @@ class App : RComponent<RProps, AppState>() {
                 p {
                     +"Total HP: "
                     +state.build.totalHp.toString()
+                    hpUi(state.build.resistance)
                 }
                 p {
                     +"Total DPS: "
                     +state.build.totalDps.format(2)
+                    dpsUi(state.build.resistance)
                 }
                 p {
                     +"Survivability Chance: "
@@ -142,6 +147,7 @@ class App : RComponent<RProps, AppState>() {
                 }
             }
             div {
+                val wave = state.game.getWave(state.build.currentLevel)!!
                 h3 { +"Wave Info" }
                 p {
                     +"Level: "
@@ -149,11 +155,13 @@ class App : RComponent<RProps, AppState>() {
                 }
                 p {
                     +"Total HP: "
-                    +state.game.getWave(state.build.currentLevel)!!.totalHp.toString()
+                    +wave.totalHp.toString()
+                    hpUi(Resistance(wave.creatures))
                 }
                 p {
                     +"Total DPS: "
-                    +state.game.getWave(state.build.currentLevel)!!.totalDps.format(2)
+                    +wave.totalDps.format(2)
+                    dpsUi(Resistance(wave.creatures))
                 }
                 button {
                     +"+"

@@ -1,5 +1,6 @@
 package builder
 
+import builder.data.Resistance
 import builder.data.Unit
 import builder.data.UnitClass
 
@@ -9,11 +10,15 @@ class Lane {
     private val mercenaries: MutableList<Unit> = mutableListOf()
 
     fun getTotalHp(level: Int): Int {
-        return fighters.filter { !it.name.contains("Worker") }.sumBy { if (it.buildLevel!! <= level) it.hp else 0 }
+        return getFighters(level).values.toList().sumBy { if (it.buildLevel!! <= level) it.hp else 0 }
     }
 
     fun getTotalDps(level: Int): Double {
-        return fighters.filter { !it.name.contains("Worker") }.sumByDouble { if (it.buildLevel!! <= level) it.dps else 0.0 }
+        return getFighters(level).values.toList().sumByDouble { if (it.buildLevel!! <= level) it.dps else 0.0 }
+    }
+
+    fun getResistance(level: Int):Resistance {
+        return Resistance(getFighters(level).values.toList())
     }
 
     fun getCosts(level: Int): Int {

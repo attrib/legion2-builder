@@ -1,0 +1,21 @@
+p:hover .dps-info, p:hover .hp-info {
+    visibility: visible;
+}
+
+.dps-info, .hp-info {
+    visibility: hidden;
+    width: 220px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+
+.dps-info img, .hp-info img {
+    margin: 0 4px;
+    vertical-align: middle;
+    width: 32px;
+}

@@ -16,6 +16,7 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
     val income get() = lane.getIncome(currentLevel)
     val totalHp get() = lane.getTotalHp(currentLevel)
     val totalDps get() = lane.getTotalDps(currentLevel)
+    val resistance get() = lane.getResistance(currentLevel)
 
     private fun reward(): Int {
         var reward = 250
