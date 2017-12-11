@@ -7,12 +7,12 @@ data class Result(val unitsA: List<UnitState>, val unitsB: List<UnitState>) {
 
 data class UnitState(val unit: Unit, var hitpoints: Double, var target: UnitState? = null) {
     fun dealDamage(global: Global) {
-        if (target != null) {
-            val mod = global.getModifier(unit.attackType!!, target!!.unit.armorType!!)
+        target?.let {
+            val mod = global.getModifier(unit.attackType!!, it.unit.armorType!!)
             val effectiveDmg = mod * unit.dmgbase / unit.aspd
-            println("${unit.name}($hitpoints) deals $effectiveDmg to ${target!!.unit.name}(${target!!.hitpoints})")
-            target!!.hitpoints -= effectiveDmg
-            if (target!!.hitpoints <= 0) {
+            println("${unit.name}($hitpoints) deals $effectiveDmg to ${it.unit.name}(${it.hitpoints})")
+            it.hitpoints -= effectiveDmg
+            if (it.hitpoints <= 0) {
                 target = null
             }
         }

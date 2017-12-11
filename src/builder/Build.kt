@@ -68,7 +68,7 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
         val calc = BattleCalc(global, lane
                 .getFighters(currentLevel).values
                 .toList(), (0 until wave.amount).map { wave.creatures.first() },
-                { it.first() }
+                { it.shuffled().first() }
         )
         val result = calc.calc()
 
