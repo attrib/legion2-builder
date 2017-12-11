@@ -1,9 +1,9 @@
 package builder.data
 
 enum class AttackType {
-    Impact,
     Pierce,
+    Impact,
     Magic,
-    Pure,
-    Unknown
+    Siege,
+    Pure
 }

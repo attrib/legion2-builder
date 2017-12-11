@@ -23,6 +23,8 @@ class Unit(val json: Json) {
         val goldvalue: Int? by jpInt(json)
         val mythiumcost: Int? by jpInt(json)
         val incomebonus: Int? by jpInt(json)
+        val dmgbase: Double by jpDouble(json)
+        val aspd: Double by jpDouble(json)
         val isenabled: String by jp(json)
         val legion_id: String by jp(json)
 

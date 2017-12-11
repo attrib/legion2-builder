@@ -75,3 +75,6 @@ fun <T> jp(json: Json, factory: (Any?) -> T = { it as T }, name: String? = null)
 fun <T> jo(json: Json, factory: (Json) -> T, name: String? = null): JsonObjectPropertyLoader<T> {
     return JsonObjectPropertyLoader(json, name, factory)
 }
+
+fun jpDoubleList(json: Json, name: String? = null) =
+        jp(json, { (it as String).split(",").toList().map { it.toDouble() } }, name)

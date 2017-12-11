@@ -17,5 +17,4 @@ class Wave(json: Json) {
 
     val totalHp get() = creatures.sumBy { it.hp * it.amount }
     val totalDps get() = creatures.sumByDouble { it.dps * it.amount }
-
 }

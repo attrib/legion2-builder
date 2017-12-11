@@ -1,6 +1,7 @@
 package builder
 
 import builder.data.Unit
+import builder.data.UnitClass
 
 class Lane {
 
@@ -30,6 +31,7 @@ class Lane {
     fun getFighters(level: Int): MutableMap<Int, Unit> {
         val fighterByLevel: MutableMap<Int, Unit> = mutableMapOf()
         fighters.filter { it.buildLevel!! <= level }
+                .filter { it.unitClass != UnitClass.Worker }
                 .forEachIndexed { key, value -> fighterByLevel.put(key, value) }
         return fighterByLevel
     }

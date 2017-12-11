@@ -38,7 +38,7 @@ class App : RComponent<RProps, AppState>() {
     }
 
     fun AppState.resetBuild() {
-        build = Build(game.waves)
+        build = Build(game.waves, game.globals["global_default"]!!)
         build.legionId = "element_legion_id"
         build.legion = game.legions["element_legion_id"]
     }
