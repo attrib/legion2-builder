@@ -1,12 +1,9 @@
 package builder
 
 import app.format
-import builder.data.Legion
-import builder.data.Unit
-import builder.data.Wave
-import kotlin.math.roundToInt
+import builder.data.*
 
-class Build(val waves: Map<Int, Wave>) {
+class Build(val waves: Map<Int, Wave>, val global: Global) {
 
     var legionId: String = ""
     var legion: Legion? = null
@@ -68,24 +65,21 @@ class Build(val waves: Map<Int, Wave>) {
     }
 
     fun survivability(wave: Wave): String {
-        val secondsToKill = wave.totalHp / totalDps
-        val leftHp = totalHp - (secondsToKill * wave.totalDps)
-        var result = ""
-        if (leftHp > 0) {
+        val calc = BattleCalc(global, lane.fighters, (0 until wave.amount).map { wave.creatures.first() })
+        val result = calc.calc()
+
+        val leftHp = result.hpA()
+        return if (leftHp > 0) {
             val possibility = (leftHp / totalHp * 100)
-            result = when {
+            when {
                 possibility < 25 -> "Medium leak probability"
                 else -> "Low leak probability"
-            }
-            result += " (" + possibility.format(2) + "%)"
+            } + " (${possibility.format(2)}% remaining hp)"
         }
         else {
-            val secondsToBeKilled = totalHp / wave.totalDps
-            val leftHpCreatures = wave.totalHp - (secondsToBeKilled * totalDps)
-            val creature = wave.creatures.first();
-            val leftUnits = kotlin.math.ceil(leftHpCreatures / creature.hp).roundToInt().toString()
-            result = "High leak probability (leaking >$leftUnits units)"
+            val leftHpCreatures = result.hpB()
+            val possibility = leftHpCreatures / wave.totalHp * 100
+            "High leak probability (${possibility.format(2)}% remaining hp)"
         }
-        return result
     }
 }
