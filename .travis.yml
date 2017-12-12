@@ -1,6 +1,10 @@
 language: node_js
 node_js:
   - "7"
+addons:
+  apt:
+    packages:
+      - openjdk-8-jdk
 before_deploy:
   - npm run build
 deploy:
