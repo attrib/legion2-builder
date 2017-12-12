@@ -8,9 +8,9 @@ before_install:
 install:
   - npm install
 script:
-  - unset JAVA_TOOL_OPTIONS
+  - unset _JAVA_OPTIONS
   - npm test
-  - unset JAVA_TOOL_OPTIONS && node node_modules/react-scripts-kotlin/scripts/build.js
+  - npm run build
 after_failure: "cat /home/travis/.npm/_logs/*.log"
 deploy:
   provider: pages
