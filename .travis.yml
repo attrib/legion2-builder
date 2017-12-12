@@ -9,9 +9,8 @@ install:
   - npm install
 script:
   - npm test
-after_failure: "cat /home/travis/.npm/_logs/*.log"
-before_deploy:
   - npm run build
+after_failure: "cat /home/travis/.npm/_logs/*.log"
 deploy:
   provider: pages
   skip_cleanup: true
