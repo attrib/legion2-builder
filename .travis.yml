@@ -8,6 +8,7 @@ before_install:
 install:
   - npm install
 script:
+  - unset JAVA_TOOL_OPTIONS
   - npm test
   - npm run build
 after_failure: "cat /home/travis/.npm/_logs/*.log"
