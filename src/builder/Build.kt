@@ -82,7 +82,7 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
                     if (units.isEmpty()) {
                         units = it
                     }
-                    units.sortedBy { it.hitpoints }
+                    units = units.sortedBy { it.hitpoints }
                     units.first()
                 }
         )
