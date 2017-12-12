@@ -10,6 +10,7 @@ install:
 script:
   - unset _JAVA_OPTIONS
   - npm test
+  - unset CI
   - npm run build
 after_failure: "cat /home/travis/.npm/_logs/*.log"
 deploy:
