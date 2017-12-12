@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "7"
+before_deploy:
+  - npm start build
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+  repo: attrib/attrib.github.io
+  local_dir: build
+  target_branch: master
+  on:
+    branch: master
