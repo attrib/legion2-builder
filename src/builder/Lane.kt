@@ -23,10 +23,6 @@ class Lane {
         return getFighters(level).values.toList().sumByDouble { if (it.buildLevel!! <= level) it.dps else 0.0 }
     }
 
-    fun getResistance(level: Int):Resistance {
-        return Resistance(getFighters(level).values.toList())
-    }
-
     fun getCosts(level: Int): Int {
         return fighters.sumBy { if (it.buildLevel!! <= level) it.totalvalue ?: 0 else 0 }
     }

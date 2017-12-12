@@ -16,7 +16,6 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
     val income get() = lane.getIncome(currentLevel)
     val totalHp get() = lane.getTotalHp(currentLevel)
     val totalDps get() = lane.getTotalDps(currentLevel)
-    val resistance get() = lane.getResistance(currentLevel)
 
     private fun reward(): Int {
         var reward = 250
@@ -70,13 +69,25 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
     }
 
     fun survivability(wave: Wave): String {
+        val creatures = mutableListOf<Unit>()
+        (0 until wave.amount).forEach { creatures.add(wave.creatures.first()) }
+        if (wave.amount2 > 0) {
+            (0 until wave.amount2).forEach { creatures.add(wave.creatures.last()) }
+        }
         val calc = BattleCalc(global, lane
                 .getFighters(currentLevel).values
-                .toList(), (0 until wave.amount).map { wave.creatures.first() },
-                { it.shuffled().first() }
+                .toList(), creatures,
+                {
+                    var units = it.filter { it.unit.attackMode === "Melee" }
+                    if (units.isEmpty()) {
+                        units = it
+                    }
+                    units.sortedBy { it.hitpoints }
+                    units.first()
+                }
         )
-        val results:MutableList<Result> = mutableListOf()
-        for (i in 0..2) {
+        val results: MutableList<Result> = mutableListOf()
+        for (i in 0..1) {
             results.add(calc.calc())
         }
 
@@ -86,12 +97,15 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
             when {
                 possibility < 25 -> "Medium leak probability"
                 else -> "Low leak probability"
-            } + " (${possibility.format(2)}% remaining hp)"
-        }
-        else {
+            } + " (${possibility.format(2)}% remaining fighter hp)"
+        } else {
             val leftHpCreatures = results.sumByDouble { it.hpB() } / results.size
             val possibility = leftHpCreatures / wave.totalHp * 100
-            "High leak probability (${possibility.format(2)}% remaining hp)"
+            "High leak probability (${possibility.format(2)}% remaining creatures hp)"
         }
+    }
+
+    fun getResistance(testUnit: Unit?): Resistance {
+        return Resistance(lane.getFighters(currentLevel).values.toList(), global, testUnit)
     }
 }

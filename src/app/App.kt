@@ -115,12 +115,12 @@ class App : RComponent<RProps, AppState>() {
                 p {
                     +"Total HP: "
                     +state.build.totalHp.toString()
-                    hpUi(state.build.resistance)
+                    hpUi(state.build.getResistance(state.game.getWave(state.build.currentLevel)?.creatures?.first()))
                 }
                 p {
                     +"Total DPS: "
                     +state.build.totalDps.format(2)
-                    dpsUi(state.build.resistance)
+                    dpsUi(state.build.getResistance(state.game.getWave(state.build.currentLevel)?.creatures?.first()))
                 }
                 p {
                     +"Survivability Chance: "
@@ -160,12 +160,12 @@ class App : RComponent<RProps, AppState>() {
                 p {
                     +"Total HP: "
                     +wave.totalHp.toString()
-                    hpUi(Resistance(wave.creatures))
+                    hpUi(Resistance(wave.creatures, state.game.globals["global_default"]!!, null))
                 }
                 p {
                     +"Total DPS: "
                     +wave.totalDps.format(2)
-                    dpsUi(Resistance(wave.creatures))
+                    dpsUi(Resistance(wave.creatures, state.game.globals["global_default"]!!, null))
                 }
                 button {
                     +"+"

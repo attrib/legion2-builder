@@ -15,6 +15,12 @@ fun RBuilder.dpsUi(resistence: Resistance) {
                 +type.toString()
                 +": "
                 +value.format(0)
+                val mod = resistence.getModAttack(type)
+                if (mod > 0.0) {
+                    +" ("
+                    +(value * mod).format(2)
+                    +")"
+                }
             }
         }
     }
@@ -28,6 +34,12 @@ fun RBuilder.hpUi(resistence: Resistance) {
                 +type.toString()
                 +": "
                 +value.toString()
+                val mod = resistence.getModDefense(type)
+                if (mod > 0.0) {
+                    +" ("
+                    +(value * mod).format(2)
+                    +")"
+                }
             }
         }
     }
