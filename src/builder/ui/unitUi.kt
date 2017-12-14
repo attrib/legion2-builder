@@ -1,7 +1,8 @@
 package builder.ui
 
 import builder.data.Unit
-import builder.data.UnitClass
+import builder.UnitClass
+import builder.UnitDef
 import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
@@ -11,44 +12,43 @@ import react.dom.img
 import react.dom.p
 
 interface UnitEventHandler {
-    fun onClick(unit: Unit)
+    fun onClick()
 }
 
-fun RBuilder.unitUi(id: String, unit: Unit, unitEventHandler: UnitEventHandler) {
+fun RBuilder.unitUi(unit: UnitDef, unitEventHandler: UnitEventHandler) {
     div("unit") {
-        attrs.id = id
         attrs.onClickFunction = {
-            unitEventHandler.onClick(unit)
+            unitEventHandler.onClick()
         }
-        img(alt = unit.name, src = unit.iconpath) {
+        img(alt = unit.id, src = "") {
             attrs {
                 width = "64px"
                 height = "64px"
             }
         }
         div("unit-info") {
-            h4 { +unit.name }
+            h4 { +unit.id }
             p {
                 +"HP: "
-                +unit.hp.toString()
+                +unit.hitpoints.toString()
             }
             p {
                 +"DPS: "
-                +(unit.dps ?: 0.0).toString()
+                +(unit.dmgBase * unit.attackSpeed).toString()
             }
             p {
                 +"Costs: "
                 +when (unit.unitClass) {
-                    UnitClass.Worker -> (unit.totalvalue ?: 0).toString()
-                    UnitClass.Fighter -> (unit.totalvalue ?: 0).toString()
-                    UnitClass.Mercenary -> (unit.mythiumcost ?: 0).toString()
+                    UnitClass.Worker -> (unit.totalValue).toString()
+                    UnitClass.Fighter -> (unit.totalValue).toString()
+                    UnitClass.Mercenary -> (unit.mythiumCost).toString()
                     else -> ""
                 }
             }
             if (unit.unitClass == UnitClass.Fighter || unit.unitClass == UnitClass.Worker) {
                 p {
                     +"Food: "
-                    +(unit.totalfood ?: 0).toString()
+                    +(unit.totalFood).toString()
                 }
             }
             p {

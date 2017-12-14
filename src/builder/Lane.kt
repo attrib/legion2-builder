@@ -1,8 +1,6 @@
 package builder
 
-import builder.data.Resistance
 import builder.data.Unit
-import builder.data.UnitClass
 
 class Lane {
 
@@ -11,63 +9,61 @@ class Lane {
 
     fun getWorkerCount(level: Int):Int {
         return 1 + fighters.filter { it.buildLevel!! <= level }
-                .filter { it.unitClass == UnitClass.Worker }
+                .filter { it.def.unitClass == UnitClass.Worker }
                 .size
     }
 
     fun getTotalHp(level: Int): Int {
-        return getFighters(level).values.toList().sumBy { if (it.buildLevel!! <= level) it.hp else 0 }
+        return getFighters(level).sumBy { if (it.buildLevel!! <= level) it.def.hitpoints else 0 }
     }
 
     fun getTotalDps(level: Int): Double {
-        return getFighters(level).values.toList().sumByDouble { if (it.buildLevel!! <= level) it.dps else 0.0 }
+        return getFighters(level).sumByDouble { if (it.buildLevel!! <= level) it.def.dmgBase * it.def.attackSpeed else 0.0 }
     }
 
     fun getCosts(level: Int): Int {
-        return fighters.sumBy { if (it.buildLevel!! <= level) it.totalvalue ?: 0 else 0 }
+        return fighters.sumBy { if (it.buildLevel!! <= level) it.def.totalValue else 0 }
     }
 
     fun getFoodCosts(level: Int): Int {
-        return fighters.sumBy { if (it.buildLevel!! <= level) it.totalfood ?: 0 else 0 }
+        return fighters.sumBy { if (it.buildLevel!! <= level) it.def.totalFood else 0 }
     }
 
     fun getIncome(level: Int): Int {
-        return mercenaries.sumBy { if (it.buildLevel!! <= level) it.incomebonus ?: 0 else 0 }
+        return mercenaries.sumBy { if (it.buildLevel!! <= level) it.def.incomeBonus else 0 }
     }
 
-    fun getFighters(level: Int, includeWorkers: Boolean = false): MutableMap<Int, Unit> {
-        val fighterByLevel: MutableMap<Int, Unit> = mutableMapOf()
-        fighters.filter { it.buildLevel!! <= level }
-                .filter { ( includeWorkers && it.buildLevel!! == level ) || it.unitClass != UnitClass.Worker }
-                .forEachIndexed { key, value -> fighterByLevel.put(key, value) }
-        return fighterByLevel
+    fun getFighters(level: Int, includeWorkers: Boolean = false): List<Unit> {
+        return fighters.filter { it.buildLevel!! <= level }
+                .filter { ( includeWorkers && it.buildLevel!! == level ) || it.def.unitClass != UnitClass.Worker }
     }
 
-    fun addFighter(unit: Unit, level: Int) {
-        val newUnit = unit.copy()
+    fun getFighterDef(level: Int, includeWorkers: Boolean = false): List<UnitDef> {
+        return getFighters(level, includeWorkers).map { it.def }
+    }
+
+    fun addFighter(unit: UnitDef, level: Int) {
+        val newUnit = Unit(unit)
         newUnit.buildLevel = level
         fighters.add(newUnit)
     }
 
-    fun removeFighter(index: Int) {
-        fighters.removeAt(index)
+    fun removeFighter(unit: Unit) {
+        fighters.remove(unit)
     }
 
-    fun getMerchenaries(level: Int): MutableMap<Int, Unit> {
-        val mercenariesByLevel: MutableMap<Int, Unit> = mutableMapOf()
-        mercenaries.filter { it.buildLevel!! == level }
-                .forEachIndexed { key, value -> mercenariesByLevel.put(key, value) }
-        return mercenariesByLevel
+    fun getMerchenaries(level: Int): List<Unit> {
+        return mercenaries.filter { it.buildLevel!! == level }
     }
 
-    fun addMerchenary(unit: Unit, level: Int) {
-        val newUnit = unit.copy()
+    fun addMerchenary(unit: UnitDef, level: Int) {
+        val newUnit = Unit(unit)
         newUnit.buildLevel = level
         mercenaries.add(newUnit)
     }
 
-    fun removeMerchenary(index: Int) {
-        mercenaries.removeAt(index)
+    fun removeMerchenary(unit: Unit) {
+        mercenaries.remove(unit)
     }
 
 }

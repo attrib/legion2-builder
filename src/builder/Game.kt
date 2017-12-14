@@ -1,64 +1,47 @@
 package builder
 
-import builder.data.*
-import org.w3c.xhr.XMLHttpRequest
-import kotlin.js.Json
+import builder.data.Global
 
-interface GameEventHandler {
-    fun loaded()
-}
+class Game {
 
-class Game(gameEventHandler: GameEventHandler) {
-
-    val legions: MutableMap<String, Legion> = mutableMapOf()
-    val mercenaries: MutableMap<String, Unit> = mutableMapOf()
-    val creatures: MutableMap<String, Unit> = mutableMapOf()
+    val legions: MutableMap<Legion, builder.data.Legion> = mutableMapOf()
+    val mercenaries: MutableMap<String, UnitDef> = mutableMapOf()
+    val creatures: MutableMap<String, UnitDef> = mutableMapOf()
     val globals: MutableMap<String, Global> = mutableMapOf()
-    val waves: MutableMap<Int, Wave> = mutableMapOf()
+    val waves: MutableMap<Int, WaveDef> = mutableMapOf()
 
     init {
-        val request = XMLHttpRequest()
-        request.overrideMimeType("application/json")
-        request.open("GET", "LTD2_Data.json", true)
-        request.onreadystatechange = {
-            if (request.readyState == XMLHttpRequest.DONE && request.status == 200.toShort())  {
-                val data = JSON.parse<Json>(request.responseText)
-                val foo = LegionTD2(data)
-                legions.putAll(foo.legions)
-                globals.putAll(foo.globals)
-                creatures.putAll(foo.units.filter { it.value.unitClass == UnitClass.Creature })
-                mercenaries.putAll(foo.units.filter { it.value.unitClass == UnitClass.Mercenary })
-                foo.units.filter { it.value.unitClass == UnitClass.Fighter }.forEach { e ->
-                    if (legions.containsKey(e.value.legion_id)) {
-                        legions[e.value.legion_id]!!.fighters[e.key] = e.value
+        globals.put(global.id, builder.data.Global(global))
+        Legion.values().forEach {
+            legions.put(it, builder.data.Legion(it.toString(), "", true))
+        }
+        units.forEach {
+            when(it.unitClass) {
+                UnitClass.Fighter -> legions[it.legion]!!.fighters.put(it.id, it)
+                UnitClass.Creature -> creatures.put(it.id, it)
+                UnitClass.Mercenary -> mercenaries.put(it.id, it)
+                UnitClass.Worker -> {
+                    legions.forEach { (_, legion) ->
+                        legion.fighters.put(it.id, it)
                     }
                 }
-                foo.units.filter { it.value.unitClass == UnitClass.Worker }.forEach { e ->
-                    legions.forEach { it.value.fighters[e.key] = e.value }
-                }
-
-                for ((key, wave) in foo.waves) {
-                    if (creatures.containsKey(wave.unit_id)) {
-                        val creature = creatures[wave.unit_id]!!
-                        creature.amount = wave.amount
-                        wave.creatures.add(creature)
-                    }
-                    if (creatures.containsKey(wave.spellunit2_id)) {
-                        val creature = creatures[wave.spellunit2_id]!!
-                        creature.amount = wave.amount2
-                        wave.creatures.add(creature)
-                    }
-                    waves.put(wave.levelnum, wave)
-                }
-
-                gameEventHandler.loaded()
+                else -> {}
             }
         }
-        request.send()
+
+        wavesDef.forEach {
+            waves.put(it.levelNum, it)
+        }
     }
 
-    fun getWave(level: Int): Wave? {
-        return waves[level]
+    fun getWaveCreaturesDef(level: Int): List<UnitDef> {
+        val creatureDefs = mutableListOf<UnitDef>()
+        val wave = waves[level]!!
+        (0 until wave.amount).forEach { creatureDefs.add(creatures[wave.unit]!!) }
+        if (wave.amount2 > 0) {
+            (0 until wave.amount2).forEach { creatureDefs.add(creatures[wave.unit2]!!) }
+        }
+        return creatureDefs
     }
 
 }

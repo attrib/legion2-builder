@@ -1,22 +1,19 @@
 package builder.data
 
-import kotlin.js.Json
+import builder.ArmorType
+import builder.AttackType
+import builder.GlobalDef
 
-class Global(json: Json) {
-    val name: String by jp(json)
-    val attackchartpierce: List<Double> by jpDoubleList(json)
-    val attackchartnormal: List<Double> by jpDoubleList(json)
-    val attackchartmagic: List<Double> by jpDoubleList(json)
-    val attackchartsiege: List<Double> by jpDoubleList(json)
-    val attackchartchaos: List<Double> by jpDoubleList(json)
+class Global(val def: GlobalDef) {
 
-    fun getModifier(attackType: AttackType, armorType: DefenseType): Double {
+    fun getModifier(attackType: AttackType, armorType: ArmorType): Double {
         return when (attackType) {
-            AttackType.Pierce -> attackchartpierce[armorType.ordinal]
-            AttackType.Impact -> attackchartnormal[armorType.ordinal]
-            AttackType.Magic -> attackchartmagic[armorType.ordinal]
-            AttackType.Siege -> attackchartsiege[armorType.ordinal]
-            AttackType.Pure -> attackchartchaos[armorType.ordinal]
+            AttackType.Pierce -> def.attackPierce[armorType.ordinal]
+            AttackType.Impact -> def.attackNormal[armorType.ordinal]
+            AttackType.Magic -> def.attackMagic[armorType.ordinal]
+            AttackType.Siege -> def.attackSiege[armorType.ordinal]
+            AttackType.Pure -> def.attackChaos[armorType.ordinal]
+            else -> 1.0
         }
     }
 }
