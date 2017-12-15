@@ -2,9 +2,7 @@ package app
 
 import builder.Build
 import builder.Game
-import builder.Legion
 import builder.data.Resistance
-import builder.ui.UnitEventHandler
 import builder.ui.dpsUi
 import builder.ui.hpUi
 import builder.ui.unitUi
@@ -32,9 +30,9 @@ class App : RComponent<RProps, AppState>() {
     }
 
     fun AppState.resetBuild() {
-        build = Build(game, game.globals["global_default"]!!)
-        build.legion = game.legions[Legion.Element]
-        build.legionId = Legion.Element
+        build = Build(game, game.data.global)
+        build.legion = game.data.legionsMap["element_legion_id"]!!
+        build.legionId = "element_legion_id"
     }
 
     override fun RBuilder.render() {
@@ -61,26 +59,26 @@ class App : RComponent<RProps, AppState>() {
             div {
                 h3 { +"Select Legion" }
                 p {
-                    for ((legionId, legion) in state.game.legions) {
+                    state.game.data.legionsMap.forEach { (legionId, legion) ->
                         if (!legion.playable) {
-                            continue
+                            return@forEach
                         }
                         input(type = InputType.radio, name = "legion") {
                             attrs.onChangeFunction = {
                                 val target = it.target as HTMLInputElement
                                 setState {
-                                    build.legionId = Legion.valueOf(target.value)
-                                    build.legion = game.legions[build.legionId!!]
+                                    build.legionId = target.value
+                                    build.legion = game.data.legionsMap[target.value]
                                 }
                             }
-                            attrs.value = legionId.toString()
-                            attrs.id = "select-" + legionId.toString()
+                            attrs.value = legionId
+                            attrs.id = "select-" + legionId
                             if (state.build.legionId == legionId) {
                                 attrs.checked = true
                             }
                         }
                         label {
-                            attrs.htmlFor = "select-" + legionId.toString()
+                            attrs.htmlFor = "select-" + legionId
                             +legion.name
                         }
                     }
@@ -100,24 +98,21 @@ class App : RComponent<RProps, AppState>() {
             }
             div {
                 h3 { +"Lane info" }
+                val unitId = state.game.data.waves[state.build.currentLevel].unit
+                val unitDef = state.game.data.unitsMap[unitId]
+                val waveDef = state.game.getWaveCreaturesDef(state.build.currentLevel)
+
                 p {
-                    +"Total HP: "
-                    +state.build.totalHp.toString()
-                    hpUi(state.build.getResistance(state.game.creatures[state.game.waves[state.build.currentLevel]?.unit]))
+                    +"Total HP: ${state.build.totalHp} ${hpUi(state.build.getResistance(unitDef))}"
                 }
                 p {
-                    +"Total DPS: "
-                    +state.build.totalDps.format(2)
-                    dpsUi(state.build.getResistance(state.game.creatures[state.game.waves[state.build.currentLevel]?.unit]))
+                    +"Total DPS: ${state.build.totalDps.format(2)} ${dpsUi(state.build.getResistance(unitDef))}"
                 }
                 p {
-                    val waveDef = state.game.getWaveCreaturesDef(state.build.currentLevel)
-                    +"Survivability Chance: "
-                    +state.build.survivability(waveDef)
+                    +"Survivability Chance: ${state.build.survivability(waveDef)}"
                 }
                 p {
-                    +"Workers: "
-                    +state.build.getWorkerCount().toString()
+                    +"Workers: ${state.build.getWorkerCount()}"
                 }
             }
             div {
@@ -149,12 +144,12 @@ class App : RComponent<RProps, AppState>() {
                 p {
                     +"Total HP: "
                     +waveDef.sumBy { it.hitpoints }.toString()
-                    hpUi(Resistance(waveDef, state.game.globals["global_default"]!!, null))
+                    hpUi(Resistance(waveDef, state.game.data.global, null))
                 }
                 p {
                     +"Total DPS: "
                     +waveDef.sumByDouble { it.dmgBase * it.attackSpeed }.format(2)
-                    dpsUi(Resistance(waveDef, state.game.globals["global_default"]!!, null))
+                    dpsUi(Resistance(waveDef, state.game.data.global, null))
                 }
                 button {
                     +"+"
@@ -179,15 +174,9 @@ class App : RComponent<RProps, AppState>() {
                         h3 { +"build area" }
                         if (state.build.getFighters(true).isNotEmpty()) {
                             ul {
-                                for (unit in state.build.getFighters(true)) {
+                                state.build.getFighters(true).forEach { unit ->
                                     li {
-                                        unitUi(unit.def, object : UnitEventHandler {
-                                            override fun onClick() {
-                                                setState {
-                                                    build.removeFighter(unit)
-                                                }
-                                            }
-                                        })
+                                        unitUi(unit.def, { setState { build.removeFighter(unit) } })
                                     }
                                 }
                             }
@@ -200,16 +189,10 @@ class App : RComponent<RProps, AppState>() {
                             +"Please select legion"
                         } else {
                             ul {
-                                for ((id, unit) in state.build.legion!!.fighters) {
+                                state.game.fighters(state.build.legion!!).forEach { unit ->
                                     if (!unit.id.startsWith("test")) {
                                         li {
-                                            unitUi(unit, object : UnitEventHandler {
-                                                override fun onClick() {
-                                                    setState {
-                                                        build.addFighter(unit)
-                                                    }
-                                                }
-                                            })
+                                            unitUi(unit, { setState { build.addFighter(unit) } })
                                         }
                                     }
                                 }
@@ -226,15 +209,9 @@ class App : RComponent<RProps, AppState>() {
                         h3 { +"selected" }
                         if (state.build.getMerchenaries().isNotEmpty()) {
                             ul {
-                                for (unit in state.build.getMerchenaries()) {
+                                state.build.getMerchenaries().forEach { unit ->
                                     li {
-                                        unitUi(unit.def, object : UnitEventHandler {
-                                            override fun onClick() {
-                                                setState {
-                                                    build.removeMerchenary(unit)
-                                                }
-                                            }
-                                        })
+                                        unitUi(unit.def, { setState { build.removeMerchenary(unit) } })
                                     }
                                 }
                             }
@@ -243,16 +220,10 @@ class App : RComponent<RProps, AppState>() {
                     div("selection") {
                         h3 { +"available" }
                         ul {
-                            for ((id, unit) in state.game.mercenaries) {
+                            state.game.mercenaries().forEach { unit ->
                                 if (!unit.id.startsWith("test")) {
                                     li {
-                                        unitUi(unit, object : UnitEventHandler {
-                                            override fun onClick() {
-                                                setState {
-                                                    build.addMerchenary(unit)
-                                                }
-                                            }
-                                        })
+                                        unitUi(unit, { setState { build.addMerchenary(unit) } })
                                     }
                                 }
                             }

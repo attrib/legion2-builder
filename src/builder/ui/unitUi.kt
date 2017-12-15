@@ -1,9 +1,7 @@
 package builder.ui
 
-import builder.data.Unit
 import builder.UnitClass
 import builder.UnitDef
-import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.dom.div
@@ -15,12 +13,17 @@ interface UnitEventHandler {
     fun onClick()
 }
 
-fun RBuilder.unitUi(unit: UnitDef, unitEventHandler: UnitEventHandler) {
+fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit) {
+    val unitEventHandler = object : UnitEventHandler {
+        override fun onClick() {
+            callback()
+        }
+    }
     div("unit") {
         attrs.onClickFunction = {
             unitEventHandler.onClick()
         }
-        img(alt = unit.id, src = "") {
+        img(alt = unit.id, src = unit.iconPath.replace("Splashes", "Icons")) {
             attrs {
                 width = "64px"
                 height = "64px"

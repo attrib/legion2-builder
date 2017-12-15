@@ -2,6 +2,7 @@ package builder.data
 
 import builder.ArmorType
 import builder.AttackType
+import builder.Global
 import builder.UnitDef
 
 class Resistance(units: List<UnitDef>, val global: Global, val testUnit: UnitDef?) {

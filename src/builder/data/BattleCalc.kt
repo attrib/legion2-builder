@@ -1,5 +1,6 @@
 package builder.data
 
+import builder.Global
 import builder.UnitDef
 
 data class Result(val unitsA: List<UnitState>, val unitsB: List<UnitState>) {
