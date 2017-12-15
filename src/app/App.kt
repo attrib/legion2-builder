@@ -59,9 +59,9 @@ class App : RComponent<RProps, AppState>() {
             div {
                 h3 { +"Select Legion" }
                 p {
-                    for ((legionId, legion) in state.game.data.legionsMap) {
+                    state.game.data.legionsMap.forEach { (legionId, legion) ->
                         if (!legion.playable) {
-                            continue
+                            return@forEach
                         }
                         input(type = InputType.radio, name = "legion") {
                             attrs.onChangeFunction = {
@@ -98,24 +98,21 @@ class App : RComponent<RProps, AppState>() {
             }
             div {
                 h3 { +"Lane info" }
+                val unitId = state.game.data.waves[state.build.currentLevel].unit
+                val unitDef = state.game.data.unitsMap[unitId]
+                val waveDef = state.game.getWaveCreaturesDef(state.build.currentLevel)
+
                 p {
-                    +"Total HP: "
-                    +state.build.totalHp.toString()
-                    hpUi(state.build.getResistance(state.game.data.unitsMap[state.game.data.waves[state.build.currentLevel].unit]))
+                    +"Total HP: ${state.build.totalHp} ${hpUi(state.build.getResistance(unitDef))}"
                 }
                 p {
-                    +"Total DPS: "
-                    +state.build.totalDps.format(2)
-                    dpsUi(state.build.getResistance(state.game.data.unitsMap[state.game.data.waves[state.build.currentLevel].unit]))
+                    +"Total DPS: ${state.build.totalDps.format(2)} ${dpsUi(state.build.getResistance(unitDef))}"
                 }
                 p {
-                    val waveDef = state.game.getWaveCreaturesDef(state.build.currentLevel)
-                    +"Survivability Chance: "
-                    +state.build.survivability(waveDef)
+                    +"Survivability Chance: ${state.build.survivability(waveDef)}"
                 }
                 p {
-                    +"Workers: "
-                    +state.build.getWorkerCount().toString()
+                    +"Workers: ${state.build.getWorkerCount()}"
                 }
             }
             div {
@@ -177,7 +174,7 @@ class App : RComponent<RProps, AppState>() {
                         h3 { +"build area" }
                         if (state.build.getFighters(true).isNotEmpty()) {
                             ul {
-                                for (unit in state.build.getFighters(true)) {
+                                state.build.getFighters(true).forEach { unit ->
                                     li {
                                         unitUi(unit.def, { setState { build.removeFighter(unit) } })
                                     }
