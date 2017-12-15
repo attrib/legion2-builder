@@ -1,13 +1,15 @@
 package builder
 
 import app.format
-import builder.data.*
-import builder.data.Legion
+import builder.data.BattleCalc
+import builder.data.Resistance
+import builder.data.Result
+import builder.data.Unit
 
 class Build(val game: Game, val global: Global) {
 
     var legion: Legion? = null
-    var legionId: builder.Legion? = null
+    var legionId: String? = null
     private val lane: Lane = Lane()
     var currentLevel = 1
 
@@ -22,7 +24,7 @@ class Build(val game: Game, val global: Global) {
         var reward = 250
         if (currentLevel > 1) {
             for (i in 1 until (currentLevel)) {
-                reward += game.waves[i]!!.totalReward
+                reward += game.data.waves[i]!!.totalReward
                 reward += lane.getIncome(i)
             }
         }
@@ -30,13 +32,13 @@ class Build(val game: Game, val global: Global) {
     }
 
     fun levelIncrease() {
-        if (game.waves.containsKey(currentLevel + 1)) {
+        if (currentLevel < game.data.waves.size) {
             currentLevel++
         }
     }
 
     fun levelDecrease() {
-        if (game.waves.containsKey(currentLevel - 1)) {
+        if (currentLevel > 0) {
             currentLevel--
         }
     }
@@ -70,7 +72,7 @@ class Build(val game: Game, val global: Global) {
     }
 
     fun survivability(creatures: List<UnitDef>): String {
-        val calc = BattleCalc(global, lane.getFighterDef(currentLevel), creatures,
+        val calc = BattleCalc(game.data.global, lane.getFighterDef(currentLevel), creatures,
                 {
                     var units = it.filter { it.unit.attackMode === AttackMode.Melee }
                     if (units.isEmpty()) {

@@ -2,18 +2,15 @@ package builder.data
 
 import builder.ArmorType
 import builder.AttackType
-import builder.GlobalDef
+import builder.Global
 
-class Global(val def: GlobalDef) {
-
-    fun getModifier(attackType: AttackType, armorType: ArmorType): Double {
-        return when (attackType) {
-            AttackType.Pierce -> def.attackPierce[armorType.ordinal]
-            AttackType.Impact -> def.attackNormal[armorType.ordinal]
-            AttackType.Magic -> def.attackMagic[armorType.ordinal]
-            AttackType.Siege -> def.attackSiege[armorType.ordinal]
-            AttackType.Pure -> def.attackChaos[armorType.ordinal]
-            else -> 1.0
-        }
+fun Global.getModifier(attackType: AttackType, armorType: ArmorType): Double {
+    return when (attackType) {
+        AttackType.Pierce -> attackPierce[armorType.ordinal]
+        AttackType.Impact -> attackNormal[armorType.ordinal]
+        AttackType.Magic -> attackMagic[armorType.ordinal]
+        AttackType.Siege -> attackSiege[armorType.ordinal]
+        AttackType.Pure -> attackChaos[armorType.ordinal]
+        else -> 1.0
     }
 }
