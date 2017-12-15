@@ -38,7 +38,7 @@ class Build(val game: Game, val global: Global) {
     }
 
     fun levelDecrease() {
-        if (currentLevel > 0) {
+        if (currentLevel > 1) {
             currentLevel--
         }
     }
