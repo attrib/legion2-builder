@@ -1,29 +1,4 @@
 
-.unit {
-    position: relative;
-    display: inline-block;
-}
-
-.unit .unit-info {
-    visibility: hidden;
-    width: 220px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    position: absolute;
-    z-index: 1;
-}
-
-.unit:hover .unit-info {
-    visibility: visible;
-}
-
-.unit-info p {
+.unit .tooltip-data p {
     margin: 0;
-}
-
-.unit-info h4 {
-    margin-top: 5px;
 }

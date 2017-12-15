@@ -23,7 +23,7 @@ fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit) {
             callback()
         }
     }
-    div("unit") {
+    div("unit tooltip-parent") {
         attrs.onClickFunction = {
             unitEventHandler.onClick()
         }
@@ -33,7 +33,7 @@ fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit) {
                 height = "64px"
             }
         }
-        div("unit-info") {
+        div("tooltip-data") {
             h4 { +unit.name }
             p {
                 +"HP: "
