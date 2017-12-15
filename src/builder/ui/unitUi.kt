@@ -3,6 +3,7 @@ package builder.ui
 import app.format
 import builder.UnitClass
 import builder.UnitDef
+import kotlinext.js.invoke
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.dom.div
@@ -15,6 +16,8 @@ interface UnitEventHandler {
 }
 
 fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit) {
+    kotlinext.js.require("src/builder/ui/unitUi.css")
+
     val unitEventHandler = object : UnitEventHandler {
         override fun onClick() {
             callback()

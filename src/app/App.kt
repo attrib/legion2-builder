@@ -10,7 +10,6 @@ import kotlinx.html.InputType
 import kotlinx.html.id
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
-import logo.logo
 import org.w3c.dom.HTMLInputElement
 import react.*
 import react.dom.*
@@ -37,7 +36,6 @@ class App : RComponent<RProps, AppState>() {
 
     override fun RBuilder.render() {
         div("App-header") {
-            logo()
             h1 {
                 +"Welcome to Legion TD 2 Builder"
             }

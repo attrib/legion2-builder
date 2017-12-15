@@ -2,12 +2,15 @@ package builder.ui
 
 import app.format
 import builder.data.Resistance
+import kotlinext.js.invoke
 import kotlinx.html.title
 import react.RBuilder
 import react.dom.div
 import react.dom.img
 
 fun RBuilder.dpsUi(resistence: Resistance) {
+    kotlinext.js.require("src/builder/ui/dpsUi.css")
+
     div("dps-info") {
         for ((type, value) in resistence.dps) {
             div {
@@ -27,6 +30,8 @@ fun RBuilder.dpsUi(resistence: Resistance) {
 }
 
 fun RBuilder.hpUi(resistence: Resistance) {
+    kotlinext.js.require("src/builder/ui/dpsUi.css")
+
     div("hp-info") {
         for ((type, value) in resistence.hps) {
             div {
