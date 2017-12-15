@@ -103,10 +103,12 @@ class App : RComponent<RProps, AppState>() {
                 val waveDef = state.game.getWaveCreaturesDef(state.build.currentLevel)
 
                 p {
-                    +"Total HP: ${state.build.totalHp} ${hpUi(state.build.getResistance(unitDef))}"
+                    +"Total HP: ${state.build.totalHp}"
+                    hpUi(state.build.getResistance(unitDef))
                 }
                 p {
-                    +"Total DPS: ${state.build.totalDps.format(2)} ${dpsUi(state.build.getResistance(unitDef))}"
+                    +"Total DPS: ${state.build.totalDps.format(2)}"
+                    dpsUi(state.build.getResistance(unitDef))
                 }
                 p {
                     +"Survivability Chance: ${state.build.survivability(waveDef)}"
@@ -139,7 +141,7 @@ class App : RComponent<RProps, AppState>() {
                 h3 { +"Wave Info" }
                 p {
                     +"Level: "
-                    +state.build.currentLevel.toString()
+                    +(state.build.currentLevel + 1).toString()
                 }
                 p {
                     +"Total HP: "

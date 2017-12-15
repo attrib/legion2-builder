@@ -11,7 +11,7 @@ class Build(val game: Game, val global: Global) {
     var legion: Legion? = null
     var legionId: String? = null
     private val lane: Lane = Lane()
-    var currentLevel = 1
+    var currentLevel = 0
 
     val costs get() = lane.getCosts(currentLevel)
     val foodCosts get() = lane.getFoodCosts(currentLevel)
@@ -22,7 +22,7 @@ class Build(val game: Game, val global: Global) {
 
     private fun reward(): Int {
         var reward = 250
-        if (currentLevel > 1) {
+        if (currentLevel > 0) {
             for (i in 1 until (currentLevel)) {
                 reward += game.data.waves[i]!!.totalReward
                 reward += lane.getIncome(i)
@@ -32,13 +32,13 @@ class Build(val game: Game, val global: Global) {
     }
 
     fun levelIncrease() {
-        if (currentLevel < game.data.waves.size) {
+        if (currentLevel < game.data.waves.size - 1) {
             currentLevel++
         }
     }
 
     fun levelDecrease() {
-        if (currentLevel > 1) {
+        if (currentLevel > 0) {
             currentLevel--
         }
     }

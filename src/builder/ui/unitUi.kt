@@ -1,5 +1,6 @@
 package builder.ui
 
+import app.format
 import builder.UnitClass
 import builder.UnitDef
 import kotlinx.html.js.onClickFunction
@@ -30,14 +31,14 @@ fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit) {
             }
         }
         div("unit-info") {
-            h4 { +unit.id }
+            h4 { +unit.name }
             p {
                 +"HP: "
                 +unit.hitpoints.toString()
             }
             p {
                 +"DPS: "
-                +(unit.dmgBase * unit.attackSpeed).toString()
+                +(unit.dmgBase * unit.attackSpeed).format(2)
             }
             p {
                 +"Costs: "
