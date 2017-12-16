@@ -2,10 +2,10 @@ package builder.data
 
 import builder.ArmorType
 import builder.AttackType
-import builder.Global
+import builder.LegionData
 import builder.UnitDef
 
-class Resistance(units: List<UnitDef>, val global: Global, val testUnit: UnitDef?) {
+class Resistance(units: List<UnitDef>, val testUnit: UnitDef?) {
 
     val dps: MutableMap<AttackType, Double> = mutableMapOf()
     val hps: MutableMap<ArmorType, Int> = mutableMapOf()
@@ -27,14 +27,14 @@ class Resistance(units: List<UnitDef>, val global: Global, val testUnit: UnitDef
 
     fun getModAttack(attackType: AttackType): Double {
         if (testUnit?.armorType !== null) {
-            return global.getModifier(attackType, testUnit.armorType)
+            return LegionData.global.getModifier(attackType, testUnit.armorType)
         }
         return 0.0
     }
 
     fun getModDefense(defenseType: ArmorType): Double {
         if (testUnit?.attackType !== null) {
-            return global.getModifier(testUnit.attackType, defenseType)
+            return LegionData.global.getModifier(testUnit.attackType, defenseType)
         }
         return 0.0
     }
