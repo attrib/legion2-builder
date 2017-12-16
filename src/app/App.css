@@ -1,64 +1,47 @@
+/* Move down content because we have a fixed navbar that is 3.5rem tall */
 body {
+  padding-top: 3.5rem;
+}
+
+.header {
+  background-color: #e9ecef;
+  padding: 15px 0;
+}
+
+.header .btn-group {
+  width: 100%;
+}
+
+aside > div {
+  margin: 5px auto;
+}
+
+#build-area {
+  margin: 5px 0;
+}
+
+footer {
+  border-top: 1px solid #e9ecef;
+}
+
+.tooltip-parent:hover .tooltip-data {
+  visibility: visible;
+}
+
+.tooltip-data {
+  visibility: hidden;
+  width: 220px;
+  background-color: black;
+  color: #fff;
   text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
 }
 
-.App-header {
-  background-color: #000;
-  height: 160px;
-  padding: 20px;
-  color: white;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-.App-ticker {
-  font-size: medium;
-}
-
-.info {
-  display: flex;
-}
-
-.info > div {
-  flex-grow: 1;
-}
-
-.info p {
-  margin: 0;
-}
-
-.area {
-  display: flex;
-}
-
-.area > div:first-child {
-  flex-grow: 2;
-}
-
-.area > div {
-  flex-grow: 1;
-}
-
-.lane {
-  display: flex;
-}
-
-.lane > div:first-child {
-  flex-grow: 2;
-}
-
-.lane > div {
-  flex-grow: 1;
-}
-
-.lane ul {
-  list-style: none;
-  display: flex;
-  flex-flow: row wrap;
-}
-
-.area .selection {
-  min-width: 150px;
+.dps-info img, .hp-info img {
+  margin: 0 4px;
+  vertical-align: middle;
+  width: 32px;
 }

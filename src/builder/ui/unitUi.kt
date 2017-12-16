@@ -1,8 +1,9 @@
 package builder.ui
 
-import builder.data.Unit
-import builder.data.UnitClass
-import kotlinx.html.id
+import app.format
+import builder.UnitClass
+import builder.UnitDef
+import kotlinext.js.invoke
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.dom.div
@@ -11,44 +12,50 @@ import react.dom.img
 import react.dom.p
 
 interface UnitEventHandler {
-    fun onClick(unit: Unit)
+    fun onClick()
 }
 
-fun RBuilder.unitUi(id: String, unit: Unit, unitEventHandler: UnitEventHandler) {
-    div("unit") {
-        attrs.id = id
-        attrs.onClickFunction = {
-            unitEventHandler.onClick(unit)
+fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit) {
+    kotlinext.js.require("src/builder/ui/unitUi.css")
+
+    val unitEventHandler = object : UnitEventHandler {
+        override fun onClick() {
+            callback()
         }
-        img(alt = unit.name, src = unit.iconpath) {
+    }
+    div("unit tooltip-parent") {
+        attrs.onClickFunction = {
+            unitEventHandler.onClick()
+        }
+        img(alt = unit.id, src = unit.iconPath.replace("Splashes", "Icons")) {
             attrs {
                 width = "64px"
                 height = "64px"
             }
         }
-        div("unit-info") {
+        div("tooltip-data") {
             h4 { +unit.name }
             p {
                 +"HP: "
-                +unit.hp.toString()
+                +unit.hitpoints.toString()
             }
             p {
                 +"DPS: "
-                +(unit.dps ?: 0.0).toString()
+                +(unit.dmgBase * unit.attackSpeed).format(2)
             }
             p {
                 +"Costs: "
                 +when (unit.unitClass) {
-                    UnitClass.Worker -> (unit.totalvalue ?: 0).toString()
-                    UnitClass.Fighter -> (unit.totalvalue ?: 0).toString()
-                    UnitClass.Mercenary -> (unit.mythiumcost ?: 0).toString()
+                    UnitClass.Worker -> (unit.totalValue).toString()
+                    UnitClass.Fighter -> (unit.totalValue).toString()
+                    UnitClass.Mercenary -> (unit.mythiumCost).toString()
                     else -> ""
                 }
             }
             if (unit.unitClass == UnitClass.Fighter || unit.unitClass == UnitClass.Worker) {
                 p {
                     +"Food: "
-                    +(unit.totalfood ?: 0).toString()
+                    +(unit.totalFood).toString()
                 }
             }
             p {

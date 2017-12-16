@@ -1,14 +1,17 @@
 package builder
 
 import app.format
-import builder.data.*
+import builder.data.BattleCalc
+import builder.data.Resistance
+import builder.data.Result
+import builder.data.Unit
 
-class Build(val waves: Map<Int, Wave>, val global: Global) {
+class Build(val game: Game, val global: Global) {
 
-    var legionId: String = ""
     var legion: Legion? = null
+    var legionId: String? = null
     private val lane: Lane = Lane()
-    var currentLevel = 1
+    var currentLevel = 0
 
     val costs get() = lane.getCosts(currentLevel)
     val foodCosts get() = lane.getFoodCosts(currentLevel)
@@ -19,23 +22,23 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
 
     private fun reward(): Int {
         var reward = 250
-        if (currentLevel > 1) {
+        if (currentLevel > 0) {
             for (i in 1 until (currentLevel)) {
-                reward += waves[i]!!.totalreward
+                reward += game.data.waves[i]!!.totalReward
                 reward += lane.getIncome(i)
             }
         }
-        return reward;
+        return reward
     }
 
     fun levelIncrease() {
-        if (waves.containsKey(currentLevel + 1)) {
+        if (currentLevel < game.data.waves.size - 1) {
             currentLevel++
         }
     }
 
     fun levelDecrease() {
-        if (waves.containsKey(currentLevel - 1)) {
+        if (currentLevel > 0) {
             currentLevel--
         }
     }
@@ -44,41 +47,34 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
         return lane.getWorkerCount(currentLevel)
     }
 
-    fun getFighters(includeWorkers: Boolean = false): MutableMap<Int, Unit> {
+    fun getFighters(includeWorkers: Boolean = false): List<Unit> {
         return lane.getFighters(currentLevel, includeWorkers)
     }
 
-    fun addFighter(unit: Unit) {
+    fun addFighter(unit: UnitDef) {
         lane.addFighter(unit, currentLevel)
     }
 
-    fun removeFighter(index: Int) {
-        lane.removeFighter(index)
+    fun removeFighter(unit: Unit) {
+        lane.removeFighter(unit)
     }
 
-    fun getMerchenaries(): MutableMap<Int, Unit> {
+    fun getMerchenaries(): List<Unit> {
         return lane.getMerchenaries(currentLevel)
     }
 
-    fun addMerchenary(unit: Unit) {
+    fun addMerchenary(unit: UnitDef) {
         lane.addMerchenary(unit, currentLevel)
     }
 
-    fun removeMerchenary(index: Int) {
-        lane.removeMerchenary(index)
+    fun removeMerchenary(unit: Unit) {
+        lane.removeMerchenary(unit)
     }
 
-    fun survivability(wave: Wave): String {
-        val creatures = mutableListOf<Unit>()
-        (0 until wave.amount).forEach { creatures.add(wave.creatures.first()) }
-        if (wave.amount2 > 0) {
-            (0 until wave.amount2).forEach { creatures.add(wave.creatures.last()) }
-        }
-        val calc = BattleCalc(global, lane
-                .getFighters(currentLevel).values
-                .toList(), creatures,
+    fun survivability(creatures: List<UnitDef>): String {
+        val calc = BattleCalc(game.data.global, lane.getFighterDef(currentLevel), creatures,
                 {
-                    var units = it.filter { it.unit.attackMode === "Melee" }
+                    var units = it.filter { it.unit.attackMode === AttackMode.Melee }
                     if (units.isEmpty()) {
                         units = it
                     }
@@ -100,12 +96,12 @@ class Build(val waves: Map<Int, Wave>, val global: Global) {
             } + " (${possibility.format(2)}% remaining fighter hp)"
         } else {
             val leftHpCreatures = results.sumByDouble { it.hpB() } / results.size
-            val possibility = leftHpCreatures / wave.totalHp * 100
+            val possibility = leftHpCreatures / creatures.sumBy { it.hitpoints } * 100
             "High leak probability (${possibility.format(2)}% remaining creatures hp)"
         }
     }
 
-    fun getResistance(testUnit: Unit?): Resistance {
-        return Resistance(lane.getFighters(currentLevel).values.toList(), global, testUnit)
+    fun getResistance(testUnit: UnitDef?): Resistance {
+        return Resistance(lane.getFighterDef(currentLevel), global, testUnit)
     }
 }

@@ -1,35 +1,40 @@
 package builder.data
 
-class Resistance(units: List<Unit>, val global: Global, val testUnit: Unit?) {
+import builder.ArmorType
+import builder.AttackType
+import builder.Global
+import builder.UnitDef
+
+class Resistance(units: List<UnitDef>, val global: Global, val testUnit: UnitDef?) {
 
     val dps: MutableMap<AttackType, Double> = mutableMapOf()
-    val hps: MutableMap<DefenseType, Int> = mutableMapOf()
+    val hps: MutableMap<ArmorType, Int> = mutableMapOf()
 
     init {
         for (unit in units) {
-            if (!dps.containsKey(unit.attackType!!)) {
-                dps.put(unit.attackType!!, 0.0)
+            if (!dps.containsKey(unit.attackType)) {
+                dps.put(unit.attackType, 0.0)
             }
-            val oldDps = dps[unit.attackType!!]
-            dps[unit.attackType!!] = unit.dps * unit.amount + oldDps!!
-            if (!hps.containsKey(unit.armorType!!)) {
-                hps.put(unit.armorType!!, 0)
+            val oldDps = dps[unit.attackType]
+            dps[unit.attackType] = unit.dmgBase * unit.attackSpeed + oldDps!!
+            if (!hps.containsKey(unit.armorType)) {
+                hps.put(unit.armorType, 0)
             }
-            val oldHp = hps[unit.armorType!!]
-            hps[unit.armorType!!] = unit.hp * unit.amount + oldHp!!
+            val oldHp = hps[unit.armorType]
+            hps[unit.armorType] = unit.hitpoints + oldHp!!
         }
     }
 
     fun getModAttack(attackType: AttackType): Double {
         if (testUnit?.armorType !== null) {
-            return global.getModifier(attackType, testUnit.armorType!!)
+            return global.getModifier(attackType, testUnit.armorType)
         }
         return 0.0
     }
 
-    fun getModDefense(defenseType: DefenseType): Double {
+    fun getModDefense(defenseType: ArmorType): Double {
         if (testUnit?.attackType !== null) {
-            return global.getModifier(testUnit.attackType!!, defenseType!!)
+            return global.getModifier(testUnit.attackType, defenseType)
         }
         return 0.0
     }

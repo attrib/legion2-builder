@@ -1,16 +1,19 @@
 package builder.data
 
+import builder.Global
+import builder.UnitDef
+
 data class Result(val unitsA: List<UnitState>, val unitsB: List<UnitState>) {
     fun hpA() = unitsA.sumByDouble { it.hitpoints }
     fun hpB() = unitsB.sumByDouble { it.hitpoints }
 }
 
-data class UnitState(val unit: Unit, var hitpoints: Double, var target: UnitState? = null) {
+data class UnitState(val unit: UnitDef, var hitpoints: Double, var target: UnitState? = null) {
     fun dealDamage(global: Global) {
         target?.let {
-            val mod = global.getModifier(unit.attackType!!, it.unit.armorType!!)
-            val effectiveDmg = mod * unit.dmgbase / unit.aspd
-            println("${unit.name}($hitpoints) deals $effectiveDmg to ${it.unit.name}(${it.hitpoints})")
+            val mod = global.getModifier(unit.attackType, it.unit.armorType)
+            val effectiveDmg = mod * unit.dmgBase / unit.attackSpeed
+            println("${unit.id}($hitpoints) deals $effectiveDmg to ${it.unit.id}(${it.hitpoints})")
             it.hitpoints -= effectiveDmg
             if (it.hitpoints <= 0) {
                 target = null
@@ -19,10 +22,10 @@ data class UnitState(val unit: Unit, var hitpoints: Double, var target: UnitStat
     }
 }
 
-class BattleCalc(val global: Global, val unitsA: List<Unit>, val unitsB: List<Unit>, val targetSelectionStrategy: (List<UnitState>) -> UnitState) {
+class BattleCalc(val global: Global, val unitsA: List<UnitDef>, val unitsB: List<UnitDef>, val targetSelectionStrategy: (List<UnitState>) -> UnitState) {
     fun calc(): Result {
-        var unitStatesA = unitsA.map { UnitState(it, it.hp.toDouble()) }
-        var unitStatesB = unitsB.map { UnitState(it, it.hp.toDouble()) }
+        var unitStatesA = unitsA.map { UnitState(it, it.hitpoints.toDouble()) }
+        var unitStatesB = unitsB.map { UnitState(it, it.hitpoints.toDouble()) }
 
         while (unitStatesA.isNotEmpty() && unitStatesB.isNotEmpty()) {
             assignTargets(unitStatesA, unitStatesB)
@@ -33,8 +36,8 @@ class BattleCalc(val global: Global, val unitsA: List<Unit>, val unitsB: List<Un
             unitStatesB = unitStatesB.filter { it.hitpoints > 0 }
         }
         println("Result:")
-        println(unitStatesA.joinToString { "${it.unit.name} ${it.hitpoints}" })
-        println(unitStatesB.joinToString { "${it.unit.name} ${it.hitpoints}" })
+        println(unitStatesA.joinToString { "${it.unit.id} ${it.hitpoints}" })
+        println(unitStatesB.joinToString { "${it.unit.id} ${it.hitpoints}" })
         return Result(unitStatesA, unitStatesB)
     }
 
