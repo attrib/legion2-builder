@@ -1,22 +1,16 @@
 package builder
 
 
-
-class Game {
-    val data = LegionData
-
-    fun fighters() = data.units.filter { it.unitClass == UnitClass.Fighter }
-    fun fighters(legion: Legion) = fighters().filter { it.legion == legion.id }
-    fun upgrades() = data.units.filter { it.unitClass == UnitClass.Worker } //@todo: add supply upgrade here
-    fun mercenaries() = data.units.filter { it.unitClass == UnitClass.Mercenary }
-
-    fun getWaveCreaturesDef(level: Int): List<UnitDef> {
-        val creatureDefs = mutableListOf<UnitDef>()
-        val wave = data.waves[level]
-        (0 until wave.amount).forEach { creatureDefs.add(data.unitsMap[wave.unit]!!) }
-        if (wave.amount2 > 0) {
-            (0 until wave.amount2).forEach { creatureDefs.add(data.unitsMap[wave.unit2]!!) }
-        }
-        return creatureDefs
+fun LegionData.fighters() = units.filter { it.unitClass == UnitClass.Fighter }
+fun LegionData.fighters(legion: Legion) = fighters().filter { it.legion == legion.id }
+fun LegionData.upgrades() = units.filter { it.unitClass == UnitClass.Worker } //@todo: add supply upgrade here
+fun LegionData.mercenaries() = units.filter { it.unitClass == UnitClass.Mercenary }
+fun LegionData.getWaveCreaturesDef(level: Int): List<UnitDef> {
+    val creatureDefs = mutableListOf<UnitDef>()
+    val wave = waves[level]
+    (0 until wave.amount).forEach { creatureDefs.add(unitsMap[wave.unit]!!) }
+    if (wave.amount2 > 0) {
+        (0 until wave.amount2).forEach { creatureDefs.add(unitsMap[wave.unit2]!!) }
     }
+    return creatureDefs
 }
