@@ -7,6 +7,7 @@ class Game {
 
     fun fighters() = data.units.filter { it.unitClass == UnitClass.Fighter }
     fun fighters(legion: Legion) = fighters().filter { it.legion == legion.id }
+    fun upgrades() = data.units.filter { it.unitClass == UnitClass.Worker } //@todo: add supply upgrade here
     fun mercenaries() = data.units.filter { it.unitClass == UnitClass.Mercenary }
 
     fun getWaveCreaturesDef(level: Int): List<UnitDef> {

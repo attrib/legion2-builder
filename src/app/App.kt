@@ -116,9 +116,9 @@ class App : RComponent<RProps, AppState>() {
                             +"Total DPS: ${state.build.totalDps.format(2)}"
                             dpsUi(state.build.getResistance(unitDef))
                         }
-                        div {
-                            +"Survivability Chance: ${state.build.survivability(waveDef)}"
-                        }
+//                        div {
+//                            +"Survivability Chance: ${state.build.survivability(waveDef)}"
+//                        }
                         div {
                             +"Workers: ${state.build.getWorkerCount()}"
                         }
@@ -224,7 +224,7 @@ class App : RComponent<RProps, AppState>() {
                             +"Please select legion"
                         } else {
                             ul("list-inline row no-gutters justify-content-start") {
-                                state.game.fighters(state.build.legion!!).forEach { unit ->
+                                (state.game.fighters(state.build.legion!!) + state.game.upgrades()).forEach { unit ->
                                     if (!unit.id.startsWith("test")) {
                                         li("col") {
                                             unitUi(unit, { setState { build.addFighter(unit) } })
