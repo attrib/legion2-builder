@@ -13,8 +13,7 @@ class Unit(val def: UnitDef) {
     var position = Position(0, 0)
 
     fun save(ds:DSFactory.DataStream) {
-        val index = LegionData.units.indexOf(def)
-        ds.writeInt16(index)
+        ds.writeUtf8WithLen(def.id)
         ds.writeInt8(buildLevel ?: -1)
         ds.writeInt8(upgradedLevel ?: -1)
         ds.writeInt8(soldLevel ?: -1)
@@ -25,8 +24,8 @@ class Unit(val def: UnitDef) {
 
     companion object {
         fun load(ds:DSFactory.DataStream) : Unit {
-            val index = ds.readInt16()
-            val unit = Unit(LegionData.units[index])
+            val index = ds.readUtf8WithLen()
+            val unit = Unit(LegionData.unitsMap[index]!!)
             unit.buildLevel = intOrNull(ds.readInt8())
             unit.upgradedLevel = intOrNull(ds.readInt8())
             unit.soldLevel = intOrNull(ds.readInt8())

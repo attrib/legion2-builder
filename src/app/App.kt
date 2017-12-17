@@ -5,8 +5,6 @@ import builder.data.Unit
 import builder.ui.*
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
-import index.LZString
-import kotlinx.html.id
 import parser.ReplayResult
 import react.*
 import react.dom.*
@@ -38,11 +36,8 @@ class App : RComponent<RProps, AppState>() {
         val url = window.location.href
         if( url.contains("?b=") ) {
             val code = url.split("?b=")[1]
-            val s = LZString.decompressFromBase64(code)
-            val arr = fromString(s).buffer
-            val ds2 = DSFactory.DataStream(arr)
             build = Build()
-            build.load(ds2)
+            build.fromPermaLinkCode(code)
         }
     }
 

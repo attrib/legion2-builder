@@ -9,28 +9,20 @@ class Lane {
     var units = Units(list)
 
     fun save(ds:DSFactory.DataStream) {
-        ds.writeInt16(fighters.size)
-        fighters.forEach {
-            it.save(ds)
-        }
-        ds.writeInt16(mercenaries.size)
-        mercenaries.forEach {
+        ds.writeInt16(list.size)
+        list.forEach {
             it.save(ds)
         }
     }
 
     fun load(ds:DSFactory.DataStream) {
-        fighters.clear()
-        mercenaries.clear()
+        list.clear()
 
         val len = ds.readInt16()
         (0 until len).forEach {
-            fighters += Unit.load(ds)
+            list += Unit.load(ds)
         }
-        val len2 = ds.readInt16()
-        (0 until len2).forEach {
-            mercenaries += Unit.load(ds)
-        }
+        units = Units(list)
     }
 
     fun getWorkerCount(level: Int):Int {
