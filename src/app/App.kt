@@ -4,21 +4,11 @@ import builder.*
 import builder.data.Resistance
 import builder.data.Unit
 import builder.data.isEnabled
-import builder.ui.dpsUi
-import builder.ui.hpUi
-import builder.ui.unitUi
-import kotlinx.html.*
-import kotlinx.html.js.onChangeFunction
+import builder.ui.*
+import kotlinx.html.id
 import kotlinx.html.js.onClickFunction
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.HTMLSelectElement
-import org.w3c.dom.get
-import org.w3c.files.Blob
-import org.w3c.files.FileReader
-import org.w3c.files.get
-import parser.LogParser
+import kotlinx.html.title
 import parser.ReplayResult
-import parser.replay
 import react.*
 import react.dom.*
 
@@ -28,7 +18,7 @@ interface AppState : RState {
     var build: Build
     var selectedUnit: Unit?
     var selectedPlayer: String?
-    var replayResult: ReplayResult
+    var replayResult: ReplayResult?
     var uploadingFile: Boolean
 }
 
@@ -70,85 +60,40 @@ class App : RComponent<RProps, AppState>() {
                 div("container") {
                     div("row") {
                         div("col") {
-                            h3 { +"Select Legion" }
-                            div("btn-group btn-group-sm") {
-                                LegionData.legionsMap.forEach { (legionId, legion) ->
-                                    if (!legion.playable) {
-                                        return@forEach
-                                    }
-                                    label("btn btn-secondary btn-sm col") {
-                                        if (state.build.legionId == legionId) {
-                                            attrs.classes += "active"
-                                        }
-                                        input(type = InputType.radio, name = "legion", classes = "d-none") {
-                                            attrs.onChangeFunction = {
-                                                val target = it.target as HTMLInputElement
-                                                setState {
-                                                    build.legionId = target.value
-                                                    build.legion = LegionData.legionsMap[target.value]
-                                                }
-                                            }
-                                            attrs.value = legionId
-                                            if (state.build.legionId == legionId) {
-                                                attrs.checked = true
-                                            }
-                                        }
-                                        img(alt = legion.name, src = legion.iconPath) {
-                                            attrs.title = legion.name
-                                            attrs.width = "32px"
-                                        }
-                                    }
-                                }
-                            }
-                            div("btn-group") {
-                                button(classes = "btn btn-secondary col") {
-                                    +"reset"
-                                    attrs.onClickFunction = {
-                                        setState {
-                                            resetBuild()
-                                        }
-                                    }
-                                }
-                                a(href = "", classes = "btn btn-secondary col") {
-                                    +"Permalink"
-                                }
-                            }
-                            div("btn-group") {
-                                input(InputType.file, classes = "btn btn-secondary col") {
-                                    attrs.onChangeFunction = {
-                                        val target = it.target as HTMLInputElement
-                                        val fr = FileReader()
-                                        fr.onload = {
-                                            val text = (it.target!! as FileReader).result as String
-                                            setState {
-                                                replayResult = replay(LogParser(text).parse())
-                                                uploadingFile = false
-                                            }
-                                        }
-                                        fr.readAsText(target.files!![0] as Blob)
-                                        setState {
-                                            uploadingFile = true
-                                        }
-                                    }
-                                }
-                                select(classes = "btn btn-secondary col") {
-                                    state.replayResult?.playerBuilds?.keys?.forEach { player ->
-                                        option {
-                                            attrs.selected = player == state.selectedPlayer ?: ""
-                                            +player
-                                        }
-                                    }
-                                    attrs.onChangeFunction = {
-                                        val target = it.target as HTMLSelectElement
-                                        val player = target.selectedOptions[0]
-                                        setState {
-                                            selectedPlayer = player?.innerHTML
-                                            build = state.replayResult?.playerBuilds?.get(selectedPlayer!!)!!
-                                        }
+                            legionSelect(state.build, state.replayResult, state.selectedPlayer, object : LegionSelectEventHandler {
+                                override fun reset() {
+                                    setState {
+                                        resetBuild()
                                     }
                                 }
 
-                            }
+                                override fun replayFileSelected() {
+                                    setState {
+                                        uploadingFile = true
+                                    }
+                                }
+
+                                override fun replayFileLoaded(replayResult: ReplayResult) {
+                                    setState {
+                                        this.replayResult = replayResult
+                                        uploadingFile = false
+                                    }
+                                }
+
+                                override fun replayPlayerSeleceted(player: String) {
+                                    setState {
+                                        build = state.replayResult?.playerBuilds?.get(player)!!
+                                    }
+                                }
+
+                                override fun changeLegion(legion: Legion) {
+                                    setState {
+                                        build.legionId = legion.id
+                                        build.legion = legion
+                                    }
+                                }
+
+                            })
                         }
                         div("col") {
                             h3 { +"Lane info" }
@@ -239,9 +184,11 @@ class App : RComponent<RProps, AppState>() {
                                 state.build.getFighters(true).forEach { unit ->
                                     li("col-auto") {
                                         val addClass = if (state.selectedUnit == unit) "selected" else ""
-                                        unitUi(unit.def, { setState {
-                                            selectedUnit = if (selectedUnit == unit) null else unit
-                                        }}, addClass)
+                                        unitUi(unit.def, {
+                                            setState {
+                                                selectedUnit = if (selectedUnit == unit) null else unit
+                                            }
+                                        }, addClass)
                                     }
                                 }
                             }
