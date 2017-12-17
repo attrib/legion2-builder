@@ -22,12 +22,14 @@ object ExtractBuilds {
             val field = mutableMapOf<Position, Unit>()
             game.waves.forEach { wave ->
                 val playerWave = wave.playerWaves[player.name]!!
+                val untouchedUnits = field.toMutableMap()
                 playerWave.buildings.entities.forEach { es ->
                     val matcher = POSITION_PATTERN.exec(es.attributes["Position"]!!)
                     if (matcher != null) {
                         val x = (2 * matcher[1]!!.toDouble()).toInt()
                         val y = (2 * matcher[2]!!.toDouble()).toInt()
                         val pos = Position(x, y)
+                        untouchedUnits.remove(pos)
                         val old = field[pos]
                         val newUnitDef = LegionData.unitsMap[es.attributes["Type"]!!]!!
                         val new = if (old != null) {
@@ -38,7 +40,9 @@ object ExtractBuilds {
                         new.position = pos
                         field[pos] = new
                     }
-
+                }
+                untouchedUnits.values.forEach { unit->
+                    build.sellFighter(unit)
                 }
                 build.levelIncrease()
             }
