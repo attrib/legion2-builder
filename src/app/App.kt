@@ -195,7 +195,14 @@ class App : RComponent<RProps, AppState>() {
                         })
                     }
                     Tabs.BuildOrder -> {
-                        buildOrder(state.build)
+                        buildOrder(state.build, object : BuildOrderEventHandler {
+                            override fun selectLevel(level: Int) {
+                                setState {
+                                    build.currentLevel = level
+                                    selectedTab = Tabs.WaveEditor
+                                }
+                            }
+                        })
                     }
                 }
             }
