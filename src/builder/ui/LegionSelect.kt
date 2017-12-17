@@ -14,9 +14,9 @@ import org.w3c.dom.get
 import org.w3c.files.Blob
 import org.w3c.files.FileReader
 import org.w3c.files.get
+import parser.ExtractBuilds
 import parser.LogParser
 import parser.ReplayResult
-import parser.replay
 import react.RBuilder
 import react.dom.*
 
@@ -76,7 +76,7 @@ fun RBuilder.legionSelect(build: Build, replayResult: ReplayResult?, selectedPla
                     val fr = FileReader()
                     fr.onload = {
                         val text = (it.target!! as FileReader).result as String
-                        eventHandler.replayFileLoaded(replay(LogParser(text).parse()))
+                        eventHandler.replayFileLoaded(ExtractBuilds.extactBuilds(LogParser(text).parse()))
                     }
                     fr.readAsText(target.files!![0] as Blob)
                     eventHandler.replayFileSelected()
@@ -86,7 +86,10 @@ fun RBuilder.legionSelect(build: Build, replayResult: ReplayResult?, selectedPla
         }
         if (replayResult !== null) {
             select(classes = "btn btn-secondary col") {
-                replayResult?.playerBuilds?.keys?.forEach { player ->
+                option {
+                    +""
+                }
+                replayResult.playerBuilds.keys.forEach { player ->
                     option {
                         attrs.selected = player == selectedPlayer ?: ""
                         +player

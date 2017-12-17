@@ -1,8 +1,6 @@
 package parser
 
-import builder.Build
 import builder.LegionData
-
 
 data class WaveTimeEntry(
         val gold: Double,
@@ -24,7 +22,15 @@ data class Wave(val number: Int, val start: Int, val end: Int) {
     var unitsSent: Snapshot? = null
 }
 
-data class GameResult(val players: List<String>, val waves: List<Wave>)
+data class Player(val playerId: Int, val entity: Entity) {
+    val name = entity.attr("Name", 200000) ?: ""
+    fun isInActiveTeam(): Boolean {
+        val gold = entity.attr("Gold", 200000)?.toInt() ?: 0
+        return gold > 0
+    }
+}
+
+data class GameResult(val players: List<Player>, val waves: List<Wave>)
 
 data class Snapshot(val entities: List<EntitySnapshot>) {
     fun workers(): Snapshot = Snapshot(entities.filter { it.attributes["Type"] == "worker_unit_id" || it.attributes["Type"] == "worker_x2_unit_id" })
@@ -46,18 +52,8 @@ enum class Currency {
 }
 
 data class Payment(val playerId: Int, val time: Int, val from: Int, val to: Int, val currency: Currency, val entity: Entity?)
-data class ReplayResult(val playerBuilds: Map<String, Build>)
 class Replay(val logFile: LogFile) {
     private var waves = emptyList<Wave>()
-    fun fullBuild(): Map<Int, Snapshot> {
-        val map = mutableMapOf<Int, Snapshot>()
-        logFile.timeLine.forEach { time ->
-            val sn = buildSnapshot(time.time)
-            println("$time ${sn.entities.size}")
-//            map[time.time] = sn
-        }
-        return map
-    }
 
     fun findPayments(name: String): List<Payment> {
         var payments = emptyList<Payment>()
@@ -115,20 +111,6 @@ class Replay(val logFile: LogFile) {
             throw IllegalArgumentException()
         }
 
-        fun format(list: List<EntitySnapshot>?) = list?.map { it.attributes["Type"] }?.joinToString(", ") ?: ""
-
-        var players = emptyList<String>()
-        (1..8).forEach { playerId ->
-            val entity = logFile.players[playerId]!!
-            val gold = entity.attr("Gold", 200000)?.toInt() ?: 0
-            if (gold > 0) {
-                players += entity.attr("Name", 200000)!!
-            }
-        }
-        if (players.size != 4) {
-            throw IllegalArgumentException("Wrong number of players!")
-        }
-
         waves.forEach { wave ->
             val atStart = buildSnapshot(wave.start - 1)
             val atEnd = buildSnapshot(wave.end)
@@ -136,7 +118,6 @@ class Replay(val logFile: LogFile) {
             val endByOwners = atEnd.byOwners()
             wave.unitsSent = endByOwners[sendUnit.toString()]
             (1..8).forEach { playerId ->
-
                 val start = startByOwners[playerId.toString()]
                 val end = endByOwners[playerId.toString()]
                 if (end != null) {
@@ -165,7 +146,7 @@ class Replay(val logFile: LogFile) {
 
             }
         }
-        return GameResult(players, waves)
+        return GameResult(logFile.players.map { Player(it.key, it.value) }.filter { it.playerId > 0 && it.name != "(Closed)" }, waves)
     }
 
     private fun buildValue(snapshot: Snapshot?): Double {
@@ -202,61 +183,4 @@ class Replay(val logFile: LogFile) {
         }
         return Snapshot(entitySnapshots)
     }
-}
-
-inline fun <K, V, R> Map<out K, V>.map(callback: (K, V) -> R) = map { (k, v) -> callback(k, v) }
-
-fun replay(logdata: LogFile): ReplayResult {
-    val gameData = LegionData
-    val r = Replay(logdata)
-    val game = r.build()
-    var last = mutableListOf<String>()
-
-    val playerBuilds = game.players.associateBy({ it }, { player ->
-        val build = Build()
-        game.waves.forEach { wave ->
-            val playerWave = wave.playerWaves[player]!!
-            val current = playerWave.buildings.entities.map { it.attributes["Type"]!! } + (1..playerWave.end.workers).map { "worker_unit_id" }
-            val diffAdded = current.toMutableList()
-            val diffRemoved = last.toMutableList()
-            last.forEach {
-                diffAdded.remove(it)
-            }
-            current.forEach {
-                diffRemoved.remove(it)
-            }
-            last = current.toMutableList()
-
-            val value = current.sumBy { gameData.unitsMap[it]!!.totalValue }
-
-
-            var text = emptyList<String>()
-            var gold = 0
-            diffAdded.forEach { added ->
-                val unitAdded = gameData.unitsMap[added]!!
-                if (unitAdded.upgradesFrom != null) {
-                    val unitUpgraded = gameData.unitsMap[unitAdded.upgradesFrom]!!
-                    if (diffRemoved.contains(unitUpgraded.id)) {
-                        gold += unitAdded.goldCost
-                        text += "${unitUpgraded.name} -> ${unitAdded.name}"
-                        build.addFighter(unitAdded)
-                    } else {
-                        gold += unitUpgraded.goldCost
-                        gold += unitAdded.goldCost
-                        text += "${unitAdded.name} (${unitUpgraded.name})*"
-                        build.addFighter(unitAdded)
-                    }
-                } else {
-                    gold += unitAdded.goldCost
-                    text += unitAdded.name
-
-                    build.addFighter(unitAdded)
-                }
-            }
-            build.levelIncrease()
-        }
-        build
-    })
-
-    return ReplayResult(playerBuilds)
 }

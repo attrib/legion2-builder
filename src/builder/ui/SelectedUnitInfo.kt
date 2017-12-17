@@ -1,13 +1,15 @@
 package builder.ui
 
-import builder.*
+import builder.Build
+import builder.LegionData
+import builder.UnitDef
 import builder.data.Unit
+import builder.fighters
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.title
 import react.RBuilder
 import react.dom.div
 import react.dom.img
-import react.setState
 
 interface SelectedUnitInfoEventHandler {
     fun deselect()

@@ -31,6 +31,7 @@ class App : RComponent<RProps, AppState>() {
         resetBuild()
         uploadingFile = false
         selectedTab = Tabs.WaveEditor
+        replayResult = null
     }
 
     fun AppState.resetBuild() {
