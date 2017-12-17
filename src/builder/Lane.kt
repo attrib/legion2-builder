@@ -1,51 +1,74 @@
 package builder
 
 import builder.data.Unit
+import builder.data.Units
 import kotlin.math.roundToInt
 
 class Lane {
+    val list = mutableListOf<Unit>()
+    var units = Units(list)
 
-    private val fighters: MutableList<Unit> = mutableListOf()
-    private val mercenaries: MutableList<Unit> = mutableListOf()
+    fun save(ds:DSFactory.DataStream) {
+        ds.writeInt16(list.size)
+        list.forEach {
+            it.save(ds)
+        }
+    }
+
+    fun load(ds:DSFactory.DataStream) {
+        list.clear()
+
+        val len = ds.readInt16()
+        (0 until len).forEach {
+            list += Unit.load(ds)
+        }
+        units = Units(list)
+    }
 
     fun getWorkerCount(level: Int):Int {
-        return 1 + getFighters(level, true)
-                .filter { it.def.unitClass == UnitClass.Worker }
-                .size
+        return 1 + getFighters(level).worker().size
     }
 
     fun getTotalHp(level: Int): Int {
-        return getFighters(level).sumBy { it.def.hitpoints }
+        return getFighters(level).fighters().totalHp()
     }
 
     fun getTotalDps(level: Int): Double {
-        return getFighters(level).sumByDouble { it.def.dmgBase * it.def.attackSpeed }
+        return getFighters(level).fighters().totalDps()
     }
 
     fun getCosts(level: Int): Int {
-        var costs = getFighters(level, true).sumBy { it.def.totalValue }
+        var costs = getFighters(level).totalValue()
         costs += getSoldFighter(level).sumByDouble { it.def.totalValue * 0.6 }.roundToInt()
         return costs
     }
 
     fun getFoodCosts(level: Int): Int {
-        return getFighters(level, true).sumBy { it.def.totalFood }
+        return getFighters(level).totalFood()
     }
 
     fun getIncome(level: Int): Int {
-        return mercenaries.sumBy { if (it.buildLevel!! <= level) it.def.incomeBonus else 0 }
+        return getFighters(level).totalIncome()
     }
 
-    fun getFighters(level: Int, includeWorkers: Boolean = false): List<Unit> {
-        return fighters
-                .filter { it.buildLevel!! <= level }
-                .filter { it.upgradedLevel == null || it.upgradedLevel!! > level }
-                .filter { it.soldLevel == null || it.soldLevel!! > level }
-                .filter { ( includeWorkers && it.buildLevel!! == level ) || it.def.unitClass != UnitClass.Worker }
+    fun getFighters(level: Int): Units {
+        return units
+                .ownCreatures()
+                .upToLevel(level)
+                .notSold(level)
+                .notUpgraded(level)
+    }
+
+    fun getFightersUnfiltered(): Units {
+        return units
     }
 
     fun getFighterDef(level: Int, includeWorkers: Boolean = false): List<UnitDef> {
-        return getFighters(level, includeWorkers).map { it.def }
+        if (includeWorkers) {
+            return getFighters(level).map { it.def }
+        } else {
+            return getFighters(level).fighters().map { it.def }
+        }
     }
 
     fun upgradeFighter(selectedUnit: Unit, upgradeTo: UnitDef, level: Int): Unit {
@@ -57,33 +80,37 @@ class Lane {
         selectedUnit.soldLevel = level
     }
 
-    fun getSoldFighter(level: Int): List<Unit> {
-        return fighters.filter { it.soldLevel != null && it.soldLevel!! <= level }
+    fun getSoldFighter(level: Int): Units {
+        return units.sold(level)
     }
 
     fun addFighter(unit: UnitDef, level: Int): Unit {
         val newUnit = Unit(unit)
         newUnit.buildLevel = level
-        fighters.add(newUnit)
+        list.add(newUnit)
+        units = Units(list)
         return newUnit
     }
 
     fun removeFighter(unit: Unit) {
-        fighters.remove(unit)
+        list.remove(unit)
+        units = Units(list)
     }
 
-    fun getMerchenaries(level: Int): List<Unit> {
-        return mercenaries.filter { it.buildLevel!! == level }
+    fun getMerchenaries(level: Int): Units {
+        return units.mercenaries().forLevel(level)
     }
 
     fun addMerchenary(unit: UnitDef, level: Int) {
         val newUnit = Unit(unit)
         newUnit.buildLevel = level
-        mercenaries.add(newUnit)
+        list.add(newUnit)
+        units = Units(list)
     }
 
     fun removeMerchenary(unit: Unit) {
-        mercenaries.remove(unit)
+        list.remove(unit)
+        units = Units(list)
     }
 
 }

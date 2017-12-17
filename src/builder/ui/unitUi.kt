@@ -4,6 +4,7 @@ import app.format
 import builder.UnitClass
 import builder.UnitDef
 import kotlinext.js.invoke
+import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.dom.div
@@ -15,7 +16,7 @@ interface UnitEventHandler {
     fun onClick()
 }
 
-fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit) {
+fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit, additionalClasses: String? = null) {
     kotlinext.js.require("src/builder/ui/unitUi.css")
 
     val unitEventHandler = object : UnitEventHandler {
@@ -24,6 +25,9 @@ fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit) {
         }
     }
     div("unit tooltip-parent") {
+        if (additionalClasses != null) {
+            attrs.classes += additionalClasses
+        }
         attrs.onClickFunction = {
             unitEventHandler.onClick()
         }
