@@ -2,14 +2,19 @@ package app
 
 import builder.*
 import builder.data.Unit
-import builder.data.isEnabled
 import builder.ui.*
-import kotlinx.html.id
+import kotlinx.html.classes
+import kotlinx.html.js.onClickFunction
 import parser.ReplayResult
 import react.*
 import react.dom.*
 
 fun Double.format(digits: Int): String = this.asDynamic().toFixed(digits)
+
+enum class Tabs {
+    BuildOrder,
+    WaveEditor
+}
 
 interface AppState : RState {
     var build: Build
@@ -17,6 +22,7 @@ interface AppState : RState {
     var selectedPlayer: String?
     var replayResult: ReplayResult?
     var uploadingFile: Boolean
+    var selectedTab: Tabs
 }
 
 class App : RComponent<RProps, AppState>() {
@@ -24,6 +30,7 @@ class App : RComponent<RProps, AppState>() {
     override fun AppState.init() {
         resetBuild()
         uploadingFile = false
+        selectedTab = Tabs.WaveEditor
     }
 
     fun AppState.resetBuild() {
@@ -115,26 +122,54 @@ class App : RComponent<RProps, AppState>() {
                 }
             }
 
-            div("container") {
-                div("row") {
-                    div("col-8") {
-                        div {
-                            attrs.id = "wave-creatures"
-                            unitList(LegionData.getWaveCreaturesDef(state.build.currentLevel), { it.isEnabled() } ,{})
+            div("tab-bar") {
+                div("container") {
+                    div("row justify-content-start") {
+                        div("col-auto") {
+                            +"Wave editor"
+                            if (state.selectedTab == Tabs.WaveEditor) {
+                                attrs.classes += "active"
+                            }
+                            attrs.onClickFunction = {
+                                setState { selectedTab = Tabs.WaveEditor }
+                            }
                         }
-                        hr {  }
-                        buildArea(state.build, state.selectedUnit, object : BuildAreaEventHandler {
+                        div("col-auto") {
+                            +"Build order"
+                            if (state.selectedTab == Tabs.BuildOrder) {
+                                attrs.classes += "active"
+                            }
+                            attrs.onClickFunction = {
+                                setState { selectedTab = Tabs.BuildOrder }
+                            }
+                        }
+                    }
+                }
+            }
+
+            div("container") {
+                attrs.classes += state.selectedTab.toString()
+                when (state.selectedTab) {
+                    Tabs.WaveEditor -> {
+                        waveEditor(state.build, state.selectedUnit, object : WaveEditorEventHandler {
+                            override fun addFighter(unitDef: UnitDef) {
+                                setState { selectedUnit = build.addFighter(unitDef) }
+                            }
+
+                            override fun addMercenary(unitDef: UnitDef) {
+                                setState { build.addMerchenary(unitDef) }
+                            }
+
+                            override fun removeMercenary(unit: Unit) {
+                                setState { build.removeMerchenary(unit) }
+                            }
+
                             override fun selectUnit(unit: Unit) {
                                 setState {
                                     selectedUnit = if (selectedUnit == unit) null else unit
                                 }
                             }
 
-                        })
-                    }
-                    aside("col-4") {
-
-                        selectedUnitInfo(state.selectedUnit, state.build, object : SelectedUnitInfoEventHandler {
                             override fun deselect() {
                                 setState { this.selectedUnit = null }
                             }
@@ -158,31 +193,9 @@ class App : RComponent<RProps, AppState>() {
                             }
 
                         })
-
-                        div {
-                            if (state.build.legion == null) {
-                                +"Please select legion"
-                            } else {
-                                unitList(LegionData.fighters(state.build.legion!!) + LegionData.upgrades(), { unit ->
-                                    unit.isEnabled() && unit.upgradesFrom == null
-                                }, { unit ->
-                                    setState { selectedUnit = build.addFighter(unit) }
-                                })
-                            }
-                        }
-
-                        div {
-                            h2 { +"Mercenaries" }
-                            div {
-                                div {
-                                    unitList(state.build.getMerchenaries(), { true }, { setState { build.removeMerchenary(it) } })
-                                }
-                                div {
-                                    unitList(LegionData.mercenaries(), { it.isEnabled() }, { setState { build.addMerchenary(it) } })
-                                }
-                            }
-                        }
-
+                    }
+                    Tabs.BuildOrder -> {
+                        buildOrder(state.build)
                     }
                 }
             }

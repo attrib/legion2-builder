@@ -15,7 +15,7 @@ interface LevelInterface {
 }
 
 fun RBuilder.waveInfo(waveDef: List<UnitDef>, currentLevel: Int, eventHandler: LevelInterface) {
-    h3 { +"Wave Info" }
+    h3 { +"Wave info" }
     div {
         +"Level: "
         +(currentLevel + 1).toString()

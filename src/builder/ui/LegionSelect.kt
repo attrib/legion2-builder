@@ -29,7 +29,7 @@ interface LegionSelectEventHandler {
 }
 
 fun RBuilder.legionSelect(build: Build, replayResult: ReplayResult?, selectedPlayer: String?, eventHandler: LegionSelectEventHandler) {
-    h3 { +"Select Legion" }
+    h3 { +"Legion" }
     div("btn-group btn-group-sm") {
         LegionData.legionsMap.forEach { (legionId, legion) ->
             if (!legion.playable) {

@@ -44,6 +44,10 @@ class Lane {
                 .filter { ( includeWorkers && it.buildLevel!! == level ) || it.def.unitClass != UnitClass.Worker }
     }
 
+    fun getFightersUnfiltered(): List<Unit> {
+        return fighters
+    }
+
     fun getFighterDef(level: Int, includeWorkers: Boolean = false): List<UnitDef> {
         return getFighters(level, includeWorkers).map { it.def }
     }
