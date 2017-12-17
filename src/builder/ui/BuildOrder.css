@@ -1,0 +1,17 @@
+
+.BuildOrder table thead th {
+    border-top: none;
+}
+
+.BuildOrder .unit, .BuildOrder .unit img {
+    height: 32px;
+    width: 32px;
+}
+
+.BuildOrder tbody ul {
+    margin-bottom: 0;
+}
+
+.BuildOrder table td {
+    padding: .25rem;
+}
