@@ -1,9 +1,7 @@
 package index
 
 import app.*
-import builder.DSFactory
 import kotlinext.js.*
-import org.khronos.webgl.ArrayBuffer
 import react.dom.*
 import kotlin.browser.*
 

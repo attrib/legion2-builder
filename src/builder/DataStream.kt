@@ -11,7 +11,7 @@ external class TextEncoder(encoding: String) {
     fun encode(s:String) : Uint8Array
 }
 
-@JsModule("datastream-js")
+@JsModule("src/DataStream.js")
 external object DSFactory {
     @JsName("default")
     class DataStream constructor(buffer: ArrayBuffer= definedExternally, byteOffset:Int= definedExternally, endianness:Boolean= definedExternally) {
