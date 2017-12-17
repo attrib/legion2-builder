@@ -5,6 +5,13 @@ import kotlinext.js.*
 import react.dom.*
 import kotlin.browser.*
 
+@JsModule("lz-string")
+external object LZString {
+    fun compressToBase64(s:String) : String
+    fun decompressFromBase64(s:String) : String
+}
+
+
 fun main(args: Array<String>) {
     require("src/index/bootstrap.min.css")
     require("src/index/index.css")

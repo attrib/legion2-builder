@@ -1,18 +1,38 @@
 package builder.data
-
-import builder.UnitClass
-import builder.UnitDef
+import builder.*
 import parser.Position
 
 fun UnitDef.isEnabled(): Boolean {
-        return !this.id.startsWith("test")
+    return !this.id.startsWith("test")
 }
 
 class Unit(val def: UnitDef) {
-        var buildLevel: Int? = null
-        var upgradedLevel: Int? = null
-        var soldLevel: Int? = null
+    var buildLevel: Int? = null
+    var upgradedLevel: Int? = null
+    var soldLevel: Int? = null
     var position = Position(0, 0)
+
+    fun save(ds:DSFactory.DataStream) {
+        ds.writeUtf8WithLen(def.id)
+        ds.writeInt8(buildLevel ?: -1)
+        ds.writeInt8(upgradedLevel ?: -1)
+        ds.writeInt8(soldLevel ?: -1)
+        ds.writeInt16(position.x)
+        ds.writeInt16(position.y)
+    }
+
+
+    companion object {
+        fun load(ds:DSFactory.DataStream) : Unit {
+            val index = ds.readUtf8WithLen()
+            val unit = Unit(LegionData.unitsMap[index]!!)
+            unit.buildLevel = intOrNull(ds.readInt8())
+            unit.upgradedLevel = intOrNull(ds.readInt8())
+            unit.soldLevel = intOrNull(ds.readInt8())
+            unit.position = Position(ds.readInt16(), ds.readInt16())
+            return unit
+        }
+    }
 }
 
 class Units(list: List<Unit>) : List<Unit> by list {

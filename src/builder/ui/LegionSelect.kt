@@ -63,7 +63,8 @@ fun RBuilder.legionSelect(build: Build, replayResult: ReplayResult?, selectedPla
                 eventHandler.reset()
             }
         }
-        a(href = "", classes = "btn btn-secondary col") {
+
+        a(href = "?b=${build.toPermaLinkCode()}", classes = "btn btn-secondary col") {
             +"Permalink"
         }
     }

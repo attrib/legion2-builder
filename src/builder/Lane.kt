@@ -8,6 +8,23 @@ class Lane {
     val list = mutableListOf<Unit>()
     var units = Units(list)
 
+    fun save(ds:DSFactory.DataStream) {
+        ds.writeInt16(list.size)
+        list.forEach {
+            it.save(ds)
+        }
+    }
+
+    fun load(ds:DSFactory.DataStream) {
+        list.clear()
+
+        val len = ds.readInt16()
+        (0 until len).forEach {
+            list += Unit.load(ds)
+        }
+        units = Units(list)
+    }
+
     fun getWorkerCount(level: Int):Int {
         return 1 + getFighters(level).worker().size
     }

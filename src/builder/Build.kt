@@ -2,6 +2,8 @@ package builder
 
 import app.format
 import builder.data.*
+import index.LZString
+import org.khronos.webgl.Uint8Array
 
 class Build() {
 
@@ -16,6 +18,38 @@ class Build() {
     val income get() = lane.getIncome(currentLevel)
     val totalHp get() = lane.getTotalHp(currentLevel)
     val totalDps get() = lane.getTotalDps(currentLevel)
+
+    fun toPermaLinkCode(): String {
+        val ds = DSFactory.DataStream()
+        save(ds)
+        val s = Uint8Array(ds.buffer).asString()
+        return LZString.compressToBase64(s)
+    }
+
+    fun fromPermaLinkCode(code: String) {
+        val s = LZString.decompressFromBase64(code)
+        val arr = fromString(s).buffer
+        val ds2 = DSFactory.DataStream(arr)
+        load(ds2)
+    }
+
+    fun save(ds:DSFactory.DataStream) {
+        ds.writeUtf8WithLen(legion?.id ?: "")
+        ds.writeInt8(currentLevel)
+        lane.save(ds)
+    }
+
+    fun load(ds:DSFactory.DataStream) {
+        val index = ds.readUtf8WithLen()
+        if (index != "") {
+            legion = LegionData.legionsMap[index]
+        } else {
+            legion = null
+        }
+        legionId = legion?.id
+        currentLevel = ds.readInt8()
+        lane.load(ds)
+    }
 
     private fun reward(): Int {
         var reward = 250

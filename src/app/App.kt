@@ -8,6 +8,7 @@ import kotlinx.html.js.onClickFunction
 import parser.ReplayResult
 import react.*
 import react.dom.*
+import kotlin.browser.window
 
 fun Double.format(digits: Int): String = this.asDynamic().toFixed(digits)
 
@@ -32,6 +33,12 @@ class App : RComponent<RProps, AppState>() {
         uploadingFile = false
         selectedTab = Tabs.WaveEditor
         replayResult = null
+        val url = window.location.href
+        if( url.contains("?b=") ) {
+            val code = url.split("?b=")[1]
+            build = Build()
+            build.fromPermaLinkCode(code)
+        }
     }
 
     fun AppState.resetBuild() {
