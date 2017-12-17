@@ -23,7 +23,7 @@ class Build() {
     private fun reward(): Int {
         var reward = 250
         if (currentLevel > 0) {
-            for (i in 1 until (currentLevel)) {
+            for (i in 0 until (currentLevel)) {
                 reward += LegionData.waves[i].totalReward
                 reward += lane.getIncome(i)
             }
@@ -51,12 +51,20 @@ class Build() {
         return lane.getFighters(currentLevel, includeWorkers)
     }
 
-    fun addFighter(unit: UnitDef) {
-        lane.addFighter(unit, currentLevel)
+    fun addFighter(unit: UnitDef): Unit {
+        return lane.addFighter(unit, currentLevel)
     }
 
     fun removeFighter(unit: Unit) {
         lane.removeFighter(unit)
+    }
+
+    fun upgradeFighter(selectedUnit: Unit, upgradeUnitDef: UnitDef): Unit {
+        return lane.upgradeFighter(selectedUnit, upgradeUnitDef, currentLevel)
+    }
+
+    fun sellFighter(selectedUnit: Unit) {
+        lane.sellFighter(selectedUnit, currentLevel)
     }
 
     fun getMerchenaries(): List<Unit> {

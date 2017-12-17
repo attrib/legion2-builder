@@ -2,15 +2,14 @@ package app
 
 import builder.*
 import builder.data.Resistance
+import builder.data.Unit
+import builder.data.isEnabled
 import builder.ui.dpsUi
 import builder.ui.hpUi
 import builder.ui.unitUi
-import kotlinx.html.InputType
-import kotlinx.html.classes
-import kotlinx.html.id
+import kotlinx.html.*
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
-import kotlinx.html.title
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.get
@@ -27,6 +26,7 @@ fun Double.format(digits: Int): String = this.asDynamic().toFixed(digits)
 
 interface AppState : RState {
     var build: Build
+    var selectedUnit: Unit?
     var selectedPlayer: String?
     var replayResult: ReplayResult
     var uploadingFile: Boolean
@@ -43,6 +43,7 @@ class App : RComponent<RProps, AppState>() {
         build = Build()
         build.legion = LegionData.legionsMap["element_legion_id"]!!
         build.legionId = "element_legion_id"
+        selectedUnit = null
     }
 
     override fun RBuilder.render() {
@@ -237,7 +238,7 @@ class App : RComponent<RProps, AppState>() {
                             ul("list-inline row no-gutters justify-content-md-center") {
                                 state.build.getFighters(true).forEach { unit ->
                                     li("col") {
-                                        unitUi(unit.def, { setState { build.removeFighter(unit) } })
+                                        unitUi(unit.def, { setState { selectedUnit = unit } })
                                     }
                                 }
                             }
@@ -245,23 +246,47 @@ class App : RComponent<RProps, AppState>() {
                     }
                     aside("col-4") {
 
-                        div {
-                            div("btn-group") {
-                                button(classes = "btn btn-lg btn-primary") {
-                                    attrs.disabled = true
-                                    +"Unit"
+                        div("selected-unit") {
+                            val selectedUnit = state.selectedUnit
+                            if (selectedUnit != null) {
+                                div("row no-gutters") {
+                                    div("col-auto") {
+                                        attrs.title = "Unselect"
+                                        unitUi(selectedUnit.def, { setState { this.selectedUnit = null } })
+                                    }
+                                    if (selectedUnit.buildLevel == state.build.currentLevel) {
+                                        div("col-auto") {
+                                            img("Recall", "Icons/Recall.png") { attrs.title = "Recall" }
+                                            attrs.onClickFunction = {
+                                                setState {
+                                                    build.removeFighter(selectedUnit)
+                                                    this.selectedUnit = null
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        div("col-auto") {
+                                            img("Undeploy", "Icons/Undeploy.png") { attrs.title = "Undeploy" }
+                                            attrs.onClickFunction = {
+                                                setState {
+                                                    build.sellFighter(selectedUnit)
+                                                    this.selectedUnit = null
+                                                }
+                                            }
+                                        }
+                                    }
+                                    LegionData.fighters(state.build.legion!!)
+                                            .filter { it.upgradesFrom == selectedUnit.def.id }
+                                            .forEach {
+                                                div("col-auto") {
+                                                    attrs.title = "Upgrade"
+                                                    unitUi(it, { setState { this.selectedUnit = build.upgradeFighter(selectedUnit, it) } })
+                                                }
+                                            }
                                 }
-                                button(classes = "btn btn-lg btn-primary") {
-                                    attrs.disabled = true
-                                    +"Sell"
-                                }
-                                button(classes = "btn btn-lg btn-primary") {
-                                    attrs.disabled = true
-                                    +"Update 1"
-                                }
-                                button(classes = "btn btn-lg btn-primary") {
-                                    attrs.disabled = true
-                                    +"Update 2"
+                            } else {
+                                div {
+                                    +"Select unit"
                                 }
                             }
                         }
@@ -272,9 +297,9 @@ class App : RComponent<RProps, AppState>() {
                             } else {
                                 ul("list-inline row no-gutters justify-content-start") {
                                     (LegionData.fighters(state.build.legion!!) + LegionData.upgrades()).forEach { unit ->
-                                        if (!unit.id.startsWith("test")) {
-                                            li("col") {
-                                                unitUi(unit, { setState { build.addFighter(unit) } })
+                                        if (unit.isEnabled() && unit.upgradesFrom == null) {
+                                            li("col-auto") {
+                                                unitUi(unit, { setState { selectedUnit = build.addFighter(unit) } })
                                             }
                                         }
                                     }
@@ -289,7 +314,7 @@ class App : RComponent<RProps, AppState>() {
                                     if (state.build.getMerchenaries().isNotEmpty()) {
                                         ul("list-inline row no-gutters justify-content-start") {
                                             state.build.getMerchenaries().forEach { unit ->
-                                                li("vlo") {
+                                                li("col-auto") {
                                                     unitUi(unit.def, { setState { build.removeMerchenary(unit) } })
                                                 }
                                             }
@@ -299,8 +324,8 @@ class App : RComponent<RProps, AppState>() {
                                 div {
                                     ul("list-inline row no-gutters justify-content-start") {
                                         LegionData.mercenaries().forEach { unit ->
-                                            if (!unit.id.startsWith("test")) {
-                                                li("col") {
+                                            if (unit.isEnabled()) {
+                                                li("col-auto") {
                                                     unitUi(unit, { setState { build.addMerchenary(unit) } })
                                                 }
                                             }
@@ -316,7 +341,7 @@ class App : RComponent<RProps, AppState>() {
         }
         footer("container footer") {
             +"Images and data are property of AutoAttack Games, Inc."
-            br {  }
+            br { }
             +"Legion TD, and Legion TD 2 are registered trademarks of AutoAttack Games, Inc."
         }
     }

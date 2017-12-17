@@ -43,12 +43,23 @@ footer {
   border-radius: 6px;
   position: absolute;
   z-index: 1;
+  line-height: 1.3em;
 }
 
 .dps-info img, .hp-info img {
   margin: 0 4px;
   vertical-align: middle;
   width: 32px;
+}
+
+.unit {
+  width: 64px;
+  height: 64px;
+}
+
+.selected-unit > div {
+  height: 64px;
+  line-height: 64px;
 }
 
 /* Absolute Center Spinner */
