@@ -35,7 +35,7 @@ fun RBuilder.buildOrder(build: Build, eventHandler: BuildOrderEventHandler) {
                             eventHandler.selectLevel(currentLevel)
                         }
                     }}
-                    td { unitList(fighters.fighers(), { true }, {}) }
+                    td { unitList(fighters.fighters(), { true }, {}) }
                     td { if (fighters.worker().size > 0) +"${fighters.worker().size}" else +"" }
                     td { unitList(build.getMerchenaries(currentLevel), { true }, {}) }
                     td { +"${fighters.totalValue()}" }
