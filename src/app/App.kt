@@ -7,18 +7,21 @@ import builder.data.isEnabled
 import builder.ui.dpsUi
 import builder.ui.hpUi
 import builder.ui.unitUi
-import kotlinx.html.*
+import kotlinx.html.InputType
+import kotlinx.html.classes
+import kotlinx.html.id
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
+import kotlinx.html.title
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.get
 import org.w3c.files.Blob
 import org.w3c.files.FileReader
 import org.w3c.files.get
+import parser.ExtractBuilds
 import parser.LogParser
 import parser.ReplayResult
-import parser.replay
 import react.*
 import react.dom.*
 
@@ -28,7 +31,7 @@ interface AppState : RState {
     var build: Build
     var selectedUnit: Unit?
     var selectedPlayer: String?
-    var replayResult: ReplayResult
+    var replayResult: ReplayResult?
     var uploadingFile: Boolean
 }
 
@@ -121,7 +124,7 @@ class App : RComponent<RProps, AppState>() {
                                         fr.onload = {
                                             val text = (it.target!! as FileReader).result as String
                                             setState {
-                                                replayResult = replay(LogParser(text).parse())
+                                                replayResult = ExtractBuilds.extactBuilds(LogParser(text).parse())
                                                 uploadingFile = false
                                             }
                                         }
@@ -132,6 +135,9 @@ class App : RComponent<RProps, AppState>() {
                                     }
                                 }
                                 select(classes = "btn btn-secondary col") {
+                                    option {
+                                        +""
+                                    }
                                     state.replayResult?.playerBuilds?.keys?.forEach { player ->
                                         option {
                                             attrs.selected = player == state.selectedPlayer ?: ""
