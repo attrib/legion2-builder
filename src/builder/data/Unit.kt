@@ -44,6 +44,7 @@ class Units(list: List<Unit>) : List<Unit> by list {
 
     fun totalHp() = sumBy { it.def.hitpoints }
     fun totalDps() = sumByDouble { it.def.dmgBase / it.def.attackSpeed }
+    fun totalGold() = sumBy { it.def.goldCost }
     fun totalValue() = sumBy { it.def.totalValue }
     fun totalFood() = sumBy { it.def.totalFood }
     fun totalIncome() = sumBy { it.def.incomeBonus }

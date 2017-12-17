@@ -155,4 +155,8 @@ class Build() {
     fun getCostsByLevel(level: Int): Int {
         return lane.getCosts(level)
     }
+
+    fun getValueByLevel(level: Int): Int {
+        return lane.getValue(level)
+    }
 }

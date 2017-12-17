@@ -16,6 +16,7 @@ fun RBuilder.buildOrder(build: Build, eventHandler: BuildOrderEventHandler) {
             tr {
                 th { +"#" }
                 th { +"Unit" }
+                th { +"Workers" }
                 th { +"Mercenary" }
                 th { +"Gold needed" }
                 th { +"Value" }
@@ -33,14 +34,11 @@ fun RBuilder.buildOrder(build: Build, eventHandler: BuildOrderEventHandler) {
                             eventHandler.selectLevel(currentLevel)
                         }
                     }}
-                    td { unitList(fighters, { true }, {}) }
+                    td { unitList(fighters.fighers(), { true }, {}) }
+                    td { if (fighters.worker().size > 0) +"${fighters.worker().size}" else +"" }
                     td { unitList(build.getMerchenaries(currentLevel), { true }, {}) }
-                    td { +fighters.sumBy { it.def.goldCost }.toString() }
-                    td {
-                        +build.getCostsByLevel(currentLevel).toString()
-                        +" / "
-                        +wave.recommendedValue.toString()
-                    }
+                    td { +"${fighters.totalValue()}" }
+                    td { +"${build.getValueByLevel(currentLevel)} / ${wave.recommendedValue}" }
                 }
             }
         }

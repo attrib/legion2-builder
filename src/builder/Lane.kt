@@ -38,9 +38,13 @@ class Lane {
     }
 
     fun getCosts(level: Int): Int {
-        var costs = getFighters(level).totalValue()
+        var costs = getFighters(level).fighers().totalValue()
         costs += getSoldFighter(level).sumByDouble { it.def.totalValue * 0.6 }.roundToInt()
         return costs
+    }
+
+    fun getValue(level: Int): Int {
+        return getFighters(level).fighers().totalValue()
     }
 
     fun getFoodCosts(level: Int): Int {
