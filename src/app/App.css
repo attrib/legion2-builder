@@ -16,6 +16,10 @@ aside > div {
   margin: 5px auto;
 }
 
+label.replay-upload {
+  margin-bottom: 0;
+}
+
 #build-area, #wave-creatures {
   margin: 5px 0;
 }
