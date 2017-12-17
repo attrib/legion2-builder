@@ -338,11 +338,11 @@ class App : RComponent<RProps, AppState>() {
                     }
                 }
             }
-        }
-        footer("container footer") {
-            +"Images and data are property of AutoAttack Games, Inc."
-            br { }
-            +"Legion TD, and Legion TD 2 are registered trademarks of AutoAttack Games, Inc."
+            footer("container") {
+                +"Images and data are property of AutoAttack Games, Inc."
+                br { }
+                +"Legion TD, and Legion TD 2 are registered trademarks of AutoAttack Games, Inc."
+            }
         }
     }
 }
