@@ -1,8 +1,10 @@
-package builder.ui
+package builder.ui.header
 
 import app.format
 import builder.UnitDef
 import builder.data.Resistance
+import builder.ui.dpsUi
+import builder.ui.hpUi
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.dom.button

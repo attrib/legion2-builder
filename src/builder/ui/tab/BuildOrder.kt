@@ -1,7 +1,8 @@
-package builder.ui
+package builder.ui.tab
 
 import builder.Build
 import builder.LegionData
+import builder.ui.unitList
 import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.dom.*
