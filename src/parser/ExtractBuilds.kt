@@ -33,7 +33,11 @@ object ExtractBuilds {
                         val old = field[pos]
                         val newUnitDef = LegionData.unitsMap[es.attributes["Type"]!!]!!
                         val new = if (old != null) {
-                            build.upgradeFighter(old, newUnitDef)
+                            if( old.def.id!=newUnitDef.id ) {
+                                build.upgradeFighter(old, newUnitDef)
+                            } else {
+                                old
+                            }
                         } else {
                             build.addFighter(newUnitDef)
                         }
