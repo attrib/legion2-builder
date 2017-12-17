@@ -3,17 +3,33 @@ body {
   padding-top: 3.5rem;
 }
 
-.header {
+.header, .tab-bar {
   background-color: #e9ecef;
-  padding: 15px 0;
+  padding-top: 15px;
 }
 
 .header .btn-group {
   width: 100%;
 }
 
+.tab-bar .col-auto {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #ffffff;
+    border-right: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.tab-bar .col-auto:hover {
+    background-color: #727b84;
+}
+
+.tab-bar .col-auto.active {
+    border-bottom: none
+}
+
 aside > div {
-  margin: 5px auto;
+  margin: 10px auto;
 }
 
 label.replay-upload {
@@ -21,7 +37,7 @@ label.replay-upload {
 }
 
 #build-area, #wave-creatures {
-  margin: 5px 0;
+  margin: 10px 0;
 }
 
 #build-area ul, #wave-creatures ul {
@@ -78,4 +94,8 @@ footer {
 .selected-unit > div {
   height: 64px;
   line-height: 64px;
+}
+
+.BuildOrder table thead th {
+    border-top: none;
 }

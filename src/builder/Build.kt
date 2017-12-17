@@ -51,6 +51,10 @@ class Build() {
         return lane.getFighters(currentLevel, includeWorkers)
     }
 
+    fun getFightersUnfiltered(): List<Unit> {
+        return lane.getFightersUnfiltered()
+    }
+
     fun addFighter(unit: UnitDef): Unit {
         return lane.addFighter(unit, currentLevel)
     }
@@ -69,6 +73,10 @@ class Build() {
 
     fun getMerchenaries(): List<Unit> {
         return lane.getMerchenaries(currentLevel)
+    }
+
+    fun getMerchenaries(level: Int): List<Unit> {
+        return lane.getMerchenaries(level)
     }
 
     fun addMerchenary(unit: UnitDef) {
@@ -111,5 +119,9 @@ class Build() {
 
     fun getResistance(testUnit: UnitDef?): Resistance {
         return Resistance(lane.getFighterDef(currentLevel), testUnit)
+    }
+
+    fun getCostsByLevel(level: Int): Int {
+        return lane.getCosts(level)
     }
 }
