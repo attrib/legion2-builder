@@ -20,7 +20,7 @@ aside > div {
   margin: 5px 0;
 }
 
-#wave-creatures ul {
+#build-area ul, #wave-creatures ul {
     justify-content: center !important;
 }
 
