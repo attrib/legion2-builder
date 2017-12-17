@@ -41,6 +41,7 @@ class Units(list: List<Unit>) : List<Unit> by list {
     fun sold(level: Int) = Units(filter { it.soldLevel != null && it.soldLevel!! <= level })
     fun notSold(level: Int) = Units(filter { it.soldLevel == null || it.soldLevel!! > level })
     fun notUpgraded(level: Int) = Units(filter { it.upgradedLevel == null || it.upgradedLevel!! > level })
+    fun removeWorkersNotLevel(level: Int) = Units(filter { it.def.unitClass != UnitClass.Worker || it.buildLevel == level })
 
     fun totalHp() = sumBy { it.def.hitpoints }
     fun totalDps() = sumByDouble { it.def.dmgBase / it.def.attackSpeed }
@@ -50,7 +51,7 @@ class Units(list: List<Unit>) : List<Unit> by list {
     fun totalIncome() = sumBy { it.def.incomeBonus }
 
     fun ownCreatures() = Units(filter { it.def.unitClass == UnitClass.Fighter || it.def.unitClass == UnitClass.Worker })
-    fun fighers() = Units(filter { it.def.unitClass == UnitClass.Fighter })
+    fun fighters() = Units(filter { it.def.unitClass == UnitClass.Fighter })
     fun worker() = Units(filter { it.def.unitClass == UnitClass.Worker })
     fun mercenaries() = Units(filter { it.def.unitClass == UnitClass.Mercenary })
 }

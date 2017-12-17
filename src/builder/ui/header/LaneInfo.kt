@@ -1,9 +1,11 @@
-package builder.ui
+package builder.ui.header
 
 import app.format
 import builder.Build
 import builder.LegionData
 import builder.getWaveCreaturesDef
+import builder.ui.dpsUi
+import builder.ui.hpUi
 import react.RBuilder
 import react.dom.div
 import react.dom.h3

@@ -30,11 +30,11 @@ class Lane {
     }
 
     fun getTotalHp(level: Int): Int {
-        return getFighters(level).fighers().totalHp()
+        return getFighters(level).fighters().totalHp()
     }
 
     fun getTotalDps(level: Int): Double {
-        return getFighters(level).fighers().totalDps()
+        return getFighters(level).fighters().totalDps()
     }
 
     fun getCosts(level: Int): Int {
@@ -71,7 +71,7 @@ class Lane {
         if (includeWorkers) {
             return getFighters(level).map { it.def }
         } else {
-            return getFighters(level).fighers().map { it.def }
+            return getFighters(level).fighters().map { it.def }
         }
     }
 

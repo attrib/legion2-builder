@@ -2,7 +2,11 @@ package app
 
 import builder.*
 import builder.data.Unit
-import builder.ui.*
+import builder.ui.header.*
+import builder.ui.tab.BuildOrderEventHandler
+import builder.ui.tab.WaveEditorEventHandler
+import builder.ui.tab.buildOrder
+import builder.ui.tab.waveEditor
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
 import parser.ReplayResult

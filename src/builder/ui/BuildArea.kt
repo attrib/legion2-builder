@@ -13,7 +13,7 @@ interface BuildAreaEventHandler {
 fun RBuilder.buildArea(build: Build, selectedUnit: Unit?, eventHandler: BuildAreaEventHandler) {
     div {
         attrs.id = "build-area"
-        unitList(build.getFighters(), { true }, { eventHandler.selectUnit(it) }, selectedUnit)
+        unitList(build.getFighters().removeWorkersNotLevel(build.currentLevel), { true }, { eventHandler.selectUnit(it) }, selectedUnit)
     }
 
 }

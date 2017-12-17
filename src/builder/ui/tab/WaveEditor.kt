@@ -1,8 +1,9 @@
-package builder.ui
+package builder.ui.tab
 
 import builder.*
 import builder.data.Unit
 import builder.data.isEnabled
+import builder.ui.*
 import kotlinx.html.id
 import react.RBuilder
 import react.dom.aside
