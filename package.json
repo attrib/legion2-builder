@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "lz-string":"1.4.4",
+    "text-encoding":"0.6.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },

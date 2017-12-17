@@ -1,15 +1,6 @@
 package builder
 
-import kotlinext.js.invoke
 import org.khronos.webgl.*
-
-
-external class TextDecoder(encoding: String) {
-    fun decode(arr:Uint8Array) : String
-}
-external class TextEncoder(encoding: String) {
-    fun encode(s:String) : Uint8Array
-}
 
 @JsModule("src/DataStream.js")
 external object DSFactory {
