@@ -237,7 +237,7 @@ class App : RComponent<RProps, AppState>() {
                         if (state.build.getFighters(true).isNotEmpty()) {
                             ul("list-inline row no-gutters justify-content-md-center") {
                                 state.build.getFighters(true).forEach { unit ->
-                                    li("col") {
+                                    li("col-auto") {
                                         unitUi(unit.def, { setState { selectedUnit = unit } })
                                     }
                                 }
