@@ -25,7 +25,7 @@ fun RBuilder.buildOrder(build: Build, eventHandler: BuildOrderEventHandler) {
             val allFighters = build.getFightersUnfiltered()
             LegionData.waves.forEach { wave ->
                 val currentLevel = wave.levelNum - 1
-                val fighters = allFighters.filter { it.buildLevel == currentLevel }
+                val fighters = allFighters.forLevel(currentLevel)
                 tr {
                     td { a("#") {
                         +wave.levelNum.toString()

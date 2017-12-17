@@ -41,7 +41,7 @@ fun RBuilder.selectedUnitInfo(selectedUnit: Unit?, build: Build, eventHandler: S
                         }
                     }
                 }
-                LegionData.fighters(build.legion!!)
+                LegionData.fighters(build.legion)
                         .filter { it.upgradesFrom == selectedUnit.def.id }
                         .forEach {
                             div("col-auto") {

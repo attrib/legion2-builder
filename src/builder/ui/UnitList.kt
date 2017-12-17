@@ -1,6 +1,7 @@
 package builder.ui
 
 import builder.UnitDef
+import builder.data.Units
 import react.RBuilder
 import react.dom.li
 import react.dom.ul
@@ -32,7 +33,7 @@ fun RBuilder.unitList(units: List<UnitDef>, filterCallback: (UnitDef) -> Boolean
     }
 }
 
-fun RBuilder.unitList(units: List<UnitInfo>, filterCallback: (UnitInfo) -> Boolean, clickCallback: (UnitInfo) -> Unit, selectedUnit: UnitInfo? = null) {
+fun RBuilder.unitList(units: Units, filterCallback: (UnitInfo) -> Boolean, clickCallback: (UnitInfo) -> Unit, selectedUnit: UnitInfo? = null) {
     val eventHandler = object : UnitListEventHandler {
         override fun click(unit: UnitInfo) {
             clickCallback(unit)
