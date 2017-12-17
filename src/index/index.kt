@@ -9,6 +9,7 @@ fun main(args: Array<String>) {
     require("src/index/bootstrap.min.css")
     require("src/index/index.css")
     require("src/app/App.css")
+    require("src/index/loading.css")
 
     render(document.getElementById("root")) {
         app()

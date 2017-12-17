@@ -48,45 +48,6 @@ object ExtractBuilds {
             }
             build
         })
-/*
-                val current = playerWave.buildings.entities.map { it.attributes["Type"]!! } + (1..playerWave.end.workers).map { "worker_unit_id" }
-                val diffAdded = current.toMutableList()
-                val diffRemoved = last.toMutableList()
-                last.forEach {
-                    diffAdded.remove(it)
-                }
-                current.forEach {
-                    diffRemoved.remove(it)
-                }
-                last = current.toMutableList()
-
-                val value = current.sumBy { gameData.unitsMap[it]!!.totalValue }
-
-
-                var text = emptyList<String>()
-                var gold = 0
-                diffAdded.forEach { added ->
-                    val unitAdded = gameData.unitsMap[added]!!
-                    if (unitAdded.upgradesFrom != null) {
-                        val unitUpgraded = gameData.unitsMap[unitAdded.upgradesFrom]!!
-                        if (diffRemoved.contains(unitUpgraded.id)) {
-                            gold += unitAdded.goldCost
-                            text += "${unitUpgraded.name} -> ${unitAdded.name}"
-                            build.addFighter(unitAdded)
-                        } else {
-                            gold += unitUpgraded.goldCost
-                            gold += unitAdded.goldCost
-                            text += "${unitAdded.name} (${unitUpgraded.name})*"
-                            build.addFighter(unitAdded)
-                        }
-                    } else {
-                        gold += unitAdded.goldCost
-                        text += unitAdded.name
-
-                        build.addFighter(unitAdded)
-                    }
-                }
-*/
 
         return ReplayResult(playerBuilds)
     }

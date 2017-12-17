@@ -4,6 +4,7 @@ import builder.*
 import builder.data.Unit
 import builder.data.isEnabled
 import builder.ui.*
+import kotlinx.html.id
 import parser.ReplayResult
 import react.*
 import react.dom.*
@@ -118,6 +119,11 @@ class App : RComponent<RProps, AppState>() {
             div("container") {
                 div("row") {
                     div("col-8") {
+                        div {
+                            attrs.id = "wave-creatures"
+                            unitList(LegionData.getWaveCreaturesDef(state.build.currentLevel), { it.isEnabled() } ,{})
+                        }
+                        hr {  }
                         buildArea(state.build, state.selectedUnit, object : BuildAreaEventHandler {
                             override fun selectUnit(unit: Unit) {
                                 setState {

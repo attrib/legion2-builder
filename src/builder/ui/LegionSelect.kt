@@ -68,17 +68,21 @@ fun RBuilder.legionSelect(build: Build, replayResult: ReplayResult?, selectedPla
         }
     }
     div("btn-group") {
-        input(InputType.file, classes = "btn btn-secondary col") {
-            attrs.onChangeFunction = {
-                val target = it.target as HTMLInputElement
-                val fr = FileReader()
-                fr.onload = {
-                    val text = (it.target!! as FileReader).result as String
-                    eventHandler.replayFileLoaded(ExtractBuilds.extactBuilds(LogParser(text).parse()))
+        label(classes = "col replay-upload btn btn-secondary col") {
+            input(InputType.file, classes = "d-none") {
+                attrs.accept = "text/plain"
+                attrs.onChangeFunction = {
+                    val target = it.target as HTMLInputElement
+                    val fr = FileReader()
+                    fr.onload = {
+                        val text = (it.target!! as FileReader).result as String
+                        eventHandler.replayFileLoaded(ExtractBuilds.extactBuilds(LogParser(text).parse()))
+                    }
+                    fr.readAsText(target.files!![0] as Blob)
+                    eventHandler.replayFileSelected()
                 }
-                fr.readAsText(target.files!![0] as Blob)
-                eventHandler.replayFileSelected()
             }
+            +"Select Replay"
         }
         if (replayResult !== null) {
             select(classes = "btn btn-secondary col") {

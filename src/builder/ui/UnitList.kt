@@ -32,7 +32,7 @@ fun RBuilder.unitList(units: List<UnitDef>, filterCallback: (UnitDef) -> Boolean
     }
 }
 
-fun RBuilder.unitList(units: List<UnitInfo>, filterCallback: (UnitInfo) -> Boolean, clickCallback: (UnitInfo) -> Unit) {
+fun RBuilder.unitList(units: List<UnitInfo>, filterCallback: (UnitInfo) -> Boolean, clickCallback: (UnitInfo) -> Unit, selectedUnit: UnitInfo? = null) {
     val eventHandler = object : UnitListEventHandler {
         override fun click(unit: UnitInfo) {
             clickCallback(unit)
@@ -43,7 +43,8 @@ fun RBuilder.unitList(units: List<UnitInfo>, filterCallback: (UnitInfo) -> Boole
         ul("list-inline row no-gutters justify-content-start") {
             units.filter { filterCallback(it) }.forEach { unit ->
                 li("col-auto") {
-                    unitUi(unit.def, { eventHandler.click(unit) })
+                    val addClass = if (selectedUnit != null && selectedUnit == unit) "selected" else ""
+                    unitUi(unit.def, { eventHandler.click(unit) }, addClass)
                 }
             }
         }
