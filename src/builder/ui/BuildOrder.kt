@@ -2,10 +2,15 @@ package builder.ui
 
 import builder.Build
 import builder.LegionData
+import kotlinx.html.js.onClickFunction
 import react.RBuilder
 import react.dom.*
 
-fun RBuilder.buildOrder(build: Build) {
+interface BuildOrderEventHandler {
+    fun selectLevel(level: Int)
+}
+
+fun RBuilder.buildOrder(build: Build, eventHandler: BuildOrderEventHandler) {
     table("table table-striped") {
         thead {
             tr {
@@ -22,7 +27,12 @@ fun RBuilder.buildOrder(build: Build) {
                 val currentLevel = wave.levelNum - 1
                 val fighters = allFighters.filter { it.buildLevel == currentLevel }
                 tr {
-                    td { +wave.levelNum.toString() }
+                    td { a("#") {
+                        +wave.levelNum.toString()
+                        attrs.onClickFunction = {
+                            eventHandler.selectLevel(currentLevel)
+                        }
+                    }}
                     td { unitList(fighters, { true }, {}) }
                     td { unitList(build.getMerchenaries(currentLevel), { true }, {}) }
                     td { +fighters.sumBy { it.def.goldCost }.toString() }
