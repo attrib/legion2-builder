@@ -1,10 +1,7 @@
 package builder
 
 import app.format
-import builder.data.BattleCalc
-import builder.data.Resistance
-import builder.data.Result
-import builder.data.Unit
+import builder.data.*
 
 class Build() {
 
@@ -47,11 +44,11 @@ class Build() {
         return lane.getWorkerCount(currentLevel)
     }
 
-    fun getFighters(includeWorkers: Boolean = false): List<Unit> {
-        return lane.getFighters(currentLevel, includeWorkers)
+    fun getFighters(): Units {
+        return lane.getFighters(currentLevel)
     }
 
-    fun getFightersUnfiltered(): List<Unit> {
+    fun getFightersUnfiltered(): Units {
         return lane.getFightersUnfiltered()
     }
 
@@ -71,11 +68,11 @@ class Build() {
         lane.sellFighter(selectedUnit, currentLevel)
     }
 
-    fun getMerchenaries(): List<Unit> {
+    fun getMerchenaries(): Units {
         return lane.getMerchenaries(currentLevel)
     }
 
-    fun getMerchenaries(level: Int): List<Unit> {
+    fun getMerchenaries(level: Int): Units {
         return lane.getMerchenaries(level)
     }
 

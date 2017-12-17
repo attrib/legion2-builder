@@ -20,6 +20,7 @@ object ExtractBuilds {
         val playerBuilds = game.players.filter { it.isInActiveTeam() }.associateBy({ it.name }, { player ->
             val build = Build()
             val field = mutableMapOf<Position, Unit>()
+            var workers = 0
             game.waves.forEach { wave ->
                 val playerWave = wave.playerWaves[player.name]!!
                 val untouchedUnits = field.toMutableMap()
@@ -44,6 +45,12 @@ object ExtractBuilds {
                         new.position = pos
                         field[pos] = new
                     }
+                }
+                if (playerWave.end.workers > workers) {
+                    (1..playerWave.end.workers - workers).forEach {
+                        build.addFighter(LegionData.unitsMap["worker_unit_id"]!!)
+                    }
+                    workers = playerWave.end.workers
                 }
                 untouchedUnits.values.forEach { unit->
                     build.sellFighter(unit)

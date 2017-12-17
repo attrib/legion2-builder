@@ -2,7 +2,7 @@ package builder
 
 
 fun LegionData.fighters() = units.filter { it.unitClass == UnitClass.Fighter }
-fun LegionData.fighters(legion: Legion) = fighters().filter { it.legion == legion.id }
+fun LegionData.fighters(legion: Legion?) = if (legion != null) fighters().filter { it.legion == legion.id } else emptyList()
 fun LegionData.upgrades() = units.filter { it.unitClass == UnitClass.Worker } //@todo: add supply upgrade here
 fun LegionData.mercenaries() = units.filter { it.unitClass == UnitClass.Mercenary }
 fun LegionData.getWaveCreaturesDef(level: Int): List<UnitDef> {
