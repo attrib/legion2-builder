@@ -1,13 +1,14 @@
 package builder.ui
 
-import builder.Build
-import builder.Legion
-import builder.LegionData
+import builder.*
+import index.LZString
 import kotlinx.html.InputType
 import kotlinx.html.classes
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.title
+import org.khronos.webgl.ArrayBuffer
+import org.khronos.webgl.Uint8Array
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.get
@@ -63,7 +64,12 @@ fun RBuilder.legionSelect(build: Build, replayResult: ReplayResult?, selectedPla
                 eventHandler.reset()
             }
         }
-        a(href = "", classes = "btn btn-secondary col") {
+        val ds = DSFactory.DataStream()
+        build.save(ds)
+        val s = Uint8Array(ds.buffer).asString()
+        val compressed = LZString.compressToBase64(s)
+
+        a(href = "?b=$compressed", classes = "btn btn-secondary col") {
             +"Permalink"
         }
     }

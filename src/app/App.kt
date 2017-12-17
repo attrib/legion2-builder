@@ -5,9 +5,12 @@ import builder.data.Unit
 import builder.ui.*
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
+import index.LZString
+import kotlinx.html.id
 import parser.ReplayResult
 import react.*
 import react.dom.*
+import kotlin.browser.window
 
 fun Double.format(digits: Int): String = this.asDynamic().toFixed(digits)
 
@@ -32,6 +35,15 @@ class App : RComponent<RProps, AppState>() {
         uploadingFile = false
         selectedTab = Tabs.WaveEditor
         replayResult = null
+        val url = window.location.href
+        if( url.contains("?b=") ) {
+            val code = url.split("?b=")[1]
+            val s = LZString.decompressFromBase64(code)
+            val arr = fromString(s).buffer
+            val ds2 = DSFactory.DataStream(arr)
+            build = Build()
+            build.load(ds2)
+        }
     }
 
     fun AppState.resetBuild() {

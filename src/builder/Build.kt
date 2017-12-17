@@ -20,6 +20,29 @@ class Build() {
     val totalHp get() = lane.getTotalHp(currentLevel)
     val totalDps get() = lane.getTotalDps(currentLevel)
 
+    fun save(ds:DSFactory.DataStream) {
+        if( legion!=null ) {
+            val index = LegionData.legions.indexOf(legion!!)
+            ds.writeInt8(index)
+        } else {
+            ds.writeInt8(-1)
+        }
+        ds.writeInt8(currentLevel)
+        lane.save(ds)
+    }
+
+    fun load(ds:DSFactory.DataStream) {
+        val index = ds.readInt8()
+        if( index!=-1 ) {
+            legion = LegionData.legions[index]
+        } else {
+            legion = null
+        }
+        legionId = legion?.id
+        currentLevel = ds.readInt8()
+        lane.load(ds)
+    }
+
     private fun reward(): Int {
         var reward = 250
         if (currentLevel > 0) {
