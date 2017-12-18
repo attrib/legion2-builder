@@ -5,14 +5,12 @@ env:
   - NODE_VERSION="9"
 before_install:
   - nvm install $NODE_VERSION
-install:
-  - npm install
 script:
   - unset _JAVA_OPTIONS
-  - npm test
+  - ./gradlew test
   - unset CI
-  - npm run build
-after_failure: "cat /home/travis/.npm/_logs/*.log"
+  - ./gradlew bundle
+after_failure: "cat client/build/logs/*.log"
 deploy:
   provider: pages
   skip_cleanup: true
