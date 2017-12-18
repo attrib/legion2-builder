@@ -3,8 +3,8 @@ jdk:
   - oraclejdk8
 env:
   - NODE_VERSION="9"
-  - PRODUCTION="true"
 before_install:
+  - PRODUCTION="true"
   - nvm install $NODE_VERSION
 after_failure: "cat client/build/logs/*.log"
 deploy:
