@@ -2,6 +2,7 @@ package builder
 
 import builder.data.Unit
 import builder.data.Units
+import ltd2.UnitDef
 import kotlin.math.roundToInt
 
 class Lane {

@@ -1,8 +1,8 @@
 package builder.ui.header
 
 import builder.Build
-import builder.Legion
-import builder.LegionData
+import ltd2.Legion
+import ltd2.LegionData
 import kotlinx.html.InputType
 import kotlinx.html.classes
 import kotlinx.html.js.onChangeFunction

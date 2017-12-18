@@ -3,7 +3,11 @@ package builder
 import app.format
 import builder.data.*
 import index.LZString
+import ltd2.AttackMode
 import org.khronos.webgl.Uint8Array
+import ltd2.Legion
+import ltd2.LegionData
+import ltd2.UnitDef
 
 class Build() {
 

@@ -1,7 +1,7 @@
 package builder.ui.header
 
 import builder.Build
-import builder.LegionData
+import ltd2.LegionData
 import react.RBuilder
 import react.dom.div
 import react.dom.h3

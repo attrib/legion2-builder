@@ -1,3 +1,5 @@
+package ltd2
+
 enum class ArmorType {
 	Immaterial,
 	Swift,

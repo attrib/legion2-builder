@@ -1,8 +1,8 @@
 package builder.ui
 
 import app.format
-import builder.UnitClass
-import builder.UnitDef
+import ltd2.UnitClass
+import ltd2.UnitDef
 import kotlinext.js.invoke
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction

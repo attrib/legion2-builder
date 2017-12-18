@@ -1,6 +1,6 @@
 package parser
 
-import builder.LegionData
+import ltd2.LegionData
 
 data class WaveTimeEntry(
         val gold: Double,

@@ -1,9 +1,9 @@
 package builder.data
 
-import builder.ArmorType
-import builder.AttackType
-import builder.LegionData
-import builder.UnitDef
+import ltd2.ArmorType
+import ltd2.AttackType
+import ltd2.LegionData
+import ltd2.UnitDef
 
 class Resistance(units: List<UnitDef>, val testUnit: UnitDef?) {
 

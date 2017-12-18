@@ -1,6 +1,6 @@
 package builder.ui
 
-import builder.UnitDef
+import ltd2.UnitDef
 import builder.data.Units
 import react.RBuilder
 import react.dom.li

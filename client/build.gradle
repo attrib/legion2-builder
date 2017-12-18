@@ -73,7 +73,7 @@ kotlinFrontend {
         sourceMapEnabled = true
     }
 
-    define("PRODUCTION", false)
+    define("PRODUCTION", System.getenv("PRODUCTION")=="true")
 }
 
 task copyArtifacts(type:Copy) {

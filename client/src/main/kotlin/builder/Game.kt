@@ -1,5 +1,10 @@
 package builder
 
+import ltd2.Legion
+import ltd2.LegionData
+import ltd2.UnitClass
+import ltd2.UnitDef
+
 
 fun LegionData.fighters() = units.filter { it.unitClass == UnitClass.Fighter }
 fun LegionData.fighters(legion: Legion?) = if (legion != null) fighters().filter { it.legion == legion.id } else emptyList()

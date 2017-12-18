@@ -1,7 +1,7 @@
 package parser
 
 import builder.Build
-import builder.LegionData
+import ltd2.LegionData
 import builder.data.Unit
 import kotlin.js.RegExp
 

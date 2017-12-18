@@ -1,8 +1,8 @@
 package builder.data
 
-import builder.ArmorType
-import builder.AttackType
-import builder.Global
+import ltd2.ArmorType
+import ltd2.AttackType
+import ltd2.Global
 
 fun Global.getModifier(attackType: AttackType, armorType: ArmorType): Double {
     return when (attackType) {

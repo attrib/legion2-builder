@@ -1,7 +1,7 @@
 package builder.ui.header
 
 import app.format
-import builder.UnitDef
+import ltd2.UnitDef
 import builder.data.Resistance
 import builder.ui.dpsUi
 import builder.ui.hpUi

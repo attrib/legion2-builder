@@ -1,8 +1,8 @@
 package builder.ui
 
 import builder.Build
-import builder.LegionData
-import builder.UnitDef
+import ltd2.LegionData
+import ltd2.UnitDef
 import builder.data.Unit
 import builder.fighters
 import kotlinx.html.js.onClickFunction

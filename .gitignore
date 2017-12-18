@@ -3,6 +3,8 @@
 # dependencies
 client/node_modules
 build
+publish/
+*/out
 # testing
 /coverage
 
