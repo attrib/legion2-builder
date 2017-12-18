@@ -7,9 +7,9 @@ before_install:
   - nvm install $NODE_VERSION
 script:
   - unset _JAVA_OPTIONS
-  - ./gradlew test
+  - gradlew test
   - unset CI
-  - ./gradlew bundle
+  - gradlew bundle
 after_failure: "cat client/build/logs/*.log"
 deploy:
   provider: pages
