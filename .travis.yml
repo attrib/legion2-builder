@@ -4,21 +4,15 @@ jdk:
 env:
   - NODE_VERSION="9"
 before_install:
+  - export PRODUCTION="true"
   - nvm install $NODE_VERSION
-install:
-  - npm install
-script:
-  - unset _JAVA_OPTIONS
-  - npm test
-  - unset CI
-  - npm run build
-after_failure: "cat /home/travis/.npm/_logs/*.log"
+after_failure: "cat client/build/logs/*.log"
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
   repo: attrib/attrib.github.io
-  local_dir: build
+  local_dir: publish
   target_branch: master
   on:
     branch: master

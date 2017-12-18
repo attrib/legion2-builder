@@ -1,0 +1,89 @@
+buildscript {
+    ext.kotlinx_html_version = "0.6.8"
+    ext.react_version = "16.2.0-pre.16-kotlin-1.2.0"
+    ext.react_dom_version = "16.2.0-pre.16-kotlin-1.2.0"
+
+
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:0.0.26"
+    }
+}
+apply plugin: "org.jetbrains.kotlin.frontend"
+apply plugin: 'kotlin-platform-js'
+apply plugin: "kotlin2js"
+apply plugin: "kotlin-dce-js"
+apply plugin: 'kotlinx-serialization'
+
+repositories {
+    maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }
+    maven { url "http://dl.bintray.com/kotlinx/kotlinx" }
+    maven { url "http://dl.bintray.com/kotlin/kotlin-js-wrappers/" }
+    mavenCentral()
+}
+
+dependencies {
+    expectedBy project(":api")
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+    compile("org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version")
+    compile "org.jetbrains:kotlin-react:$react_version"
+    compile "org.jetbrains:kotlin-react-dom:$react_dom_version"
+    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
+
+    testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
+}
+
+compileKotlin2Js {
+    kotlinOptions {
+        sourceMap = true
+        sourceMapEmbedSources = "always"
+        moduleKind = "commonjs"
+        metaInfo = false
+    }
+}
+
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}
+
+kotlinFrontend {
+    sourceMaps = true
+    npm {
+        dependency("react-dom", "^16.2.0")
+        dependency("react", "^16.2.0")
+        dependency("text-encoding", "0.6.4")
+        dependency("lz-string", "1.4.4")
+
+        devDependency("style-loader", "0.19.1")
+        devDependency("css-loader","0.28.7")
+        devDependency("url-loader", "0.6.2")
+        devDependency("source-map-loader", "0.2.3")
+        devDependency("extract-text-webpack-plugin", "3.0.2")
+    }
+
+    webpackBundle {
+        bundleName = "main"
+        contentPath = file('src/main/web')
+        sourceMapEnabled = true
+    }
+
+    define("PRODUCTION", System.getenv("PRODUCTION")=="true")
+}
+
+task copyArtifacts(type:Copy) {
+    from("src/main/web") {
+        include "**/*"
+    }
+    from("build/bundle") {
+        include "**/*"
+    }
+    into("../publish")
+}
+
+assemble.dependsOn copyArtifacts

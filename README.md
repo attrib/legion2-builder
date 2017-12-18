@@ -32,9 +32,9 @@ This project was bootstrapped with [Create React Kotlin App](https://github.com/
 
 Its a fun project for me to play with Kotlin and React.
 
-Development server: `npm start`
+Development server: `./gradlew run -t`
 
-Build: `npm run build`
+Build: `./gradlew assemble`
 
 ## Collaborators
 

@@ -1,0 +1,3 @@
+rootProject.name = 'legiontd2-builder'
+
+include 'api-gen', 'client', 'api'
