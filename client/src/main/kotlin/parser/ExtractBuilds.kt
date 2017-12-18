@@ -1,12 +1,12 @@
 package parser
 
-import builder.Build
+import ltd2.Build
 import ltd2.LegionData
-import builder.data.Unit
+import ltd2.Position
+import ltd2.UnitState
 import kotlin.js.RegExp
 
 
-data class Position(val x: Int, val y: Int)
 data class GridPosition(val x: Double, val y: Double)
 data class ReplayResult(val playerBuilds: Map<String, Build>)
 
@@ -19,7 +19,7 @@ object ExtractBuilds {
 
         val playerBuilds = game.players.filter { it.isInActiveTeam() }.associateBy({ it.name }, { player ->
             val build = Build()
-            val field = mutableMapOf<Position, Unit>()
+            val field = mutableMapOf<Position, UnitState>()
             var workers = 0
             game.waves.forEach { wave ->
                 val playerWave = wave.playerWaves[player.name]!!

@@ -1,30 +1,34 @@
-package builder
+package ltd2
 
-import builder.data.Unit
-import builder.data.Units
-import ltd2.UnitDef
+import kotlinx.serialization.KInput
+import kotlinx.serialization.KOutput
+import kotlinx.serialization.KSerialClassDesc
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.internal.SerialClassDescImpl
 import kotlin.math.roundToInt
 
-class Lane {
-    val list = mutableListOf<Unit>()
-    var units = Units(list)
 
-    fun save(ds:DSFactory.DataStream) {
-        ds.writeInt16(list.size)
-        list.forEach {
-            it.save(ds)
-        }
-    }
-
-    fun load(ds:DSFactory.DataStream) {
-        list.clear()
-
-        val len = ds.readInt16()
+object LaneSerializer : KSerializer<Lane> {
+    override fun load(input: KInput): Lane {
+        val len = input.readShortValue()
+        val list = mutableListOf<UnitState>()
         (0 until len).forEach {
-            list += Unit.load(ds)
+            list += input.read(UnitSerializer)
         }
-        units = Units(list)
+        return Lane(list)
     }
+
+    override fun save(output: KOutput, obj: Lane) {
+        obj.apply {
+            output.writeShortValue(list.size.toShort())
+            list.forEach { output.write(UnitSerializer, it) }
+        }
+    }
+
+    override val serialClassDesc: KSerialClassDesc = SerialClassDescImpl("ltd2.Lane")
+}
+class Lane(val list : MutableList<UnitState> = mutableListOf()) {
+    var units = Units(list)
 
     fun getWorkerCount(level: Int):Int {
         return 1 + getFighters(level).worker().size
@@ -76,12 +80,12 @@ class Lane {
         }
     }
 
-    fun upgradeFighter(selectedUnit: Unit, upgradeTo: UnitDef, level: Int): Unit {
+    fun upgradeFighter(selectedUnit: UnitState, upgradeTo: UnitDef, level: Int): UnitState {
         selectedUnit.upgradedLevel = level
         return addFighter(upgradeTo, level)
     }
 
-    fun sellFighter(selectedUnit: Unit, level: Int) {
+    fun sellFighter(selectedUnit: UnitState, level: Int) {
         selectedUnit.soldLevel = level
     }
 
@@ -89,15 +93,15 @@ class Lane {
         return units.sold(level)
     }
 
-    fun addFighter(unit: UnitDef, level: Int): Unit {
-        val newUnit = Unit(unit)
+    fun addFighter(unit: UnitDef, level: Int): UnitState {
+        val newUnit = UnitState(unit)
         newUnit.buildLevel = level
         list.add(newUnit)
         units = Units(list)
         return newUnit
     }
 
-    fun removeFighter(unit: Unit) {
+    fun removeFighter(unit: UnitState) {
         list.remove(unit)
         units = Units(list)
     }
@@ -107,13 +111,13 @@ class Lane {
     }
 
     fun addMerchenary(unit: UnitDef, level: Int) {
-        val newUnit = Unit(unit)
+        val newUnit = UnitState(unit)
         newUnit.buildLevel = level
         list.add(newUnit)
         units = Units(list)
     }
 
-    fun removeMerchenary(unit: Unit) {
+    fun removeMerchenary(unit: UnitState) {
         list.remove(unit)
         units = Units(list)
     }

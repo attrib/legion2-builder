@@ -1,6 +1,6 @@
 package builder.ui.tab
 
-import builder.Build
+import ltd2.Build
 import ltd2.LegionData
 import builder.ui.unitList
 import kotlinx.html.js.onClickFunction

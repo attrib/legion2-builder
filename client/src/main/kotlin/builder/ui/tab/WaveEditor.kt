@@ -2,8 +2,8 @@ package builder.ui.tab
 
 import ltd2.*
 import builder.*
-import builder.data.Unit
-import builder.data.isEnabled
+import ltd2.UnitState
+import ltd2.isEnabled
 import builder.ui.*
 import kotlinx.html.id
 import react.RBuilder
@@ -15,10 +15,10 @@ import react.dom.hr
 interface WaveEditorEventHandler : BuildAreaEventHandler, SelectedUnitInfoEventHandler {
     fun addFighter(unitDef: UnitDef)
     fun addMercenary(unitDef: UnitDef)
-    fun removeMercenary(unit: Unit)
+    fun removeMercenary(unit: UnitState)
 }
 
-fun RBuilder.waveEditor(build: Build, selectedUnit: Unit?, eventHandler: WaveEditorEventHandler) {
+fun RBuilder.waveEditor(build: Build, selectedUnit: UnitState?, eventHandler: WaveEditorEventHandler) {
     div("row") {
         div("col-8") {
             div {

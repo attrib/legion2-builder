@@ -17,7 +17,7 @@ apply plugin: "org.jetbrains.kotlin.frontend"
 apply plugin: 'kotlin-platform-js'
 apply plugin: "kotlin2js"
 apply plugin: "kotlin-dce-js"
-//apply plugin: 'kotlinx-serialization'
+apply plugin: 'kotlinx-serialization'
 
 repositories {
     maven { url "http://dl.bintray.com/kotlin/kotlin-dev" }

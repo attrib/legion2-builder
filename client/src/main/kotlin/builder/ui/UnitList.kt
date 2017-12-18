@@ -1,11 +1,11 @@
 package builder.ui
 
 import ltd2.UnitDef
-import builder.data.Units
+import ltd2.Units
 import react.RBuilder
 import react.dom.li
 import react.dom.ul
-import builder.data.Unit as UnitInfo
+import ltd2.UnitState as UnitInfo
 
 interface UnitDefListEventHandler {
     fun click(unit: UnitDef)

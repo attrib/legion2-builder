@@ -1,6 +1,7 @@
 package builder.ui.header
 
-import builder.Build
+import builder.PermaLinkV1JS
+import ltd2.Build
 import ltd2.Legion
 import ltd2.LegionData
 import kotlinx.html.InputType
@@ -8,6 +9,7 @@ import kotlinx.html.classes
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.title
+import ltd2.PermaLinkV1
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.get
@@ -64,7 +66,7 @@ fun RBuilder.legionSelect(build: Build, replayResult: ReplayResult?, selectedPla
             }
         }
 
-        a(href = "?b=${build.toPermaLinkCode()}", classes = "btn btn-secondary col") {
+        a(href = "?b=${PermaLinkV1JS.toPermaLinkCode(build)}", classes = "btn btn-secondary col") {
             +"Permalink"
         }
     }

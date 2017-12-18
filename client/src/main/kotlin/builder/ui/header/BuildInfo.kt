@@ -1,6 +1,6 @@
 package builder.ui.header
 
-import builder.Build
+import ltd2.Build
 import ltd2.LegionData
 import react.RBuilder
 import react.dom.div

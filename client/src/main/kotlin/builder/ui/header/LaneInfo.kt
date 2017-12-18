@@ -1,7 +1,7 @@
 package builder.ui.header
 
 import app.format
-import builder.Build
+import ltd2.Build
 import ltd2.LegionData
 import builder.getWaveCreaturesDef
 import builder.ui.dpsUi

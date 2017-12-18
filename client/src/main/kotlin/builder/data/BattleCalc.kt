@@ -2,6 +2,7 @@ package builder.data
 
 import ltd2.Global
 import ltd2.UnitDef
+import ltd2.getModifier
 
 data class Result(val unitsA: List<UnitState>, val unitsB: List<UnitState>) {
     fun hpA() = unitsA.sumByDouble { it.hitpoints }

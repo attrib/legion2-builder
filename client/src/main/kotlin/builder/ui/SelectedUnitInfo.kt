@@ -1,9 +1,9 @@
 package builder.ui
 
-import builder.Build
+import ltd2.Build
 import ltd2.LegionData
 import ltd2.UnitDef
-import builder.data.Unit
+import ltd2.UnitState
 import builder.fighters
 import kotlinx.html.js.onClickFunction
 import kotlinx.html.title
@@ -18,7 +18,7 @@ interface SelectedUnitInfoEventHandler {
     fun upgrade(upgradeTo: UnitDef)
 }
 
-fun RBuilder.selectedUnitInfo(selectedUnit: Unit?, build: Build, eventHandler: SelectedUnitInfoEventHandler) {
+fun RBuilder.selectedUnitInfo(selectedUnit: UnitState?, build: Build, eventHandler: SelectedUnitInfoEventHandler) {
     div("selected-unit") {
         if (selectedUnit != null) {
             div("row no-gutters") {

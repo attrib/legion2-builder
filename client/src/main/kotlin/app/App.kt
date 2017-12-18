@@ -2,7 +2,6 @@ package app
 
 import ltd2.*
 import builder.*
-import builder.data.Unit
 import builder.ui.header.*
 import builder.ui.tab.BuildOrderEventHandler
 import builder.ui.tab.WaveEditorEventHandler
@@ -24,7 +23,7 @@ enum class Tabs {
 
 interface AppState : RState {
     var build: Build
-    var selectedUnit: Unit?
+    var selectedUnit: UnitState?
     var selectedPlayer: String?
     var replayResult: ReplayResult?
     var uploadingFile: Boolean
@@ -41,8 +40,7 @@ class App : RComponent<RProps, AppState>() {
         val url = window.location.href
         if( url.contains("?b=") ) {
             val code = url.split("?b=")[1]
-            build = Build()
-            build.fromPermaLinkCode(code)
+            build = PermaLinkV1JS.fromPermaLinkCode(code)
         }
     }
 
@@ -173,11 +171,11 @@ class App : RComponent<RProps, AppState>() {
                                 setState { build.addMerchenary(unitDef) }
                             }
 
-                            override fun removeMercenary(unit: Unit) {
+                            override fun removeMercenary(unit: UnitState) {
                                 setState { build.removeMerchenary(unit) }
                             }
 
-                            override fun selectUnit(unit: Unit) {
+                            override fun selectUnit(unit: UnitState) {
                                 setState {
                                     selectedUnit = if (selectedUnit == unit) null else unit
                                 }

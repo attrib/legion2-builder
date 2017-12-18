@@ -1,7 +1,7 @@
 package builder.ui
 
 import app.format
-import builder.data.Resistance
+import ltd2.Resistance
 import kotlinext.js.invoke
 import kotlinx.html.title
 import react.RBuilder
