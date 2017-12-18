@@ -4,7 +4,7 @@ jdk:
 env:
   - NODE_VERSION="9"
 before_install:
-  - PRODUCTION="true"
+  - export PRODUCTION="true"
   - nvm install $NODE_VERSION
 after_failure: "cat client/build/logs/*.log"
 deploy:
