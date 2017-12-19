@@ -1,9 +1,9 @@
-var webpackConfig = require("/mnt/c/Users/synopia/IdeaProjects/legion2-builder/client/build/webpack.karma.config.js");
-webpackConfig.resolve.modules.push("/mnt/c/Users/synopia/IdeaProjects/legion2-builder/client/build/classes/kotlin/test/client_test.js");
+var webpackConfig = require("webpack.karma.config.js");
+webpackConfig.resolve.modules.push("classes/kotlin/test/client_test.js");
 
 module.exports = function (config) {
     config.set({
-        "basePath": "/mnt/c/Users/synopia/IdeaProjects/legion2-builder/client/build",
+        "basePath": ".",
         "frameworks": [
             "qunit",
             "es6-shim"
@@ -13,7 +13,7 @@ module.exports = function (config) {
             "junit"
         ],
         "files": [
-            "/mnt/c/Users/synopia/IdeaProjects/legion2-builder/client/build/classes/kotlin/test/client_test.js"
+            "classes/kotlin/test/client_test.js"
         ],
         "exclude": [
             "*~",
@@ -30,7 +30,7 @@ module.exports = function (config) {
         "captureTimeout": 60000,
         "singleRun": false,
         "preprocessors": {
-            "/mnt/c/Users/synopia/IdeaProjects/legion2-builder/client/build/classes/kotlin/test/client_test.js": [
+            "classes/kotlin/test/client_test.js": [
                 "sourcemap",
                 "webpack"
             ]
@@ -51,7 +51,7 @@ module.exports = function (config) {
             }
         },
         "junitReporter": {
-            "outputFile": "/mnt/c/Users/synopia/IdeaProjects/legion2-builder/client/build/reports/karma.xml",
+            "outputFile": "reports/karma.xml",
             "suite": "karma"
         },
         "webpack": webpackConfig

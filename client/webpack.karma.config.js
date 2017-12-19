@@ -3,12 +3,12 @@
 var webpack = require('webpack');
 
 var config = {
-    "context": "/mnt/c/Users/synopia/IdeaProjects/legion2-builder/client/build/classes/kotlin/test",
+    "context": "classes/kotlin/test",
     "entry": {
         "main": "./client_test"
     },
     "output": {
-        "path": "/mnt/c/Users/synopia/IdeaProjects/legion2-builder/client/build/testbundle",
+        "path": "testbundle",
         "filename": "[name].bundle.js",
         "chunkFilename": "[id].bundle.js",
         "publicPath": "/"
@@ -24,8 +24,7 @@ var config = {
             "classes/kotlin/main",
             "resources/main",
             "resources/test",
-            "node_modules",
-            "/mnt/c/Users/synopia/IdeaProjects/legion2-builder/client/build/node_modules"
+            "node_modules"
         ]
     },
     "plugins": [
