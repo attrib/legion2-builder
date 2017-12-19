@@ -1,9 +1,9 @@
 'use strict';
-
+const path = require('path');
 var webpack = require('webpack');
 
 var config = {
-    "context": "classes/kotlin/test",
+    "context": path.resolve(".", "classes/kotlin/test"),
     "entry": {
         "main": "./client_test"
     },

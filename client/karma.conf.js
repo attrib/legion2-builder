@@ -1,4 +1,4 @@
-var webpackConfig = require("webpack.karma.config.js");
+var webpackConfig = require("./webpack.karma.config.js");
 webpackConfig.resolve.modules.push("classes/kotlin/test/client_test.js");
 
 module.exports = function (config) {

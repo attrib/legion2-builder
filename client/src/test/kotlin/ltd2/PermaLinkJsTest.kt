@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 class PermaLinkJsTest {
     @Test
     fun testPermaLink() {
-        println("Hello from PermaLinkTestJS")
+        println("Hello from PermaLinkTestJS2")
 
         val orig = Build(Lane(mutableListOf(UnitState(LegionData.unitsMap["worker_unit_id"]!!))))
         val data = PermaLinkV1JS.toPermaLinkCode(orig)
