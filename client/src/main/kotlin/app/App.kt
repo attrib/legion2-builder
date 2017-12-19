@@ -1,7 +1,7 @@
 package app
 
-import ltd2.*
-import builder.*
+import builder.PermaLinkV1JS
+import builder.getWaveCreaturesDef
 import builder.ui.header.*
 import builder.ui.tab.BuildOrderEventHandler
 import builder.ui.tab.WaveEditorEventHandler
@@ -9,6 +9,7 @@ import builder.ui.tab.buildOrder
 import builder.ui.tab.waveEditor
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
+import ltd2.*
 import parser.ReplayResult
 import react.*
 import react.dom.*
@@ -38,7 +39,7 @@ class App : RComponent<RProps, AppState>() {
         selectedTab = Tabs.WaveEditor
         replayResult = null
         val url = window.location.href
-        if( url.contains("?b=") ) {
+        if (url.contains("?b=")) {
             val code = url.split("?b=")[1]
             build = PermaLinkV1JS.fromPermaLinkCode(code)
         }
@@ -63,7 +64,10 @@ class App : RComponent<RProps, AppState>() {
                     }
                 }
             }
-            a(href = "https://github.com/attrib/legion2-builder", classes = "btn btn-outline-success my-2 my-sm-0") {
+            a(href = "http://store.steampowered.com/news/externalpost/steam_community_announcements/2442505391489226804", classes = "btn btn-outline-primary mr-2", target = "_blank") {
+                +"1.65"
+            }
+            a(href = "https://github.com/attrib/legion2-builder", classes = "btn btn-outline-success mr-2", target = "_blank") {
                 +"Github"
             }
         }

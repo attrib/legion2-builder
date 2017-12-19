@@ -49,8 +49,10 @@ fun <T> writeEnum(name:String, values:Array<T>) {
     println("}")
 }
 fun main(args: Array<String>) {
-    val data = loadData("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Legion TD 2")
-    (System::setOut)(PrintStream("src/main/kotlin/ltd2.kt"))
+    val data = loadData("D:\\Spiele\\Steam\\steamapps\\common\\Legion TD 2")
+    (System::setOut)(PrintStream("api/src/main/kotlin/ltd2/ltd2.kt"))
+    println("package ltd2")
+    println("")
     writeEnum("ArmorType", ArmorType.values())
     writeEnum("AttackType", AttackType.values())
     writeEnum("AttackMode", AttackMode.values())
