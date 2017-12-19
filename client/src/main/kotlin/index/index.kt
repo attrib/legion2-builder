@@ -13,13 +13,16 @@ external object LZString {
 
 
 fun main(args: Array<String>) {
-    require("index/bootstrap.min.css")
-    require("index/index.css")
-    require("app/App.css")
-    require("index/loading.css")
-    require("builder/ui/tab/BuildOrder.css")
+    val container = document.getElementById("root")
+    if( container!=null ) {
+        require("index/bootstrap.min.css")
+        require("index/index.css")
+        require("app/App.css")
+        require("index/loading.css")
+        require("builder/ui/tab/BuildOrder.css")
 
-    render(document.getElementById("root")) {
-        app()
+        render(container) {
+            app()
+        }
     }
 }
