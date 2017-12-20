@@ -12,6 +12,7 @@ import kotlinx.html.js.onClickFunction
 import ltd2.*
 import org.w3c.dom.PopStateEvent
 import org.w3c.dom.events.Event
+import org.w3c.dom.get
 import parser.ReplayResult
 import react.*
 import react.dom.*
@@ -32,6 +33,11 @@ interface AppState : RState {
     var uploadingFile: Boolean
     var selectedTab: Tabs
 }
+
+/**
+ * Google analytics update method
+ */
+external fun ga(method: String, option: String, url: String? = definedExternally)
 
 class App : RComponent<RProps, AppState>() {
 
@@ -66,6 +72,10 @@ class App : RComponent<RProps, AppState>() {
     fun AppState.updateHistory() {
         val permalink = PermaLinkV1JS.toPermaLinkCode(build)
         window.history.pushState(permalink, build.legion?.name + " " + build.currentLevel.toString(), "/?b=" + permalink)
+        if (jsTypeOf(window["ga"]) !== "undefined") {
+            ga("set", "page", "/?b=" + permalink)
+            ga("send", "pageview")
+        }
     }
 
     override fun RBuilder.render() {
