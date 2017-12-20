@@ -10,6 +10,8 @@ import builder.ui.tab.waveEditor
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
 import ltd2.*
+import org.w3c.dom.PopStateEvent
+import org.w3c.dom.events.Event
 import parser.ReplayResult
 import react.*
 import react.dom.*
@@ -43,6 +45,14 @@ class App : RComponent<RProps, AppState>() {
             val code = url.split("?b=")[1]
             build = PermaLinkV1JS.fromPermaLinkCode(code)
         }
+        window.onpopstate = { event: Event ->
+            val state = (event as PopStateEvent).state
+            if (state !== null) {
+                setState {
+                    build = PermaLinkV1JS.fromPermaLinkCode(state.toString())
+                }
+            }
+        }
     }
 
     fun AppState.resetBuild() {
@@ -50,6 +60,12 @@ class App : RComponent<RProps, AppState>() {
         build.legion = LegionData.legionsMap["element_legion_id"]!!
         build.legionId = "element_legion_id"
         selectedUnit = null
+        updateHistory()
+    }
+
+    fun AppState.updateHistory() {
+        val permalink = PermaLinkV1JS.toPermaLinkCode(build)
+        window.history.pushState(permalink, build.legion?.name + " " + build.currentLevel.toString(), "/?b=" + permalink)
     }
 
     override fun RBuilder.render() {
@@ -94,6 +110,7 @@ class App : RComponent<RProps, AppState>() {
 
                                 override fun replayFileLoaded(replayResult: ReplayResult) {
                                     setState {
+                                        resetBuild()
                                         this.replayResult = replayResult
                                         uploadingFile = false
                                     }
@@ -124,11 +141,17 @@ class App : RComponent<RProps, AppState>() {
                             val waveDef = LegionData.getWaveCreaturesDef(state.build.currentLevel)
                             waveInfo(waveDef, state.build.currentLevel, object : LevelInterface {
                                 override fun decrease() {
-                                    setState { state.build.levelDecrease() }
+                                    setState {
+                                        state.build.levelDecrease()
+                                        updateHistory()
+                                    }
                                 }
 
                                 override fun increase() {
-                                    setState { state.build.levelIncrease() }
+                                    setState {
+                                        state.build.levelIncrease()
+                                        updateHistory()
+                                    }
                                 }
 
                             })
@@ -168,15 +191,24 @@ class App : RComponent<RProps, AppState>() {
                     Tabs.WaveEditor -> {
                         waveEditor(state.build, state.selectedUnit, object : WaveEditorEventHandler {
                             override fun addFighter(unitDef: UnitDef) {
-                                setState { selectedUnit = build.addFighter(unitDef) }
+                                setState {
+                                    selectedUnit = build.addFighter(unitDef)
+                                    updateHistory()
+                                }
                             }
 
                             override fun addMercenary(unitDef: UnitDef) {
-                                setState { build.addMerchenary(unitDef) }
+                                setState {
+                                    build.addMerchenary(unitDef)
+                                    updateHistory()
+                                }
                             }
 
                             override fun removeMercenary(unit: UnitState) {
-                                setState { build.removeMerchenary(unit) }
+                                setState {
+                                    build.removeMerchenary(unit)
+                                    updateHistory()
+                                }
                             }
 
                             override fun selectUnit(unit: UnitState) {
@@ -193,6 +225,7 @@ class App : RComponent<RProps, AppState>() {
                                 setState {
                                     build.removeFighter(selectedUnit!!)
                                     selectedUnit = null
+                                    updateHistory()
                                 }
                             }
 
@@ -200,11 +233,15 @@ class App : RComponent<RProps, AppState>() {
                                 setState {
                                     build.sellFighter(selectedUnit!!)
                                     selectedUnit = null
+                                    updateHistory()
                                 }
                             }
 
                             override fun upgrade(upgradeTo: UnitDef) {
-                                setState { selectedUnit = build.upgradeFighter(selectedUnit!!, upgradeTo) }
+                                setState {
+                                    selectedUnit = build.upgradeFighter(selectedUnit!!, upgradeTo)
+                                    updateHistory()
+                                }
                             }
 
                         })
