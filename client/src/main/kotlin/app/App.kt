@@ -69,9 +69,9 @@ class App : RComponent<RProps, AppState>() {
     fun AppState.updateHistory() {
         val permalink = PermaLinkV1JS.toPermaLinkCode(build)
         window.history.pushState(permalink, build.legion?.name + " " + build.currentLevel.toString(), "/?b=" + permalink)
-        if (jsTypeOf(window["ga"]) !== "undefined") {
-            window["ga"]("set", "page", "/?b=" + permalink)
-            window["ga"]("send", "pageview")
+        if (jsTypeOf(window["gtag"]) !== "undefined") {
+            window["gtag"]("set", "page", "/?b=" + permalink)
+            window["gtag"]("send", "pageview", "/?b=" + permalink)
         }
     }
 
