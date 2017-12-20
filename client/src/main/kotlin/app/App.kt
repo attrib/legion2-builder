@@ -34,15 +34,9 @@ interface AppState : RState {
     var selectedTab: Tabs
 }
 
-/**
- * Google analytics update method
- */
-external fun ga(method: String, option: String, url: String? = definedExternally)
-
 class App : RComponent<RProps, AppState>() {
 
     override fun AppState.init() {
-        resetBuild()
         uploadingFile = false
         selectedTab = Tabs.WaveEditor
         replayResult = null
@@ -50,6 +44,9 @@ class App : RComponent<RProps, AppState>() {
         if (url.contains("?b=")) {
             val code = url.split("?b=")[1]
             build = PermaLinkV1JS.fromPermaLinkCode(code)
+        }
+        else {
+            resetBuild()
         }
         window.onpopstate = { event: Event ->
             val state = (event as PopStateEvent).state
@@ -73,8 +70,8 @@ class App : RComponent<RProps, AppState>() {
         val permalink = PermaLinkV1JS.toPermaLinkCode(build)
         window.history.pushState(permalink, build.legion?.name + " " + build.currentLevel.toString(), "/?b=" + permalink)
         if (jsTypeOf(window["ga"]) !== "undefined") {
-            ga("set", "page", "/?b=" + permalink)
-            ga("send", "pageview")
+            window["ga"]("set", "page", "/?b=" + permalink)
+            window["ga"]("send", "pageview")
         }
     }
 
