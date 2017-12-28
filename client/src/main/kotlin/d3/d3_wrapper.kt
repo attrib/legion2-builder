@@ -12,4 +12,5 @@ external object d3_wrapper {
                units: Array<UnitState>,
                buildUnitCallback: (UnitDef, Int, Int) -> Unit,
                selectUnitCallback: (UnitState) -> Unit)
+    fun drawInlineSVG(callback: (String) -> Unit)
 }

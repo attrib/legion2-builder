@@ -254,6 +254,52 @@ var d3_wrapper = {
 
     validPlacement: function(cell) {
         return cell.col >= 0 && cell.col < (d3_wrapper.cols - 1) && cell.row >= 0 && cell.row < (d3_wrapper.rows - 1);
+    },
+
+    drawInlineSVG: function drawInlineSVG(callback) {
+        if (!d3_wrapper.svg) {
+            setTimeout(function () {
+                drawInlineSVG(callback)
+            }, 40);
+            return;
+        }
+        var canvas = document.createElement("canvas");
+        canvas.width = (d3_wrapper.size * d3_wrapper.cols);
+        canvas.height = (d3_wrapper.size * d3_wrapper.rows);
+        var ctx = canvas.getContext('2d');
+        var svg = d3_wrapper.svg.node().cloneNode(true);
+        svg.setAttribute("width", (d3_wrapper.size * d3_wrapper.cols) + "px");
+        svg.childNodes[0].childNodes.forEach(function (value, index) {
+            svg.childNodes[0].childNodes[index].setAttribute("fill", "none");
+            svg.childNodes[0].childNodes[index].setAttribute("stroke", "#aaa");
+        });
+        svg.childNodes[1].childNodes.forEach(function (value, index) {
+            svg.childNodes[1].childNodes[index].setAttribute("href", d3_wrapper.getBase64Image(value));
+        });
+        var svgURL = new XMLSerializer().serializeToString(svg);
+        var img = new Image();
+        img.onload = function () {
+            ctx.drawImage(this, 0, 0);
+            callback(canvas.toDataURL());
+        };
+        img.src = 'data:image/svg+xml; charset=utf8, ' + encodeURIComponent(svgURL);
+    },
+
+    getBase64Image: function(imgSvg) {
+        // Create an empty canvas element
+        var canvas = document.createElement("canvas");
+        canvas.width = imgSvg.getAttribute("width");
+        canvas.height = imgSvg.getAttribute("height");
+        var img = new Image();
+        img.src = imgSvg.getAttribute("href");
+        // Copy the image contents to the canvas
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        // Get the data-URL formatted image
+        // Firefox supports PNG and JPEG. You could check img.src to
+        // guess the original format, but be aware the using "image/jpg"
+        // will re-encode the image.
+        return canvas.toDataURL("image/png");
     }
 };
 
