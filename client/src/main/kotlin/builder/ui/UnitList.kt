@@ -1,5 +1,6 @@
 package builder.ui
 
+import builder.data.UnitSelection
 import ltd2.UnitDef
 import ltd2.Units
 import react.RBuilder
@@ -15,7 +16,7 @@ interface UnitListEventHandler {
     fun click(unit: UnitInfo)
 }
 
-fun RBuilder.unitList(units: List<UnitDef>, filterCallback: (UnitDef) -> Boolean, clickCallback: (UnitDef) -> Unit) {
+fun RBuilder.unitList(units: List<UnitDef>, filterCallback: (UnitDef) -> Boolean, clickCallback: (UnitDef) -> Unit, selectedUnit: UnitSelection) {
     val eventHandler = object : UnitDefListEventHandler {
         override fun click(unit: UnitDef) {
             clickCallback(unit)
@@ -26,14 +27,15 @@ fun RBuilder.unitList(units: List<UnitDef>, filterCallback: (UnitDef) -> Boolean
         ul("list-inline row no-gutters justify-content-start") {
             units.filter { filterCallback(it) }.forEach { unit ->
                 li("col-auto") {
-                    unitUi(unit, { eventHandler.click(unit) })
+                    val addClass = if (selectedUnit.isSelected(unit)) "selected" else ""
+                    unitUi(unit, { eventHandler.click(unit) }, addClass)
                 }
             }
         }
     }
 }
 
-fun RBuilder.unitList(units: Units, filterCallback: (UnitInfo) -> Boolean, clickCallback: (UnitInfo) -> Unit, selectedUnit: UnitInfo? = null) {
+fun RBuilder.unitList(units: Units, filterCallback: (UnitInfo) -> Boolean, clickCallback: (UnitInfo) -> Unit, selectedUnit: UnitSelection) {
     val eventHandler = object : UnitListEventHandler {
         override fun click(unit: UnitInfo) {
             clickCallback(unit)
@@ -44,7 +46,7 @@ fun RBuilder.unitList(units: Units, filterCallback: (UnitInfo) -> Boolean, click
         ul("list-inline row no-gutters justify-content-start") {
             units.filter { filterCallback(it) }.forEach { unit ->
                 li("col-auto") {
-                    val addClass = if (selectedUnit != null && selectedUnit == unit) "selected" else ""
+                    val addClass = if (selectedUnit.isSelected(unit)) "selected" else ""
                     unitUi(unit.def, { eventHandler.click(unit) }, addClass)
                 }
             }

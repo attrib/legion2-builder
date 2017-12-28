@@ -82,7 +82,7 @@ class Lane(val list : MutableList<UnitState> = mutableListOf()) {
 
     fun upgradeFighter(selectedUnit: UnitState, upgradeTo: UnitDef, level: Int): UnitState {
         selectedUnit.upgradedLevel = level
-        return addFighter(upgradeTo, level)
+        return addFighter(upgradeTo, level, selectedUnit.position)
     }
 
     fun sellFighter(selectedUnit: UnitState, level: Int) {
@@ -93,9 +93,10 @@ class Lane(val list : MutableList<UnitState> = mutableListOf()) {
         return units.sold(level)
     }
 
-    fun addFighter(unit: UnitDef, level: Int): UnitState {
+    fun addFighter(unit: UnitDef, level: Int, position: Position): UnitState {
         val newUnit = UnitState(unit)
         newUnit.buildLevel = level
+        newUnit.position = position
         list.add(newUnit)
         units = Units(list)
         return newUnit

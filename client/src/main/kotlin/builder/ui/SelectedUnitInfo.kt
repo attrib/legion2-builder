@@ -1,5 +1,6 @@
 package builder.ui
 
+import builder.data.UnitSelection
 import ltd2.Build
 import ltd2.LegionData
 import ltd2.UnitDef
@@ -18,15 +19,15 @@ interface SelectedUnitInfoEventHandler {
     fun upgrade(upgradeTo: UnitDef)
 }
 
-fun RBuilder.selectedUnitInfo(selectedUnit: UnitState?, build: Build, eventHandler: SelectedUnitInfoEventHandler) {
+fun RBuilder.selectedUnitInfo(selectedUnit: UnitSelection, build: Build, eventHandler: SelectedUnitInfoEventHandler) {
     div("selected-unit") {
-        if (selectedUnit != null) {
+        if (selectedUnit.isBuiltUnit()) {
             div("row no-gutters") {
                 div("col-auto") {
                     attrs.title = "Unselect"
-                    unitUi(selectedUnit.def, { eventHandler.deselect() })
+                    unitUi(selectedUnit.getBuiltUnit().def, { eventHandler.deselect() })
                 }
-                if (selectedUnit.buildLevel == build.currentLevel) {
+                if (selectedUnit.getBuiltUnit().buildLevel == build.currentLevel) {
                     div("col-auto") {
                         img("Recall", "Icons/Recall.png") { attrs.title = "Recall" }
                         attrs.onClickFunction = {
@@ -42,7 +43,7 @@ fun RBuilder.selectedUnitInfo(selectedUnit: UnitState?, build: Build, eventHandl
                     }
                 }
                 LegionData.fighters(build.legion)
-                        .filter { it.upgradesFrom == selectedUnit.def.id }
+                        .filter { it.upgradesFrom == selectedUnit.getBuiltUnit().def.id }
                         .forEach {
                             div("col-auto") {
                                 attrs.title = "Upgrade"

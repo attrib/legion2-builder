@@ -40,15 +40,14 @@ object ExtractBuilds {
                                 old
                             }
                         } else {
-                            build.addFighter(newUnitDef)
+                            build.addFighter(newUnitDef, pos)
                         }
-                        new.position = pos
                         field[pos] = new
                     }
                 }
                 if (playerWave.end.workers > workers) {
                     (1..playerWave.end.workers - workers).forEach {
-                        build.addFighter(LegionData.unitsMap["worker_unit_id"]!!)
+                        build.addFighter(LegionData.unitsMap["worker_unit_id"]!!, Position(19, 0))
                     }
                     workers = playerWave.end.workers
                 }

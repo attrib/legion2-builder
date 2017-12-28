@@ -78,8 +78,8 @@ class Build(val lane: Lane = Lane()) {
         return lane.getFightersUnfiltered()
     }
 
-    fun addFighter(unit: UnitDef): UnitState {
-        return lane.addFighter(unit, currentLevel)
+    fun addFighter(unit: UnitDef, position: Position): UnitState {
+        return lane.addFighter(unit, currentLevel, position)
     }
 
     fun removeFighter(unit: UnitState) {
