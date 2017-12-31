@@ -3,6 +3,7 @@ package ltd2
 import java.io.PrintStream
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
+import kotlin.reflect.full.createType
 import kotlin.reflect.full.memberProperties
 
 fun type2String(type:KType) : String {
@@ -59,6 +60,7 @@ fun main(args: Array<String>) {
     writeEnum("UnitClass", UnitClass.values())
     writeClassDef(Legion::class)
     writeClassDef(UnitDef::class)
+    writeClassDef(ResearchDef::class)
     writeClassDef(WaveDef::class)
     writeClassDef(BuffDef::class)
     writeClassDef(Global::class)
@@ -78,6 +80,16 @@ fun main(args: Array<String>) {
     println("\tval units = listOf(")
     println(data.unitDefs.unitDefs.map {unitDef->
         "\t\tUnitDef(${UnitDef::class.memberProperties.map { value2String(it.returnType, it.get(unitDef)) }.joinToString(", ")})"
+    }.joinToString(",\n"))
+    println("\t)")
+    println("\tval researches = listOf(")
+    // Add worker to researches as its more a research than a unit
+    println(data.unitDefs.unitDefs.filter { it.id == "worker_unit_id" }.map {unitDef->
+        "\t\tResearchDef(0, ${value2String(Int::class.createType(), unitDef.goldCost)}, 0, ${value2String(String::class.createType(), unitDef.iconPath.replace("Splashes/", "Icons/"))}, ${value2String(String::class.createType(), unitDef.id)}, ${value2String(Int::class.createType(), unitDef.mythiumCost)}, 0, 0, ${value2String(String::class.createType(), unitDef.name)}, ${value2String(String::class.createType(), unitDef.tooltip)}, 1)"
+    }.joinToString(",\n") + ",")
+    // Only add only implemented research yet (upgrade_supply_research_id)
+    println(data.researches.researches.filter { it.id == "upgrade_supply_research_id"}.map {researchDef->
+        "\t\tResearchDef(${ResearchDef::class.memberProperties.map { value2String(it.returnType, it.get(researchDef)) }.joinToString(", ")})"
     }.joinToString(",\n"))
     println("\t)")
     println("\tval unitsMap = units.associateBy { it.id }\n")

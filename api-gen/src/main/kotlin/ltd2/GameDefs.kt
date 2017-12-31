@@ -81,6 +81,21 @@ data class UnitDef(
 
 data class UnitDefs(@SerializedName("unit") val unitDefs: List<UnitDef>)
 
+data class ResearchDef(
+        @SerializedName("@id") val id: String,
+        @SerializedName("bonussupply") val bonussupply: Int,
+        @SerializedName("mythiumharvestbonus") val mythiumharvestbonus: Int,
+        val workercount: Int, // this is fake and needed as our research has the worker build in it
+        @SerializedName("iconpath") val iconPath: String,
+        @SerializedName("tooltip") val tooltip: String,
+        @SerializedName("name") val name: String,
+        @SerializedName("goldcost") val goldCost:Int,
+        @SerializedName("goldcostperlevel") val goldCostPerLevel:Int,
+        @SerializedName("mythiumcost") val mythiumCost:Int,
+        @SerializedName("mythiumcostperlevel") val mythiumCostPerLevel:Int
+)
+data class ResearchDefs(@SerializedName("research") val researches: List<ResearchDef>)
+
 data class BuffDef(
         @SerializedName("@id") val id:String,
         @SerializedName("targeteffect") val targetEffect:String?,
@@ -230,7 +245,7 @@ class StringTypeAdapter : PrimitivTypeAdapter<String>("*") {
     }
 }
 
-data class GameData(val buffs:Buffs, val legions:Legions, val unitDefs: UnitDefs, val global: Global, val waveDefs: WaveDefs)
+data class GameData(val buffs:Buffs, val legions:Legions, val unitDefs: UnitDefs, val global: Global, val waveDefs: WaveDefs, val researches: ResearchDefs)
 fun loadData(ltd2Folder:String) : GameData {
     val p = XmlParserCreator { XmlPullParserFactory.newInstance().newPullParser() }
     val builder = GsonBuilder()
@@ -252,5 +267,6 @@ fun loadData(ltd2Folder:String) : GameData {
     val units = gsonXml.fromXml(InputStreamReader(zip.getInputStream(zip.getEntry("units.xml"))), UnitDefs::class.java)
     val globals = gsonXml.fromXml(InputStreamReader(zip.getInputStream(zip.getEntry("globals.xml"))), Globals::class.java).globals[0]
     val waves = gsonXml.fromXml(InputStreamReader(zip.getInputStream(zip.getEntry("waves.xml"))), WaveDefs::class.java)
-    return GameData(buffs, legions, units, globals, waves)
+    val researches = gsonXml.fromXml(InputStreamReader(zip.getInputStream(zip.getEntry("researches.xml"))), ResearchDefs::class.java)
+    return GameData(buffs, legions, units, globals, waves, researches)
 }

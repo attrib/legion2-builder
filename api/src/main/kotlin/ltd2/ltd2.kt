@@ -63,6 +63,19 @@ data class UnitDef(
 	val unitClass : UnitClass,
 	val upgradesFrom : String?
 )
+data class ResearchDef(
+	val bonussupply : Int,
+	val goldCost : Int,
+	val goldCostPerLevel : Int,
+	val iconPath : String,
+	val id : String,
+	val mythiumCost : Int,
+	val mythiumCostPerLevel : Int,
+	val mythiumharvestbonus : Int,
+	val name : String,
+	val tooltip : String,
+	val workercount : Int
+)
 data class WaveDef(
 	val amount : Int,
 	val amount2 : Int,
@@ -333,6 +346,10 @@ object LegionData {
 		UnitDef(ArmorType.Immaterial, AttackMode.Melee, 1.0, AttackType.Pure, 0, 1200, 0, 60, 0, 27000, 0.0, "Splashes/LegionKing.png", "legion_king_unit_id", 0, "creature_legion_id", 0, 0.0, 0, "Legion King", "Demonic creature with unmatched power", 0, 0, UnitClass.Creature, null),
 		UnitDef(ArmorType.Natural, AttackMode.Melee, 0.98, AttackType.Pierce, 0, 20, 0, 0, 0, 380, 0.0, "Splashes/ChaosHound.png", "chaos_hound_harbinger_unit_id", 0, "forsaken_legion_id", 0, 0.0, 0, "Chaos Hound", "High damage melee pet", 0, 0, UnitClass.Fighter, null),
 		UnitDef(ArmorType.Illegal, AttackMode.None, 1.0, AttackType.Impact, 0, 10, 0, 0, 100, 100, 0.0, "Splashes/2xWorkers.png", "worker_x2_unit_id", 0, "aspect_legion_id", 0, 0.0, 0, "2x Workers", "Increases mythium production rate by 2 to hire more mercenaries.", 1, 100, UnitClass.Worker, null)
+	)
+	val researches = listOf(
+		ResearchDef(0, 100, 0, "Icons/Worker.png", "worker_unit_id", 0, 0, 0, "Worker", "Increases mythium production rate by 1 to hire more mercenaries.", 1),
+		ResearchDef(15, 0, 0, "Icons/UpgradeSupply.png", "upgrade_supply_research_id", 60, 15, 0, "Upgrade Supply", "Increases your supply cap by 15, allowing you to deploy more fighters", 0)
 	)
 	val unitsMap = units.associateBy { it.id }
 
