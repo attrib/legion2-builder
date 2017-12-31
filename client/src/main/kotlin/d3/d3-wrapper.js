@@ -96,7 +96,12 @@ var d3_wrapper = {
                         y = match[2] / d3_wrapper.size - y - 2;
                     }
                     buildUnitCallback(d, x, y);
-                    d3_wrapper.selectedUnitSvg.remove();
+                })
+                .on("contextmenu", function (d) {
+                    d3.event.preventDefault();
+                    if (d3_wrapper.selectedUnitSvg) {
+                        d3_wrapper.selectedUnitSvg.remove();
+                    }
                 });
             this.selectedUnitSvg.exit()
                 .remove();
@@ -131,6 +136,13 @@ var d3_wrapper = {
                     d3_wrapper.selectedUnitSvg
                         .attr("x", d.x)
                         .attr("y", d.y);
+                }
+            })
+            .on("contextmenu", function (d) {
+                d3.event.preventDefault();
+                if (d3_wrapper.selectedUnitBuiltSvg) {
+                    d3_wrapper.selectedUnitBuiltSvg.remove();
+                    selectUnitCallback(selectedUnit.getBuiltUnit());
                 }
             });
 
@@ -243,6 +255,13 @@ var d3_wrapper = {
                 })
                 .on("click", function (d) {
                     selectUnitCallback(d);
+                })
+                .on("contextmenu", function (d) {
+                    d3.event.preventDefault();
+                    if (d3_wrapper.selectedUnitBuiltSvg) {
+                        d3_wrapper.selectedUnitBuiltSvg.remove();
+                        selectUnitCallback(d);
+                    }
                 });
             this.selectedUnitBuiltSvg.exit()
                 .remove();

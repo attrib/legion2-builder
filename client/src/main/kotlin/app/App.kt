@@ -203,7 +203,7 @@ class App : RComponent<RProps, AppState>() {
                         waveEditor(state.build, state.selectedUnit, object : WaveEditorEventHandler {
                             override fun addFighter(unit: UnitDef, x: Int, y: Int) {
                                 setState {
-                                    selectedUnit.select(build.addFighter(unit, Position(x, y)))
+                                    build.addFighter(unit, Position(x, y))
                                     updateHistory()
                                 }
                             }
