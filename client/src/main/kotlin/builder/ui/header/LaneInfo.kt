@@ -14,15 +14,28 @@ fun RBuilder.laneInfo(build: Build) {
     h3 { +"Lane info" }
     val unitId = LegionData.waves[build.currentLevel].unit
     val unitDef = LegionData.unitsMap[unitId]
+    val resistance = build.getResistance(unitDef)
     val waveDef = LegionData.getWaveCreaturesDef(build.currentLevel)
 
     div("tooltip-parent") {
         +"Total HP: ${build.totalHp}"
-        hpUi(build.getResistance(unitDef))
+        +" ("
+        +resistance.hps.map {
+            val mod = resistance.getModDefense(it.key)
+            it.value * mod
+        }.sum().format(2)
+        +")"
+        hpUi(resistance)
     }
     div("tooltip-parent") {
         +"Total DPS: ${build.totalDps.format(2)}"
-        dpsUi(build.getResistance(unitDef))
+        +" ("
+        +resistance.dps.map {
+            val mod = resistance.getModAttack(it.key)
+            it.value * mod
+        }.sum().format(2)
+        +")"
+        dpsUi(resistance)
     }
 //                        div {
 //                            +"Survivability Chance: ${state.build.survivability(waveDef)}"

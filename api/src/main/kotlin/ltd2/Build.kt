@@ -37,8 +37,9 @@ class Build(val lane: Lane = Lane()) {
     var currentLevel = 0
 
     val costs get() = lane.getCosts(currentLevel)
-    val foodCosts get() = lane.getFoodCosts(currentLevel)
     val available get() = reward() - costs
+    val foodCosts get() = lane.getFoodCosts(currentLevel)
+    val maxFood get() = lane.getMaxFood(currentLevel)
     val income get() = lane.getIncome(currentLevel)
     val totalHp get() = lane.getTotalHp(currentLevel)
     val totalDps get() = lane.getTotalDps(currentLevel)
@@ -78,8 +79,8 @@ class Build(val lane: Lane = Lane()) {
         return lane.getFightersUnfiltered()
     }
 
-    fun addFighter(unit: UnitDef): UnitState {
-        return lane.addFighter(unit, currentLevel)
+    fun addFighter(unit: UnitDef, position: Position): UnitState {
+        return lane.addFighter(unit, currentLevel, position)
     }
 
     fun removeFighter(unit: UnitState) {
@@ -92,6 +93,22 @@ class Build(val lane: Lane = Lane()) {
 
     fun sellFighter(selectedUnit: UnitState) {
         lane.sellFighter(selectedUnit, currentLevel)
+    }
+
+    fun getResearches(): List<Research> {
+        return lane.getResearchesFromLevel(currentLevel)
+    }
+
+    fun getAllResearches(): List<Research> {
+        return lane.getResearches(currentLevel)
+    }
+
+    fun addResearch(researchDef: ResearchDef) {
+        return lane.addResearch(researchDef, currentLevel)
+    }
+
+    fun removeResearch(research: Research) {
+        lane.removeResearch(research)
     }
 
     fun getMerchenaries(): Units {

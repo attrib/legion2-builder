@@ -1,5 +1,6 @@
 package builder.ui.tab
 
+import builder.data.UnitSelection
 import ltd2.Build
 import ltd2.LegionData
 import builder.ui.unitList
@@ -11,13 +12,13 @@ interface BuildOrderEventHandler {
     fun selectLevel(level: Int)
 }
 
-fun RBuilder.buildOrder(build: Build, eventHandler: BuildOrderEventHandler) {
+fun RBuilder.buildOrder(build: Build, selectedUnit: UnitSelection, eventHandler: BuildOrderEventHandler) {
     table("table table-striped") {
         thead {
             tr {
                 th { +"#" }
                 th { +"Unit" }
-                th { +"Workers" }
+                th { +"Research" }
                 th { +"Mercenary" }
                 th { +"Gold needed" }
                 th { +"Value" }
@@ -35,9 +36,9 @@ fun RBuilder.buildOrder(build: Build, eventHandler: BuildOrderEventHandler) {
                             eventHandler.selectLevel(currentLevel)
                         }
                     }}
-                    td { unitList(fighters.fighters(), { true }, {}) }
-                    td { if (fighters.worker().size > 0) +"${fighters.worker().size}" else +"" }
-                    td { unitList(build.getMerchenaries(currentLevel), { true }, {}) }
+                    td { unitList(fighters.fighters(), {}, selectedUnit) }
+                    td { unitList(build.getAllResearches().filter { it.buildLevel == currentLevel }, {}, selectedUnit) }
+                    td { unitList(build.getMerchenaries(currentLevel), {}, selectedUnit) }
                     td { +"${fighters.totalValue()}" }
                     td { +"${build.getValueByLevel(currentLevel)} / ${wave.recommendedValue}" }
                 }

@@ -3,3 +3,16 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+svg .cell {
+  stroke: #aaa;
+  fill-opacity: 0;
+}
+
+svg .cell:hover {
+  stroke: #333;
+}
+
+svg .newUnit {
+  opacity: 0.7;
+}
