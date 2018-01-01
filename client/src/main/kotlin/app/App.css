@@ -69,15 +69,18 @@ footer {
 
 .tooltip-data {
   visibility: hidden;
-  width: 220px;
+  width: 260px;
   background-color: black;
   color: #fff;
-  text-align: center;
-  padding: 5px 0;
+  padding: 5px;
   border-radius: 6px;
   position: absolute;
   z-index: 1;
   line-height: 1.3em;
+}
+
+.unit .tooltip-data {
+  text-align: center;
 }
 
 .dps-info img, .hp-info img {

@@ -1,6 +1,7 @@
 package app
 
 import builder.PermaLinkV1JS
+import builder.buildableFighters
 import builder.data.UnitSelection
 import builder.getWaveCreaturesDef
 import builder.ui.header.*
@@ -11,13 +12,17 @@ import builder.ui.tab.waveEditor
 import d3.d3_wrapper
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
+import kotlinx.html.js.onKeyUpFunction
+import kotlinx.html.onKeyUp
 import ltd2.*
 import org.w3c.dom.PopStateEvent
 import org.w3c.dom.events.Event
+import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.get
 import parser.ReplayResult
 import react.*
 import react.dom.*
+import kotlin.browser.document
 import kotlin.browser.window
 
 fun Double.format(digits: Int): String = this.asDynamic().toFixed(digits)
@@ -129,6 +134,24 @@ class App : RComponent<RProps, AppState>() {
         if (state.uploadingFile) {
             div("loading") { +"Loading" }
         } else {
+            document.onkeyup = {
+                val event = it as KeyboardEvent
+                val allowedKeysGeneral = listOf("+", "-", "Tab")
+                val allFightersKey = listOf("q", "w", "e", "r", "t", "y", "u")
+                val buildableFighters = LegionData.buildableFighters(state.build.legion).mapIndexed { index: Int, unitDef: UnitDef -> allFightersKey[index] to unitDef }.toMap()
+                if (allowedKeysGeneral.contains(event.key) || buildableFighters.containsKey(event.key)) {
+                    event.preventDefault()
+                    setState {
+                        when (event.key) {
+                            "+" -> build.levelIncrease()
+                            "-" -> build.levelDecrease()
+                            "Tab" -> selectedTab = if (selectedTab == Tabs.WaveEditor) Tabs.BuildOrder else Tabs.WaveEditor
+                            else -> selectedUnit.select(buildableFighters[event.key]!!)
+                        }
+                    }
+                }
+            }
+
             div("header") {
                 div("container") {
                     div("row") {
@@ -313,6 +336,7 @@ class App : RComponent<RProps, AppState>() {
                         })
                     }
                     Tabs.BuildOrder -> {
+                        state.build.currentLevel = LegionData.waves.size - 1
                         buildOrder(state.build, state.selectedUnit, object : BuildOrderEventHandler {
                             override fun selectLevel(level: Int) {
                                 setState {

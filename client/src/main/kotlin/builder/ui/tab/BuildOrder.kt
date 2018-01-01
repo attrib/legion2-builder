@@ -36,9 +36,9 @@ fun RBuilder.buildOrder(build: Build, selectedUnit: UnitSelection, eventHandler:
                             eventHandler.selectLevel(currentLevel)
                         }
                     }}
-                    td { unitList(fighters.fighters(), { true }, {}, selectedUnit) }
-                    td { unitList(build.getAllResearches(), { it.buildLevel == currentLevel }, {}, selectedUnit) }
-                    td { unitList(build.getMerchenaries(currentLevel), { true }, {}, selectedUnit) }
+                    td { unitList(fighters.fighters(), {}, selectedUnit) }
+                    td { unitList(build.getAllResearches().filter { it.buildLevel == currentLevel }, {}, selectedUnit) }
+                    td { unitList(build.getMerchenaries(currentLevel), {}, selectedUnit) }
                     td { +"${fighters.totalValue()}" }
                     td { +"${build.getValueByLevel(currentLevel)} / ${wave.recommendedValue}" }
                 }

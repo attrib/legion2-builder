@@ -54,7 +54,7 @@ class Units(list: List<UnitState>) : List<UnitState> by list {
     fun removeWorkersNotLevel(level: Int) = Units(filter { it.def.unitClass != UnitClass.Worker || it.buildLevel == level })
 
     fun totalHp() = sumBy { it.def.hitpoints }
-    fun totalDps() = sumByDouble { it.def.dmgBase / it.def.attackSpeed }
+    fun totalDps() = sumByDouble { if (it.def.attackSpeed > 0) it.def.dmgBase / it.def.attackSpeed else 0.0 }
     fun totalGold() = sumBy { it.def.goldCost }
     fun totalValue() = sumBy { it.def.totalValue }
     fun totalFood() = sumBy { it.def.totalFood }

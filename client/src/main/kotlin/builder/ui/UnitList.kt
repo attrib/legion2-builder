@@ -10,7 +10,7 @@ interface UnitListEventHandler {
     fun click(unit: Any)
 }
 
-fun <k:Any>RBuilder.unitList(units: List<k>, filterCallback: (k) -> Boolean, clickCallback: (Any) -> Unit, selectedUnit: UnitSelection, researches: List<Research> = listOf()) {
+fun <k:Any>RBuilder.unitList(units: List<k>, clickCallback: (Any) -> Unit, selectedUnit: UnitSelection, researches: List<Research> = listOf()) {
     val eventHandler = object : UnitListEventHandler {
         override fun click(unit: Any) {
             clickCallback(unit)
@@ -19,7 +19,7 @@ fun <k:Any>RBuilder.unitList(units: List<k>, filterCallback: (k) -> Boolean, cli
 
     if (units.isNotEmpty()) {
         ul("list-inline row no-gutters justify-content-start") {
-            units.filter { filterCallback(it) }.forEach { unit ->
+            units.forEach { unit ->
                 li("col-auto") {
                     val addClass = if (selectedUnit.isSelected(unit)) "selected" else ""
                     when (unit) {

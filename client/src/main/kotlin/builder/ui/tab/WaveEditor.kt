@@ -26,7 +26,7 @@ fun RBuilder.waveEditor(build: Build, selectedUnit: UnitSelection, eventHandler:
         div("col-8") {
             div {
                 attrs.id = "wave-creatures"
-                unitList(LegionData.getWaveCreaturesDef(build.currentLevel), { it.isEnabled() }, {}, selectedUnit)
+                unitList(LegionData.getWaveCreaturesDef(build.currentLevel), {}, selectedUnit)
             }
             hr { }
             buildArea(build, selectedUnit, eventHandler)
@@ -39,9 +39,7 @@ fun RBuilder.waveEditor(build: Build, selectedUnit: UnitSelection, eventHandler:
                 if (build.legion == null) {
                     +"Please select legion"
                 } else {
-                    unitList(LegionData.fighters(build.legion!!) + LegionData.upgrades(), { unit ->
-                        unit.isEnabled() && unit.upgradesFrom == null
-                    }, { unit ->
+                    unitList(LegionData.buildableFighters(build.legion!!), { unit ->
                         eventHandler.selectNewFighter(unit as UnitDef)
                     }, selectedUnit)
                 }
@@ -50,10 +48,10 @@ fun RBuilder.waveEditor(build: Build, selectedUnit: UnitSelection, eventHandler:
                 h2 { +"Research" }
                 div {
                     div {
-                        unitList(build.getResearches(), { true }, { eventHandler.removeResearch(it as Research) }, selectedUnit, build.getAllResearches())
+                        unitList(build.getResearches(), { eventHandler.removeResearch(it as Research) }, selectedUnit, build.getAllResearches())
                     }
                     div {
-                        unitList(LegionData.researches, { true }, { eventHandler.addResearch(it as ResearchDef) }, selectedUnit, build.getAllResearches())
+                        unitList(LegionData.researches, { eventHandler.addResearch(it as ResearchDef) }, selectedUnit, build.getAllResearches())
                     }
                 }
             }
@@ -61,10 +59,10 @@ fun RBuilder.waveEditor(build: Build, selectedUnit: UnitSelection, eventHandler:
                 h2 { +"Mercenaries" }
                 div {
                     div {
-                        unitList(build.getMerchenaries(), { true }, { eventHandler.removeMercenary(it as UnitState) }, selectedUnit)
+                        unitList(build.getMerchenaries(), { eventHandler.removeMercenary(it as UnitState) }, selectedUnit)
                     }
                     div {
-                        unitList(LegionData.mercenaries(), { it.isEnabled() }, { eventHandler.addMercenary(it as UnitDef) }, selectedUnit)
+                        unitList(LegionData.mercenaries(), { eventHandler.addMercenary(it as UnitDef) }, selectedUnit)
                     }
                 }
             }
