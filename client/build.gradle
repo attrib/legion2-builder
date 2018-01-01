@@ -68,6 +68,7 @@ kotlinFrontend {
         dependency("react", "^16.2.0")
         dependency("text-encoding", "0.6.4")
         dependency("lz-string", "1.4.4")
+        dependency("d3", "4.12.2")
 
         devDependency("es6-shim", "*")
         devDependency("karma-babel-preprocessor", "*")

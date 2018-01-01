@@ -1,17 +1,28 @@
 package app
 
-import ltd2.*
-import builder.*
+import builder.PermaLinkV1JS
+import builder.buildableFighters
+import builder.data.UnitSelection
+import builder.getWaveCreaturesDef
 import builder.ui.header.*
 import builder.ui.tab.BuildOrderEventHandler
 import builder.ui.tab.WaveEditorEventHandler
 import builder.ui.tab.buildOrder
 import builder.ui.tab.waveEditor
+import d3.d3_wrapper
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
+import kotlinx.html.js.onKeyUpFunction
+import kotlinx.html.onKeyUp
+import ltd2.*
+import org.w3c.dom.PopStateEvent
+import org.w3c.dom.events.Event
+import org.w3c.dom.events.KeyboardEvent
+import org.w3c.dom.get
 import parser.ReplayResult
 import react.*
 import react.dom.*
+import kotlin.browser.document
 import kotlin.browser.window
 
 fun Double.format(digits: Int): String = this.asDynamic().toFixed(digits)
@@ -23,32 +34,68 @@ enum class Tabs {
 
 interface AppState : RState {
     var build: Build
-    var selectedUnit: UnitState?
+    var selectedUnit: UnitSelection
     var selectedPlayer: String?
     var replayResult: ReplayResult?
     var uploadingFile: Boolean
     var selectedTab: Tabs
+    var errorMessage: String?
 }
 
 class App : RComponent<RProps, AppState>() {
 
     override fun AppState.init() {
-        resetBuild()
         uploadingFile = false
         selectedTab = Tabs.WaveEditor
+        selectedUnit = UnitSelection()
         replayResult = null
         val url = window.location.href
-        if( url.contains("?b=") ) {
+        if (url.contains("?b=")) {
             val code = url.split("?b=")[1]
-            build = PermaLinkV1JS.fromPermaLinkCode(code)
+            try {
+                build = PermaLinkV1JS.fromPermaLinkCode(code)
+            }
+            catch(e: Exception) {
+                resetBuild()
+                errorMessage = "The permalink is invalid or outdated. " + e.message
+            }
         }
+        else {
+            resetBuild()
+        }
+        window.onpopstate = { event: Event ->
+            val state = (event as PopStateEvent).state
+            if (state !== null) {
+                setState {
+                    try {
+                        build = PermaLinkV1JS.fromPermaLinkCode(state.toString())
+                        selectedUnit.clearSelection()
+                    }
+                    catch(e: Exception) {
+                        resetBuild()
+                        errorMessage = "The permalink is invalid or outdated. " + e.message
+                    }
+                }
+            }
+        }
+        d3_wrapper.init()
     }
 
     fun AppState.resetBuild() {
         build = Build()
         build.legion = LegionData.legionsMap["element_legion_id"]!!
         build.legionId = "element_legion_id"
-        selectedUnit = null
+        selectedUnit.clearSelection()
+        updateHistory()
+    }
+
+    fun AppState.updateHistory() {
+        val permalink = PermaLinkV1JS.toPermaLinkCode(build)
+        window.history.pushState(permalink, build.legion?.name + " " + build.currentLevel.toString(), "/?b=" + permalink)
+        if (jsTypeOf(window["gtag"]) !== "undefined") {
+            window["gtag"]("set", "page", "/?b=" + permalink)
+            window["gtag"]("send", "pageview", "/?b=" + permalink)
+        }
     }
 
     override fun RBuilder.render() {
@@ -63,14 +110,48 @@ class App : RComponent<RProps, AppState>() {
                     }
                 }
             }
-            a(href = "https://github.com/attrib/legion2-builder", classes = "btn btn-outline-success my-2 my-sm-0") {
+            a(href = "http://steamcommunity.com/games/469600/announcements/detail/1601458706072267291", classes = "btn btn-outline-primary mr-2", target = "_blank") {
+                +"1.66"
+            }
+            a(href = "https://github.com/attrib/legion2-builder", classes = "btn btn-outline-success mr-2", target = "_blank") {
                 +"Github"
+            }
+        }
+
+        if (state.errorMessage != null) {
+            div("error") {
+                p {
+                    +state.errorMessage.toString()
+                }
+                attrs.onClickFunction = {
+                    setState {
+                        errorMessage = null
+                    }
+                }
             }
         }
 
         if (state.uploadingFile) {
             div("loading") { +"Loading" }
         } else {
+            document.onkeyup = {
+                val event = it as KeyboardEvent
+                val allowedKeysGeneral = listOf("+", "-", "Tab")
+                val allFightersKey = listOf("q", "w", "e", "r", "t", "y", "u")
+                val buildableFighters = LegionData.buildableFighters(state.build.legion).mapIndexed { index: Int, unitDef: UnitDef -> allFightersKey[index] to unitDef }.toMap()
+                if (allowedKeysGeneral.contains(event.key) || buildableFighters.containsKey(event.key)) {
+                    event.preventDefault()
+                    setState {
+                        when (event.key) {
+                            "+" -> build.levelIncrease()
+                            "-" -> build.levelDecrease()
+                            "Tab" -> selectedTab = if (selectedTab == Tabs.WaveEditor) Tabs.BuildOrder else Tabs.WaveEditor
+                            else -> selectedUnit.select(buildableFighters[event.key]!!)
+                        }
+                    }
+                }
+            }
+
             div("header") {
                 div("container") {
                     div("row") {
@@ -90,6 +171,7 @@ class App : RComponent<RProps, AppState>() {
 
                                 override fun replayFileLoaded(replayResult: ReplayResult) {
                                     setState {
+                                        resetBuild()
                                         this.replayResult = replayResult
                                         uploadingFile = false
                                     }
@@ -98,6 +180,8 @@ class App : RComponent<RProps, AppState>() {
                                 override fun replayPlayerSeleceted(player: String) {
                                     setState {
                                         build = state.replayResult?.playerBuilds?.get(player)!!
+                                        selectedTab = Tabs.BuildOrder
+                                        updateHistory()
                                     }
                                 }
 
@@ -120,11 +204,17 @@ class App : RComponent<RProps, AppState>() {
                             val waveDef = LegionData.getWaveCreaturesDef(state.build.currentLevel)
                             waveInfo(waveDef, state.build.currentLevel, object : LevelInterface {
                                 override fun decrease() {
-                                    setState { state.build.levelDecrease() }
+                                    setState {
+                                        state.build.levelDecrease()
+                                        updateHistory()
+                                    }
                                 }
 
                                 override fun increase() {
-                                    setState { state.build.levelIncrease() }
+                                    setState {
+                                        state.build.levelIncrease()
+                                        updateHistory()
+                                    }
                                 }
 
                             })
@@ -163,50 +253,91 @@ class App : RComponent<RProps, AppState>() {
                 when (state.selectedTab) {
                     Tabs.WaveEditor -> {
                         waveEditor(state.build, state.selectedUnit, object : WaveEditorEventHandler {
-                            override fun addFighter(unitDef: UnitDef) {
-                                setState { selectedUnit = build.addFighter(unitDef) }
+                            override fun addResearch(researchDef: ResearchDef) {
+                                setState {
+                                    build.addResearch(researchDef)
+                                    updateHistory()
+                                }
+                            }
+
+                            override fun removeResearch(research: Research) {
+                                setState {
+                                    build.removeResearch(research)
+                                    updateHistory()
+                                }
+                            }
+
+                            override fun addFighter(unit: UnitDef, x: Int, y: Int) {
+                                setState {
+                                    build.addFighter(unit, Position(x, y))
+                                    updateHistory()
+                                }
+                            }
+
+                            override fun selectNewFighter(unitDef: UnitDef) {
+                                setState {
+                                    selectedUnit.select(unitDef)
+                                }
                             }
 
                             override fun addMercenary(unitDef: UnitDef) {
-                                setState { build.addMerchenary(unitDef) }
+                                setState {
+                                    build.addMerchenary(unitDef)
+                                    updateHistory()
+                                }
                             }
 
                             override fun removeMercenary(unit: UnitState) {
-                                setState { build.removeMerchenary(unit) }
+                                setState {
+                                    build.removeMerchenary(unit)
+                                    updateHistory()
+                                }
                             }
 
                             override fun selectUnit(unit: UnitState) {
                                 setState {
-                                    selectedUnit = if (selectedUnit == unit) null else unit
+                                    selectedUnit.select(unit)
                                 }
                             }
 
                             override fun deselect() {
-                                setState { this.selectedUnit = null }
+                                setState { this.selectedUnit.clearSelection() }
                             }
 
                             override fun recall() {
                                 setState {
-                                    build.removeFighter(selectedUnit!!)
-                                    selectedUnit = null
+                                    if (selectedUnit.isBuiltUnit()) {
+                                        build.removeFighter(selectedUnit.getBuiltUnit())
+                                        selectedUnit.clearSelection()
+                                        updateHistory()
+                                    }
                                 }
                             }
 
                             override fun undeploy() {
                                 setState {
-                                    build.sellFighter(selectedUnit!!)
-                                    selectedUnit = null
+                                    if (selectedUnit.isBuiltUnit()) {
+                                        build.sellFighter(selectedUnit.getBuiltUnit())
+                                        selectedUnit.clearSelection()
+                                        updateHistory()
+                                    }
                                 }
                             }
 
                             override fun upgrade(upgradeTo: UnitDef) {
-                                setState { selectedUnit = build.upgradeFighter(selectedUnit!!, upgradeTo) }
+                                setState {
+                                    if (selectedUnit.isBuiltUnit()) {
+                                        selectedUnit.select(build.upgradeFighter(selectedUnit.getBuiltUnit(), upgradeTo))
+                                        updateHistory()
+                                    }
+                                }
                             }
 
                         })
                     }
                     Tabs.BuildOrder -> {
-                        buildOrder(state.build, object : BuildOrderEventHandler {
+                        state.build.currentLevel = LegionData.waves.size - 1
+                        buildOrder(state.build, state.selectedUnit, object : BuildOrderEventHandler {
                             override fun selectLevel(level: Int) {
                                 setState {
                                     build.currentLevel = level

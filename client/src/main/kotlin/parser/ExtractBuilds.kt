@@ -1,9 +1,6 @@
 package parser
 
-import ltd2.Build
-import ltd2.LegionData
-import ltd2.Position
-import ltd2.UnitState
+import ltd2.*
 import kotlin.js.RegExp
 
 
@@ -21,6 +18,7 @@ object ExtractBuilds {
             val build = Build()
             val field = mutableMapOf<Position, UnitState>()
             var workers = 0
+            var food = 15
             game.waves.forEach { wave ->
                 val playerWave = wave.playerWaves[player.name]!!
                 val untouchedUnits = field.toMutableMap()
@@ -40,17 +38,22 @@ object ExtractBuilds {
                                 old
                             }
                         } else {
-                            build.addFighter(newUnitDef)
+                            build.addFighter(newUnitDef, pos)
                         }
-                        new.position = pos
                         field[pos] = new
                     }
                 }
                 if (playerWave.end.workers > workers) {
                     (1..playerWave.end.workers - workers).forEach {
-                        build.addFighter(LegionData.unitsMap["worker_unit_id"]!!)
+                        build.addResearch(LegionData.researchMap[Research.WORKER_ID]!!)
                     }
                     workers = playerWave.end.workers
+                }
+                if (playerWave.end.foodCap > food) {
+                    (1..((playerWave.end.foodCap - food) / 15)).forEach {
+                        build.addResearch(LegionData.researchMap[Research.SUPPLY_RESEARCH_ID]!!)
+                    }
+                    food = playerWave.end.foodCap
                 }
                 untouchedUnits.values.forEach { unit->
                     build.sellFighter(unit)
