@@ -69,7 +69,7 @@ class Lane(val list : MutableList<UnitState> = mutableListOf(), val researches: 
     }
 
     fun getIncome(level: Int): Int {
-        return getFighters(level).totalIncome()
+        return units.mercenaries().upToLevel(level).totalIncome()
     }
 
     fun getFighters(level: Int): Units {
