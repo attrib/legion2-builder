@@ -1,58 +1,53 @@
 package builder.data
 
+import ltd2.Research
+import ltd2.ResearchDef
 import ltd2.UnitDef
 import ltd2.UnitState
 
 class UnitSelection {
 
-    private var builtUnit: UnitState? = null
-    private var newUnit: UnitDef? = null
+    private var selected: Any? = null
 
     fun clearSelection() {
-        builtUnit = null
-        newUnit = null
+        selected = null
     }
 
-    fun select(unit: UnitState) {
-        if (unit == builtUnit) {
+    fun select(unit: Any) {
+        if (unit == selected) {
             clearSelection()
             return
         }
         clearSelection()
-        builtUnit = unit
-    }
-
-    fun select(unit: UnitDef) {
-        if (unit == newUnit) {
-            clearSelection()
-            return
-        }
-        clearSelection()
-        newUnit = unit
+        selected = unit
     }
 
     fun isBuiltUnit(): Boolean {
-        return builtUnit !== null
+        return selected is UnitState
     }
 
     fun isNewUnit(): Boolean {
-        return newUnit !== null
+        return selected is UnitDef
+    }
+
+    fun isBuiltResearch(): Boolean {
+        return selected is Research
+    }
+
+    fun isNewResearch(): Boolean {
+        return selected is ResearchDef
     }
 
     fun getBuiltUnit(): UnitState {
-        return builtUnit!!
+        return selected!! as UnitState
     }
 
     fun getNewUnit() : UnitDef {
-        return newUnit!!
+        return selected!! as UnitDef
     }
 
-    fun isSelected(unit: UnitDef): Boolean {
-        return newUnit !== null && unit === newUnit
-    }
-
-    fun isSelected(unit: UnitState): Boolean {
-        return builtUnit !== null && unit === builtUnit
+    fun isSelected(compare: Any): Boolean {
+        return selected !== null && compare === selected
     }
 
 }

@@ -34,6 +34,7 @@ interface AppState : RState {
     var replayResult: ReplayResult?
     var uploadingFile: Boolean
     var selectedTab: Tabs
+    var errorMessage: String?
 }
 
 class App : RComponent<RProps, AppState>() {
@@ -46,7 +47,13 @@ class App : RComponent<RProps, AppState>() {
         val url = window.location.href
         if (url.contains("?b=")) {
             val code = url.split("?b=")[1]
-            build = PermaLinkV1JS.fromPermaLinkCode(code)
+            try {
+                build = PermaLinkV1JS.fromPermaLinkCode(code)
+            }
+            catch(e: Exception) {
+                resetBuild()
+                errorMessage = "The permalink is invalid or outdated. " + e.message
+            }
         }
         else {
             resetBuild()
@@ -55,7 +62,14 @@ class App : RComponent<RProps, AppState>() {
             val state = (event as PopStateEvent).state
             if (state !== null) {
                 setState {
-                    build = PermaLinkV1JS.fromPermaLinkCode(state.toString())
+                    try {
+                        build = PermaLinkV1JS.fromPermaLinkCode(state.toString())
+                        selectedUnit.clearSelection()
+                    }
+                    catch(e: Exception) {
+                        resetBuild()
+                        errorMessage = "The permalink is invalid or outdated. " + e.message
+                    }
                 }
             }
         }
@@ -99,6 +113,19 @@ class App : RComponent<RProps, AppState>() {
             }
         }
 
+        if (state.errorMessage != null) {
+            div("error") {
+                p {
+                    +state.errorMessage.toString()
+                }
+                attrs.onClickFunction = {
+                    setState {
+                        errorMessage = null
+                    }
+                }
+            }
+        }
+
         if (state.uploadingFile) {
             div("loading") { +"Loading" }
         } else {
@@ -130,6 +157,8 @@ class App : RComponent<RProps, AppState>() {
                                 override fun replayPlayerSeleceted(player: String) {
                                     setState {
                                         build = state.replayResult?.playerBuilds?.get(player)!!
+                                        selectedTab = Tabs.BuildOrder
+                                        updateHistory()
                                     }
                                 }
 
@@ -201,6 +230,20 @@ class App : RComponent<RProps, AppState>() {
                 when (state.selectedTab) {
                     Tabs.WaveEditor -> {
                         waveEditor(state.build, state.selectedUnit, object : WaveEditorEventHandler {
+                            override fun addResearch(researchDef: ResearchDef) {
+                                setState {
+                                    build.addResearch(researchDef)
+                                    updateHistory()
+                                }
+                            }
+
+                            override fun removeResearch(research: Research) {
+                                setState {
+                                    build.removeResearch(research)
+                                    updateHistory()
+                                }
+                            }
+
                             override fun addFighter(unit: UnitDef, x: Int, y: Int) {
                                 setState {
                                     build.addFighter(unit, Position(x, y))

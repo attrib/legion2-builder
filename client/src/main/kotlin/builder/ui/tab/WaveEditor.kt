@@ -17,6 +17,8 @@ interface WaveEditorEventHandler : BuildAreaEventHandler, SelectedUnitInfoEventH
     fun selectNewFighter(unitDef: UnitDef)
     fun addMercenary(unitDef: UnitDef)
     fun removeMercenary(unit: UnitState)
+    fun addResearch(researchDef: ResearchDef)
+    fun removeResearch(research: Research)
 }
 
 fun RBuilder.waveEditor(build: Build, selectedUnit: UnitSelection, eventHandler: WaveEditorEventHandler) {
@@ -40,19 +42,29 @@ fun RBuilder.waveEditor(build: Build, selectedUnit: UnitSelection, eventHandler:
                     unitList(LegionData.fighters(build.legion!!) + LegionData.upgrades(), { unit ->
                         unit.isEnabled() && unit.upgradesFrom == null
                     }, { unit ->
-                        eventHandler.selectNewFighter(unit)
+                        eventHandler.selectNewFighter(unit as UnitDef)
                     }, selectedUnit)
                 }
             }
-
+            div {
+                h2 { +"Research" }
+                div {
+                    div {
+                        unitList(build.getResearches(), { true }, { eventHandler.removeResearch(it as Research) }, selectedUnit, build.getAllResearches())
+                    }
+                    div {
+                        unitList(LegionData.researches, { true }, { eventHandler.addResearch(it as ResearchDef) }, selectedUnit, build.getAllResearches())
+                    }
+                }
+            }
             div {
                 h2 { +"Mercenaries" }
                 div {
                     div {
-                        unitList(build.getMerchenaries(), { true }, { eventHandler.removeMercenary(it) }, selectedUnit)
+                        unitList(build.getMerchenaries(), { true }, { eventHandler.removeMercenary(it as UnitState) }, selectedUnit)
                     }
                     div {
-                        unitList(LegionData.mercenaries(), { it.isEnabled() }, { eventHandler.addMercenary(it) }, selectedUnit)
+                        unitList(LegionData.mercenaries(), { it.isEnabled() }, { eventHandler.addMercenary(it as UnitDef) }, selectedUnit)
                     }
                 }
             }

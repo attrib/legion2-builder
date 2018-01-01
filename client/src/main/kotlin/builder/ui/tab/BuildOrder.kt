@@ -18,7 +18,7 @@ fun RBuilder.buildOrder(build: Build, selectedUnit: UnitSelection, eventHandler:
             tr {
                 th { +"#" }
                 th { +"Unit" }
-                th { +"Workers" }
+                th { +"Research" }
                 th { +"Mercenary" }
                 th { +"Gold needed" }
                 th { +"Value" }
@@ -37,7 +37,7 @@ fun RBuilder.buildOrder(build: Build, selectedUnit: UnitSelection, eventHandler:
                         }
                     }}
                     td { unitList(fighters.fighters(), { true }, {}, selectedUnit) }
-                    td { if (fighters.worker().size > 0) +"${fighters.worker().size}" else +"" }
+                    td { unitList(build.getAllResearches(), { it.buildLevel == currentLevel }, {}, selectedUnit) }
                     td { unitList(build.getMerchenaries(currentLevel), { true }, {}, selectedUnit) }
                     td { +"${fighters.totalValue()}" }
                     td { +"${build.getValueByLevel(currentLevel)} / ${wave.recommendedValue}" }

@@ -85,7 +85,6 @@ data class ResearchDef(
         @SerializedName("@id") val id: String,
         @SerializedName("bonussupply") val bonussupply: Int,
         @SerializedName("mythiumharvestbonus") val mythiumharvestbonus: Int,
-        val workercount: Int, // this is fake and needed as our research has the worker build in it
         @SerializedName("iconpath") val iconPath: String,
         @SerializedName("tooltip") val tooltip: String,
         @SerializedName("name") val name: String,

@@ -12,24 +12,15 @@ import react.dom.h4
 import react.dom.img
 import react.dom.p
 
-interface UnitEventHandler {
-    fun onClick()
-}
-
 fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit, additionalClasses: String? = null) {
     kotlinext.js.require("builder/ui/unitUi.css")
 
-    val unitEventHandler = object : UnitEventHandler {
-        override fun onClick() {
-            callback()
-        }
-    }
     div("unit tooltip-parent") {
         if (additionalClasses != null) {
             attrs.classes += additionalClasses
         }
         attrs.onClickFunction = {
-            unitEventHandler.onClick()
+            callback()
         }
         img(alt = unit.id, src = unit.iconPath.replace("Splashes", "Icons")) {
             attrs {

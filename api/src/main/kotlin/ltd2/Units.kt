@@ -62,6 +62,5 @@ class Units(list: List<UnitState>) : List<UnitState> by list {
 
     fun ownCreatures() = Units(filter { it.def.unitClass == UnitClass.Fighter || it.def.unitClass == UnitClass.Worker })
     fun fighters() = Units(filter { it.def.unitClass == UnitClass.Fighter })
-    fun worker() = Units(filter { it.def.unitClass == UnitClass.Worker })
     fun mercenaries() = Units(filter { it.def.unitClass == UnitClass.Mercenary })
 }
