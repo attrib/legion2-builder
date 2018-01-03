@@ -1,21 +1,28 @@
 package app
 
 import builder.PermaLinkV1JS
+import builder.buildableFighters
+import builder.data.UnitSelection
 import builder.getWaveCreaturesDef
 import builder.ui.header.*
 import builder.ui.tab.BuildOrderEventHandler
 import builder.ui.tab.WaveEditorEventHandler
 import builder.ui.tab.buildOrder
 import builder.ui.tab.waveEditor
+import d3.d3_wrapper
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
+import kotlinx.html.js.onKeyUpFunction
+import kotlinx.html.onKeyUp
 import ltd2.*
 import org.w3c.dom.PopStateEvent
 import org.w3c.dom.events.Event
+import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.get
 import parser.ReplayResult
 import react.*
 import react.dom.*
+import kotlin.browser.document
 import kotlin.browser.window
 
 fun Double.format(digits: Int): String = this.asDynamic().toFixed(digits)
@@ -27,11 +34,12 @@ enum class Tabs {
 
 interface AppState : RState {
     var build: Build
-    var selectedUnit: UnitState?
+    var selectedUnit: UnitSelection
     var selectedPlayer: String?
     var replayResult: ReplayResult?
     var uploadingFile: Boolean
     var selectedTab: Tabs
+    var errorMessage: String?
 }
 
 class App : RComponent<RProps, AppState>() {
@@ -39,11 +47,18 @@ class App : RComponent<RProps, AppState>() {
     override fun AppState.init() {
         uploadingFile = false
         selectedTab = Tabs.WaveEditor
+        selectedUnit = UnitSelection()
         replayResult = null
         val url = window.location.href
         if (url.contains("?b=")) {
             val code = url.split("?b=")[1]
-            build = PermaLinkV1JS.fromPermaLinkCode(code)
+            try {
+                build = PermaLinkV1JS.fromPermaLinkCode(code)
+            }
+            catch(e: Exception) {
+                resetBuild()
+                errorMessage = "The permalink is invalid or outdated. " + e.message
+            }
         }
         else {
             resetBuild()
@@ -52,17 +67,25 @@ class App : RComponent<RProps, AppState>() {
             val state = (event as PopStateEvent).state
             if (state !== null) {
                 setState {
-                    build = PermaLinkV1JS.fromPermaLinkCode(state.toString())
+                    try {
+                        build = PermaLinkV1JS.fromPermaLinkCode(state.toString())
+                        selectedUnit.clearSelection()
+                    }
+                    catch(e: Exception) {
+                        resetBuild()
+                        errorMessage = "The permalink is invalid or outdated. " + e.message
+                    }
                 }
             }
         }
+        d3_wrapper.init()
     }
 
     fun AppState.resetBuild() {
         build = Build()
         build.legion = LegionData.legionsMap["element_legion_id"]!!
         build.legionId = "element_legion_id"
-        selectedUnit = null
+        selectedUnit.clearSelection()
         updateHistory()
     }
 
@@ -95,9 +118,40 @@ class App : RComponent<RProps, AppState>() {
             }
         }
 
+        if (state.errorMessage != null) {
+            div("error") {
+                p {
+                    +state.errorMessage.toString()
+                }
+                attrs.onClickFunction = {
+                    setState {
+                        errorMessage = null
+                    }
+                }
+            }
+        }
+
         if (state.uploadingFile) {
             div("loading") { +"Loading" }
         } else {
+            document.onkeyup = {
+                val event = it as KeyboardEvent
+                val allowedKeysGeneral = listOf("+", "-", "Tab")
+                val allFightersKey = listOf("q", "w", "e", "r", "t", "y", "u")
+                val buildableFighters = LegionData.buildableFighters(state.build.legion).mapIndexed { index: Int, unitDef: UnitDef -> allFightersKey[index] to unitDef }.toMap()
+                if (allowedKeysGeneral.contains(event.key) || buildableFighters.containsKey(event.key)) {
+                    event.preventDefault()
+                    setState {
+                        when (event.key) {
+                            "+" -> build.levelIncrease()
+                            "-" -> build.levelDecrease()
+                            "Tab" -> selectedTab = if (selectedTab == Tabs.WaveEditor) Tabs.BuildOrder else Tabs.WaveEditor
+                            else -> selectedUnit.select(buildableFighters[event.key]!!)
+                        }
+                    }
+                }
+            }
+
             div("header") {
                 div("container") {
                     div("row") {
@@ -126,6 +180,8 @@ class App : RComponent<RProps, AppState>() {
                                 override fun replayPlayerSeleceted(player: String) {
                                     setState {
                                         build = state.replayResult?.playerBuilds?.get(player)!!
+                                        selectedTab = Tabs.BuildOrder
+                                        updateHistory()
                                     }
                                 }
 
@@ -197,10 +253,30 @@ class App : RComponent<RProps, AppState>() {
                 when (state.selectedTab) {
                     Tabs.WaveEditor -> {
                         waveEditor(state.build, state.selectedUnit, object : WaveEditorEventHandler {
-                            override fun addFighter(unitDef: UnitDef) {
+                            override fun addResearch(researchDef: ResearchDef) {
                                 setState {
-                                    selectedUnit = build.addFighter(unitDef)
+                                    build.addResearch(researchDef)
                                     updateHistory()
+                                }
+                            }
+
+                            override fun removeResearch(research: Research) {
+                                setState {
+                                    build.removeResearch(research)
+                                    updateHistory()
+                                }
+                            }
+
+                            override fun addFighter(unit: UnitDef, x: Int, y: Int) {
+                                setState {
+                                    build.addFighter(unit, Position(x, y))
+                                    updateHistory()
+                                }
+                            }
+
+                            override fun selectNewFighter(unitDef: UnitDef) {
+                                setState {
+                                    selectedUnit.select(unitDef)
                                 }
                             }
 
@@ -220,41 +296,48 @@ class App : RComponent<RProps, AppState>() {
 
                             override fun selectUnit(unit: UnitState) {
                                 setState {
-                                    selectedUnit = if (selectedUnit == unit) null else unit
+                                    selectedUnit.select(unit)
                                 }
                             }
 
                             override fun deselect() {
-                                setState { this.selectedUnit = null }
+                                setState { this.selectedUnit.clearSelection() }
                             }
 
                             override fun recall() {
                                 setState {
-                                    build.removeFighter(selectedUnit!!)
-                                    selectedUnit = null
-                                    updateHistory()
+                                    if (selectedUnit.isBuiltUnit()) {
+                                        build.removeFighter(selectedUnit.getBuiltUnit())
+                                        selectedUnit.clearSelection()
+                                        updateHistory()
+                                    }
                                 }
                             }
 
                             override fun undeploy() {
                                 setState {
-                                    build.sellFighter(selectedUnit!!)
-                                    selectedUnit = null
-                                    updateHistory()
+                                    if (selectedUnit.isBuiltUnit()) {
+                                        build.sellFighter(selectedUnit.getBuiltUnit())
+                                        selectedUnit.clearSelection()
+                                        updateHistory()
+                                    }
                                 }
                             }
 
                             override fun upgrade(upgradeTo: UnitDef) {
                                 setState {
-                                    selectedUnit = build.upgradeFighter(selectedUnit!!, upgradeTo)
-                                    updateHistory()
+                                    if (selectedUnit.isBuiltUnit()) {
+                                        selectedUnit.select(build.upgradeFighter(selectedUnit.getBuiltUnit(), upgradeTo))
+                                        updateHistory()
+                                    }
                                 }
                             }
 
                         })
                     }
                     Tabs.BuildOrder -> {
-                        buildOrder(state.build, object : BuildOrderEventHandler {
+                        state.build.currentLevel = LegionData.waves.size - 1
+                        buildOrder(state.build, state.selectedUnit, object : BuildOrderEventHandler {
                             override fun selectLevel(level: Int) {
                                 setState {
                                     build.currentLevel = level

@@ -17,8 +17,8 @@ fun RBuilder.buildInfo(build: Build) {
     div {
         +"Food: "
         +build.foodCosts.toString()
-//                            +" / "
-//                            +"15"
+        +" / "
+        +build.maxFood.toString()
     }
     div {
         +"Available: "

@@ -8,6 +8,9 @@ class Resistance(units: List<UnitDef>, val testUnit: UnitDef?) {
 
     init {
         for (unit in units) {
+            if (unit.attackType == AttackType.Illegal || unit.armorType == ArmorType.Illegal) {
+                continue
+            }
             if (!dps.containsKey(unit.attackType)) {
                 dps.put(unit.attackType, 0.0)
             }

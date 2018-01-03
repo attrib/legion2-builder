@@ -1,15 +1,12 @@
 package builder
 
-import ltd2.Legion
-import ltd2.LegionData
-import ltd2.UnitClass
-import ltd2.UnitDef
+import ltd2.*
 
 
-fun LegionData.fighters() = units.filter { it.unitClass == UnitClass.Fighter }
+fun LegionData.fighters() = units.filter { it.unitClass == UnitClass.Fighter && it.isEnabled() }
 fun LegionData.fighters(legion: Legion?) = if (legion != null) fighters().filter { it.legion == legion.id } else emptyList()
-fun LegionData.upgrades() = units.filter { it.unitClass == UnitClass.Worker } //@todo: add supply upgrade here
-fun LegionData.mercenaries() = units.filter { it.unitClass == UnitClass.Mercenary }
+fun LegionData.buildableFighters(legion: Legion?) = if (legion != null) fighters(legion).filter { it.upgradesFrom == null && it.goldCost > 0 } else emptyList()
+fun LegionData.mercenaries() = units.filter { it.unitClass == UnitClass.Mercenary && it.isEnabled() }
 fun LegionData.getWaveCreaturesDef(level: Int): List<UnitDef> {
     val creatureDefs = mutableListOf<UnitDef>()
     val wave = waves[level]

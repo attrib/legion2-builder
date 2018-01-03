@@ -2,6 +2,7 @@ package builder.ui.tab
 
 import ltd2.*
 import builder.*
+import builder.data.UnitSelection
 import ltd2.UnitState
 import ltd2.isEnabled
 import builder.ui.*
@@ -13,17 +14,19 @@ import react.dom.h2
 import react.dom.hr
 
 interface WaveEditorEventHandler : BuildAreaEventHandler, SelectedUnitInfoEventHandler {
-    fun addFighter(unitDef: UnitDef)
+    fun selectNewFighter(unitDef: UnitDef)
     fun addMercenary(unitDef: UnitDef)
     fun removeMercenary(unit: UnitState)
+    fun addResearch(researchDef: ResearchDef)
+    fun removeResearch(research: Research)
 }
 
-fun RBuilder.waveEditor(build: Build, selectedUnit: UnitState?, eventHandler: WaveEditorEventHandler) {
+fun RBuilder.waveEditor(build: Build, selectedUnit: UnitSelection, eventHandler: WaveEditorEventHandler) {
     div("row") {
         div("col-8") {
             div {
                 attrs.id = "wave-creatures"
-                unitList(LegionData.getWaveCreaturesDef(build.currentLevel), { it.isEnabled() }, {})
+                unitList(LegionData.getWaveCreaturesDef(build.currentLevel), {}, selectedUnit)
             }
             hr { }
             buildArea(build, selectedUnit, eventHandler)
@@ -36,22 +39,30 @@ fun RBuilder.waveEditor(build: Build, selectedUnit: UnitState?, eventHandler: Wa
                 if (build.legion == null) {
                     +"Please select legion"
                 } else {
-                    unitList(LegionData.fighters(build.legion!!) + LegionData.upgrades(), { unit ->
-                        unit.isEnabled() && unit.upgradesFrom == null
-                    }, { unit ->
-                        eventHandler.addFighter(unit)
-                    })
+                    unitList(LegionData.buildableFighters(build.legion!!), { unit ->
+                        eventHandler.selectNewFighter(unit as UnitDef)
+                    }, selectedUnit)
                 }
             }
-
+            div {
+                h2 { +"Research" }
+                div {
+                    div {
+                        unitList(build.getResearches(), { eventHandler.removeResearch(it as Research) }, selectedUnit, build.getAllResearches())
+                    }
+                    div {
+                        unitList(LegionData.researches, { eventHandler.addResearch(it as ResearchDef) }, selectedUnit, build.getAllResearches())
+                    }
+                }
+            }
             div {
                 h2 { +"Mercenaries" }
                 div {
                     div {
-                        unitList(build.getMerchenaries(), { true }, { eventHandler.removeMercenary(it) })
+                        unitList(build.getMerchenaries(), { eventHandler.removeMercenary(it as UnitState) }, selectedUnit)
                     }
                     div {
-                        unitList(LegionData.mercenaries(), { it.isEnabled() }, { eventHandler.addMercenary(it) })
+                        unitList(LegionData.mercenaries(), { eventHandler.addMercenary(it as UnitDef) }, selectedUnit)
                     }
                 }
             }
