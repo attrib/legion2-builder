@@ -24,7 +24,7 @@ var config = {
             "classes/kotlin/main",
             "resources/main",
             "resources/test",
-            "node_modules"
+            "build/node_modules"
         ]
     },
     "plugins": [
