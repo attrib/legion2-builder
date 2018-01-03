@@ -21,17 +21,19 @@ All images and data is copyrighted by [Legion 2 TD](https://legiontd2.com)
 * Sell unit
 * Share builds
 * Read placement from replay file
+* Implement unit placement
+* Keyboard support
+* Add research to level
 
 ## ToDo
 
 Full list see [Issues](https://github.com/attrib/legion2-builder/issues)
 
-* Implement unit placement
 * Load / Save builds from session store
 * Better design (PRs welcome)
 * Improved replay reader
-* Any graph requests?
 * Battle calculator
+* Suggestions? (e.g. graphs from replay)
 
 ## About the project
 
