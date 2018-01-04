@@ -41,8 +41,8 @@ fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit, additionalClasses: Stri
             p {
                 +"Costs: "
                 +when (unit.unitClass) {
-                    UnitClass.Worker -> (unit.totalValue).toString()
-                    UnitClass.Fighter -> (unit.totalValue).toString()
+                    UnitClass.Worker -> (unit.goldCost).toString()
+                    UnitClass.Fighter -> (unit.goldCost).toString()
                     UnitClass.Mercenary -> (unit.mythiumCost).toString()
                     else -> ""
                 }

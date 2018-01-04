@@ -38,7 +38,7 @@ fun RBuilder.laneInfo(build: Build) {
         dpsUi(resistance)
     }
     div {
-        +"Total costs:"
+        +"Total costs: "
         +build.costs.toString()
     }
 //                        div {
