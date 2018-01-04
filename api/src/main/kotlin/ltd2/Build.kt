@@ -92,6 +92,10 @@ class Build(val lane: Lane = Lane()) {
         return lane.upgradeFighter(selectedUnit, upgradeUnitDef, currentLevel)
     }
 
+    fun downgradeFigther(selectedUnit: UnitState): UnitState? {
+        return lane.downgradeFighter(selectedUnit)
+    }
+
     fun sellFighter(selectedUnit: UnitState) {
         lane.sellFighter(selectedUnit, currentLevel)
     }

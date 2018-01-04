@@ -333,6 +333,18 @@ class App : RComponent<RProps, AppState>() {
                                 }
                             }
 
+                            override fun downgrade() {
+                                setState {
+                                    if (selectedUnit.isBuiltUnit()) {
+                                        val downgradedUnit = build.downgradeFigther(selectedUnit.getBuiltUnit());
+                                        if (downgradedUnit !== null) {
+                                            selectedUnit.select(downgradedUnit)
+                                            updateHistory()
+                                        }
+                                    }
+                                }
+                            }
+
                         })
                     }
                     Tabs.BuildOrder -> {
