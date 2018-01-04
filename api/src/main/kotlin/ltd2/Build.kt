@@ -37,6 +37,7 @@ class Build(val lane: Lane = Lane()) {
     var currentLevel = 0
 
     val costs get() = lane.getCosts(currentLevel)
+    val value get() = lane.getValue(currentLevel)
     val available get() = reward() - costs
     val foodCosts get() = lane.getFoodCosts(currentLevel)
     val maxFood get() = lane.getMaxFood(currentLevel)
@@ -131,8 +132,8 @@ class Build(val lane: Lane = Lane()) {
         return Resistance(lane.getFighterDef(currentLevel), testUnit)
     }
 
-    fun getCostsByLevel(level: Int): Int {
-        return lane.getCosts(level)
+    fun getCostsForLevel(level: Int): Int {
+        return getFightersUnfiltered().forLevel(level).totalValue() + lane.getResearchesFromLevel(level).sumBy { it.def.goldCost + it.upgradeLevel * it.def.goldCostPerLevel }
     }
 
     fun getValueByLevel(level: Int): Int {
