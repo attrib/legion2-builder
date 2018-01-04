@@ -94,7 +94,19 @@ class Lane(val list : MutableList<UnitState> = mutableListOf(), val researches: 
 
     fun upgradeFighter(selectedUnit: UnitState, upgradeTo: UnitDef, level: Int): UnitState {
         selectedUnit.upgradedLevel = level
-        return addFighter(upgradeTo, level, selectedUnit.position)
+        val newUnit = addFighter(upgradeTo, level, selectedUnit.position)
+        newUnit.upgradedFrom = selectedUnit
+        return newUnit
+    }
+
+    fun downgradeFighter(selectedUnit: UnitState): UnitState? {
+        // Downgrade is not working when coming from a link
+        if (selectedUnit.upgradedFrom !== null) {
+            selectedUnit.upgradedFrom!!.upgradedLevel = null
+            removeFighter(selectedUnit)
+            return selectedUnit.upgradedFrom!!
+        }
+        return null
     }
 
     fun sellFighter(selectedUnit: UnitState, level: Int) {

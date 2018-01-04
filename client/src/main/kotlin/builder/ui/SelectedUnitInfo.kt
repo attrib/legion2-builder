@@ -17,6 +17,7 @@ interface SelectedUnitInfoEventHandler {
     fun recall()
     fun undeploy()
     fun upgrade(upgradeTo: UnitDef)
+    fun downgrade()
 }
 
 fun RBuilder.selectedUnitInfo(selectedUnit: UnitSelection, build: Build, eventHandler: SelectedUnitInfoEventHandler) {
@@ -32,6 +33,14 @@ fun RBuilder.selectedUnitInfo(selectedUnit: UnitSelection, build: Build, eventHa
                         img("Recall", "Icons/Recall.png") { attrs.title = "Recall" }
                         attrs.onClickFunction = {
                             eventHandler.recall()
+                        }
+                    }
+                    if (selectedUnit.getBuiltUnit().upgradedFrom !== null) {
+                        div("col-auto") {
+                            img("Downgrade", selectedUnit.getBuiltUnit().upgradedFrom!!.def.iconPath.replace("Splashes", "Icons")) { attrs.title = "Downgrade" }
+                            attrs.onClickFunction = {
+                                eventHandler.downgrade()
+                            }
                         }
                     }
                 } else {

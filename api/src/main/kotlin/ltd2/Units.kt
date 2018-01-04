@@ -41,6 +41,7 @@ object UnitSerializer : KSerializer<UnitState> {
 class UnitState(val def: UnitDef) {
     var buildLevel: Int? = null
     var upgradedLevel: Int? = null
+    var upgradedFrom: UnitState? = null
     var soldLevel: Int? = null
     var position = Position(0, 0)
 }
