@@ -37,6 +37,10 @@ fun RBuilder.laneInfo(build: Build) {
         +")"
         dpsUi(resistance)
     }
+    div {
+        +"Total costs:"
+        +build.costs.toString()
+    }
 //                        div {
 //                            +"Survivability Chance: ${state.build.survivability(waveDef)}"
 //                        }

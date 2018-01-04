@@ -9,8 +9,8 @@ import react.dom.h3
 fun RBuilder.buildInfo(build: Build) {
     h3 { +"Build info" }
     div {
-        +"Cost: "
-        +build.costs.toString()
+        +"Value: "
+        +build.value.toString()
         +" / "
         +LegionData.waves[build.currentLevel].recommendedValue.toString()
     }
@@ -19,6 +19,10 @@ fun RBuilder.buildInfo(build: Build) {
         +build.foodCosts.toString()
         +" / "
         +build.maxFood.toString()
+    }
+    div {
+        +"Costs current level: "
+        +build.getCostsForLevel(build.currentLevel).toString()
     }
     div {
         +"Available: "

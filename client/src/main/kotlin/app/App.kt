@@ -336,7 +336,6 @@ class App : RComponent<RProps, AppState>() {
                         })
                     }
                     Tabs.BuildOrder -> {
-                        state.build.currentLevel = LegionData.waves.size - 1
                         buildOrder(state.build, state.selectedUnit, object : BuildOrderEventHandler {
                             override fun selectLevel(level: Int) {
                                 setState {
