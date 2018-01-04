@@ -133,7 +133,7 @@ class Build(val lane: Lane = Lane()) {
     }
 
     fun getCostsForLevel(level: Int): Int {
-        return getFightersUnfiltered().forLevel(level).totalValue() + lane.getResearchesFromLevel(level).sumBy { it.def.goldCost + it.upgradeLevel * it.def.goldCostPerLevel }
+        return getFightersUnfiltered().forLevel(level).totalGold() + lane.getResearchesFromLevel(level).sumBy { it.def.goldCost + it.upgradeLevel * it.def.goldCostPerLevel }
     }
 
     fun getValueByLevel(level: Int): Int {
