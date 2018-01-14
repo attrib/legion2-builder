@@ -15,6 +15,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server.iml" group="server" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server_main.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server_main.iml" group="server" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server_test.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server_test.iml" group="server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/whitelabel/whitelabel_main.iml" filepath="$PROJECT_DIR$/.idea/modules/whitelabel/whitelabel_main.iml" group="whitelabel" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/whitelabel/whitelabel_test.iml" filepath="$PROJECT_DIR$/.idea/modules/whitelabel/whitelabel_test.iml" group="whitelabel" />
     </modules>
   </component>
 </project>
