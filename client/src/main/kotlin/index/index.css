@@ -2,17 +2,34 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  padding-top: 3.5rem;
 }
 
-svg .cell {
-  stroke: #aaa;
-  fill-opacity: 0;
+.header, .tab-bar {
+  background-color: #e9ecef;
+  padding-top: 15px;
 }
 
-svg .cell:hover {
-  stroke: #333;
+.header .btn-group {
+  width: 100%;
 }
 
-svg .newUnit {
-  opacity: 0.7;
+.tab-bar .col-auto {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: #ffffff;
+  border-right: 1px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.tab-bar .col-auto:hover {
+  background-color: #727b84;
+}
+
+.tab-bar .col-auto.active {
+  border-bottom: none
+}
+
+footer {
+  border-top: 1px solid #e9ecef;
 }

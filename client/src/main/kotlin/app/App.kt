@@ -12,8 +12,6 @@ import builder.ui.tab.waveEditor
 import d3.d3_wrapper
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
-import kotlinx.html.js.onKeyUpFunction
-import kotlinx.html.onKeyUp
 import ltd2.*
 import org.w3c.dom.PopStateEvent
 import org.w3c.dom.events.Event
@@ -96,25 +94,6 @@ class App : RComponent<RProps, AppState>() {
     }
 
     override fun RBuilder.render() {
-        nav("navbar navbar-expand-md navbar-dark fixed-top bg-dark") {
-            a(href = "#", classes = "navbar-brand") {
-                +"Legion TD 2 Builder"
-            }
-            ul("mr-auto navbar-nav") {
-                li("nav-item") {
-                    a(href = "https://legiontd2.com", classes = "nav-link", target = "_blank") {
-                        +"Official LTD2"
-                    }
-                }
-            }
-            a(href = "http://steamcommunity.com/games/469600/announcements/detail/3271170356004951599", classes = "btn btn-outline-primary mr-2", target = "_blank") {
-                +"1.67"
-            }
-            a(href = "https://github.com/attrib/legion2-builder", classes = "btn btn-outline-success mr-2", target = "_blank") {
-                +"Github"
-            }
-        }
-
         if (state.errorMessage != null) {
             div("error") {
                 p {
@@ -355,11 +334,6 @@ class App : RComponent<RProps, AppState>() {
                         })
                     }
                 }
-            }
-            footer("container") {
-                +"Images and data are property of AutoAttack Games, Inc."
-                br { }
-                +"Legion TD, and Legion TD 2 are registered trademarks of AutoAttack Games, Inc."
             }
         }
     }

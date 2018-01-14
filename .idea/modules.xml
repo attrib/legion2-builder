@@ -12,6 +12,11 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/client/client_main.iml" filepath="$PROJECT_DIR$/.idea/modules/client/client_main.iml" group="client" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/client/client_test.iml" filepath="$PROJECT_DIR$/.idea/modules/client/client_test.iml" group="client" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/legiontd2-builder.iml" filepath="$PROJECT_DIR$/.idea/modules/legiontd2-builder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server.iml" group="server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server_main.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server_main.iml" group="server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server_test.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server_test.iml" group="server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/whitelabel/whitelabel_main.iml" filepath="$PROJECT_DIR$/.idea/modules/whitelabel/whitelabel_main.iml" group="whitelabel" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/whitelabel/whitelabel_test.iml" filepath="$PROJECT_DIR$/.idea/modules/whitelabel/whitelabel_test.iml" group="whitelabel" />
     </modules>
   </component>
 </project>

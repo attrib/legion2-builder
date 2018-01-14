@@ -13,7 +13,7 @@ external object LZString {
 
 
 fun main(args: Array<String>) {
-    val container = document.getElementById("root")
+    val container = document.getElementById("builder")
     if( container!=null ) {
         require("index/bootstrap.min.css")
         require("index/index.css")
