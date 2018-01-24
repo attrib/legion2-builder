@@ -107,8 +107,8 @@ class App : RComponent<RProps, AppState>() {
                     }
                 }
             }
-            a(href = "http://steamcommunity.com/games/469600/announcements/detail/1673518837497003150", classes = "btn btn-outline-primary mr-2", target = "_blank") {
-                +"1.68"
+            a(href = "https://legiontd2.com/community/threads/v1-69a.14248/", classes = "btn btn-outline-primary mr-2", target = "_blank") {
+                +"1.69a"
             }
             a(href = "https://github.com/attrib/legion2-builder", classes = "btn btn-outline-success mr-2", target = "_blank") {
                 +"Github"
