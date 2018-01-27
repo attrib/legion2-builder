@@ -259,7 +259,7 @@ fun loadData(ltd2Folder:String) : GameData {
             .registerTypeAdapter(UnitClass::class.java, UnitClassAdapter())
 //            .registerTypeAdapter(Legion::class.java, LegionAdapter())
     val gsonXml = GsonXmlBuilder().wrap(builder).setXmlParserCreator(p).setSameNameLists(true).create()
-    val zipFile = "$ltd2Folder\\Legion TD 2_Data\\StreamingAssets\\Maps\\legiontd2.zip"
+    val zipFile = "$ltd2Folder/Legion TD 2_Data/StreamingAssets/Maps/legiontd2.zip"
     val zip = ZipFile(zipFile)
     val buffs = gsonXml.fromXml(InputStreamReader(zip.getInputStream(zip.getEntry("buffs.xml"))), Buffs::class.java)
     val legions = gsonXml.fromXml(InputStreamReader(zip.getInputStream(zip.getEntry("legions.xml"))), Legions::class.java)

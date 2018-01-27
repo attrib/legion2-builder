@@ -10,7 +10,7 @@ All images and data is copyrighted by [Legion 2 TD](https://legiontd2.com)
 
 ## Working
 
-* Read values from Legion 2 TD map file (currently 1.69a)
+* Read values from Legion 2 TD map file (auto updated)
 * Add fighters to lane
 * Add mercenary for income calculation
 * Calculate damage dealt by wave and fighters and predict a leak probability

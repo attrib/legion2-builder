@@ -1,0 +1,10 @@
+.git
+.idea
+.gradle
+
+data
+steam
+build
+out
+*/build
+*/out

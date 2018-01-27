@@ -1,3 +1,5 @@
+@file:JvmName("Exporter")
+
 package ltd2
 
 import java.io.PrintStream
@@ -50,7 +52,7 @@ fun <T> writeEnum(name:String, values:Array<T>) {
     println("}")
 }
 fun main(args: Array<String>) {
-    val data = loadData("D:\\Spiele\\Steam\\steamapps\\common\\Legion TD 2")
+    val data = loadData(args[0])
     (System::setOut)(PrintStream("api/src/main/kotlin/ltd2/ltd2.kt"))
     println("package ltd2")
     println("")
