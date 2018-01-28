@@ -10,6 +10,7 @@ import builder.ui.tab.WaveEditorEventHandler
 import builder.ui.tab.buildOrder
 import builder.ui.tab.waveEditor
 import d3.d3_wrapper
+import index.LegionTD2Builder
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
 import ltd2.*
@@ -89,7 +90,7 @@ class App : RComponent<RProps, AppState>() {
 
     fun AppState.updateHistory() {
         val permalink = PermaLinkV1JS.toPermaLinkCode(build)
-        window.history.pushState(permalink, build.legion?.name + " " + build.currentLevel.toString(), "/?b=" + permalink)
+        window.history.pushState(permalink, build.legion?.name + " " + build.currentLevel.toString(), LegionTD2Builder.basePath + "?b=" + permalink)
         js("if('gtag' in window){gtag('config', LegionTD2Builder.gaId, {'page_path': '/?b='+ permalink})}")
     }
 

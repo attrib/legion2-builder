@@ -12,7 +12,7 @@ fun RBuilder.dpsUi(resistence: Resistance) {
     div("tooltip-data") {
         for ((type, value) in resistence.dps) {
             div {
-                img(alt = type.toString(), src = "Icons/" + type.toString() + ".png") { attrs.title = type.toString() }
+                IconImg( "Icons/" + type.toString() + ".png", type.toString())
                 +type.toString()
                 +": "
                 +value.format(0)
@@ -31,7 +31,7 @@ fun RBuilder.hpUi(resistence: Resistance) {
     div("tooltip-data") {
         for ((type, value) in resistence.hps) {
             div {
-                img(alt = type.toString(), src = "Icons/" + type.toString() + ".png") { attrs.title = type.toString() }
+                IconImg( "Icons/" + type.toString() + ".png", type.toString())
                 +type.toString()
                 +": "
                 +value.toString()

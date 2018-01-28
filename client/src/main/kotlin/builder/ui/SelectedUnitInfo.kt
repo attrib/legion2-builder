@@ -30,14 +30,14 @@ fun RBuilder.selectedUnitInfo(selectedUnit: UnitSelection, build: Build, eventHa
                 }
                 if (selectedUnit.getBuiltUnit().buildLevel == build.currentLevel) {
                     div("col-auto") {
-                        img("Recall", "Icons/Recall.png") { attrs.title = "Recall" }
+                        IconImg( "Icons/Recall.png", "Recall")
                         attrs.onClickFunction = {
                             eventHandler.recall()
                         }
                     }
                     if (selectedUnit.getBuiltUnit().upgradedFrom !== null) {
                         div("col-auto") {
-                            img("Downgrade", selectedUnit.getBuiltUnit().upgradedFrom!!.def.iconPath.replace("Splashes", "Icons")) { attrs.title = "Downgrade" }
+                            IconImg( selectedUnit.getBuiltUnit().upgradedFrom!!.def.iconPath, "Downgrade")
                             attrs.onClickFunction = {
                                 eventHandler.downgrade()
                             }
@@ -45,7 +45,7 @@ fun RBuilder.selectedUnitInfo(selectedUnit: UnitSelection, build: Build, eventHa
                     }
                 } else {
                     div("col-auto") {
-                        img("Undeploy", "Icons/Undeploy.png") { attrs.title = "Undeploy" }
+                        IconImg( "Icons/Undeploy.png", "Undeploy")
                         attrs.onClickFunction = {
                             eventHandler.undeploy()
                         }
