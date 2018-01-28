@@ -22,7 +22,7 @@ fun main(args: Array<String>) {
         console.error("LegionTD2Builder is not defined.")
         return
     }
-    if (jsTypeOf(LegionTD2Builder.containerId) != "object") {
+    if (jsTypeOf(LegionTD2Builder.containerId) != "string") {
         console.error("LegionTD2Builder.containerId is not defined.")
         return
     }
