@@ -90,7 +90,7 @@ class App : RComponent<RProps, AppState>() {
     fun AppState.updateHistory() {
         val permalink = PermaLinkV1JS.toPermaLinkCode(build)
         window.history.pushState(permalink, build.legion?.name + " " + build.currentLevel.toString(), "/?b=" + permalink)
-        js("if(gtag){gtag('config', 'UA-42953114-2', {'page_path': '/?b='+ permalink})}")
+        js("if('gtag' in window){gtag('config', 'UA-42953114-2', {'page_path': '/?b='+ permalink})}")
     }
 
     override fun RBuilder.render() {
