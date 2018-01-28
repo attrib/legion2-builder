@@ -18,6 +18,14 @@ external object LegionTD2Builder {
 
 
 fun main(args: Array<String>) {
+    if (jsTypeOf(LegionTD2Builder) != "object") {
+        console.error("LegionTD2Builder is not defined.")
+        return
+    }
+    if (jsTypeOf(LegionTD2Builder.containerId) != "object") {
+        console.error("LegionTD2Builder.containerId is not defined.")
+        return
+    }
     val container = document.getElementById(LegionTD2Builder.containerId)
     if( container!=null ) {
         require("index/bootstrap.min.css")
