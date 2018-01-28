@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install --no-install-recommends -yq curl lib32gcc1 && \
+    apt-get install -yq curl lib32gcc1 && \
     rm -rf /var/lib/apt/lists/* && \
     # Download and extract SteamCMD
     mkdir -p /opt/steamcmd && \

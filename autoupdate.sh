@@ -7,7 +7,7 @@ docker build -f Dockerfile-steamcmd . -t attrib/steamcmd
 
 docker run -it --rm -v `pwd`/data:/data -v `pwd`/steam:/root/Steam attrib/steamcmd \
     +@sSteamCmdForcePlatformType windows \
-    +login attrib $1 \
+    +login $1 $2 \
     +force_install_dir /data/legion2-td \
     +app_update 469600 validate \
     +quit
@@ -17,11 +17,11 @@ docker build -f Dockerfile-apigen . -t attrib/legiontd2-api-gen
 docker run -it --rm -v `pwd`:/home/gradle -v `pwd`/.gradle:/home/gradle/.gradle attrib/legiontd2-api-gen \
      /bin/bash -c "gradle api-gen:jar && java -jar api-gen/build/libs/api-gen.jar ./data/legion2-td/"
 
-git diff-index --quiet HEAD api\src\main\kotlin\ltd2\ltd2.kt
+git diff-index --quiet HEAD api/src/main/kotlin/ltd2/ltd2.kt
 RETURN=$?
 
 if [ $RETURN -ne 0 ]; then
-    git add api\src\main\kotlin\ltd2\ltd2.kt
+    git add api/src/main/kotlin/ltd2/ltd2.kt
     git commit -m "Updated to newest version"
     git push origin master
 fi
