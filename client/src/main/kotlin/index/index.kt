@@ -11,9 +11,14 @@ external object LZString {
     fun decompressFromBase64(s:String) : String
 }
 
+external object LegionTD2Builder {
+    val containerId: String
+    val gaId: String?
+}
+
 
 fun main(args: Array<String>) {
-    val container = document.getElementById("builder")
+    val container = document.getElementById(LegionTD2Builder.containerId)
     if( container!=null ) {
         require("index/bootstrap.min.css")
         require("index/index.css")
