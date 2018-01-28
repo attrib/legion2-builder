@@ -22,12 +22,7 @@ fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit, additionalClasses: Stri
         attrs.onClickFunction = {
             callback()
         }
-        img(alt = unit.id, src = unit.iconPath.replace("Splashes", "Icons")) {
-            attrs {
-                width = "64px"
-                height = "64px"
-            }
-        }
+        IconImg( unit.iconPath, unit.id, 64, 64)
         div("tooltip-data") {
             h4 { +unit.name }
             p {

@@ -27,7 +27,12 @@ var d3_wrapper = {
         });
     },
 
+    iconPath: function (iconPath) {
+        return LegionTD2Builder.iconsPath + iconPath.replace("Splashes", "");
+    },
+
     render: function (id, selectedUnit, units, buildUnitCallback, selectUnitCallback) {
+        var that = this;
         var area = d3.select("#" + id);
         // @todo: hack to wait till react rendered
         if (area.size() === 0) {
@@ -73,7 +78,7 @@ var d3_wrapper = {
                 .attr("x", -d3_wrapper.size * 2)
                 .attr("y", -d3_wrapper.size * 2)
                 .attr("href", function (d) {
-                    return d.iconPath.replace("Splashes", "Icons")
+                    return that.iconPath(d.iconPath)
                 });
             this.selectedUnitSvg.enter()
                 .append("image")
@@ -83,7 +88,7 @@ var d3_wrapper = {
                 .attr("width", d3_wrapper.size * 2)
                 .attr("height", d3_wrapper.size * 2)
                 .attr("href", function (d) {
-                    return d.iconPath.replace("Splashes", "Icons")
+                    return that.iconPath(d.iconPath)
                 })
                 .on("click", function (d) {
                     var unitSvg = d3.select(this),
@@ -160,7 +165,7 @@ var d3_wrapper = {
                 return d.position.y * d3_wrapper.size;
             })
             .attr("href", function (d) {
-                return d.def.iconPath.replace("Splashes", "Icons")
+                return that.iconPath(d.def.iconPath)
             });
 
         unitsSvg.enter()
@@ -175,7 +180,7 @@ var d3_wrapper = {
             .attr("width", d3_wrapper.size * 2)
             .attr("height", d3_wrapper.size * 2)
             .attr("href", function (d) {
-                return d.def.iconPath.replace("Splashes", "Icons")
+                return that.iconPath(d.def.iconPath)
             })
             .on("click", function (d) {
                 selectUnitCallback(d);
@@ -251,7 +256,7 @@ var d3_wrapper = {
                 .attr("height", d3_wrapper.size * 2)
                 .attr("fill", "none")
                 .attr("href", function () {
-                    return "Icons/button active.png"
+                    return that.iconPath("Icons/button active.png")
                 })
                 .on("click", function (d) {
                     selectUnitCallback(d);

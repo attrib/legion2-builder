@@ -1,6 +1,7 @@
 package builder.ui.header
 
 import builder.PermaLinkV1JS
+import builder.ui.IconImg
 import ltd2.Build
 import ltd2.Legion
 import ltd2.LegionData
@@ -51,10 +52,7 @@ fun RBuilder.legionSelect(build: Build, replayResult: ReplayResult?, selectedPla
                         attrs.checked = true
                     }
                 }
-                img(alt = legion.name, src = legion.iconPath) {
-                    attrs.title = legion.name
-                    attrs.width = "32px"
-                }
+                IconImg( legion.iconPath, legion.name, 32, 32)
             }
         }
     }
