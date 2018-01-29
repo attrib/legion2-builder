@@ -16,6 +16,7 @@ external object LegionTD2Builder {
     val gaId: String?
     var basePath: String?
     var iconsPath: String?
+    var queryString: String?
 }
 
 
@@ -29,19 +30,25 @@ fun main(args: Array<String>) {
         return
     }
     if (LegionTD2Builder.basePath == null) {
-        LegionTD2Builder.basePath = "/"
+        LegionTD2Builder.basePath = window.location.pathname
     }
-    if (!LegionTD2Builder.basePath!!.endsWith("/")) {
-        LegionTD2Builder.basePath += "/"
+    if (LegionTD2Builder.basePath!!.endsWith("/")) {
+        LegionTD2Builder.basePath = LegionTD2Builder.basePath!!.substring(-1)
+    }
+    if (LegionTD2Builder.queryString == null) {
+        LegionTD2Builder.queryString = "?" + window.location.search.substring(1).split("&").filter { !it.startsWith("b=") }.joinToString("&")
+    }
+    if (LegionTD2Builder.queryString!!.length > 1) {
+        LegionTD2Builder.queryString += "&"
     }
     if (LegionTD2Builder.iconsPath == null) {
-        LegionTD2Builder.iconsPath = LegionTD2Builder.basePath + "Icons/"
+        LegionTD2Builder.iconsPath = LegionTD2Builder.basePath!!.substring(0, window.location.pathname.lastIndexOf("/")) + "/Icons/"
     }
     if (!LegionTD2Builder.iconsPath!!.endsWith("/")) {
         LegionTD2Builder.iconsPath += "/"
     }
     val container = document.getElementById(LegionTD2Builder.containerId)
-    if( container!=null ) {
+    if (container != null) {
         require("index/bootstrap.min.css")
         require("index/index.css")
         require("app/App.css")
@@ -51,5 +58,8 @@ fun main(args: Array<String>) {
         render(container) {
             app()
         }
+    }
+    else {
+        console.error("Container with ID ${LegionTD2Builder.containerId} not found.")
     }
 }
