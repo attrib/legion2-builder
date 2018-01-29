@@ -28,7 +28,7 @@ var d3_wrapper = {
     },
 
     iconPath: function (iconPath) {
-        return LegionTD2Builder.iconsPath + iconPath.replace("Splashes", "");
+        return LegionTD2Builder.iconsPath + iconPath.replace("Splashes/", "").replace("Icons/", "");
     },
 
     render: function (id, selectedUnit, units, buildUnitCallback, selectUnitCallback) {

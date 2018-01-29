@@ -48,9 +48,9 @@ class App : RComponent<RProps, AppState>() {
         selectedTab = Tabs.WaveEditor
         selectedUnit = UnitSelection()
         replayResult = null
-        val url = window.location.href
-        if (url.contains("?b=")) {
-            val code = url.split("?b=")[1]
+        val matches = window.location.search.substring(1).split("&").filter { it.startsWith("b=") }
+        if (matches.isNotEmpty()) {
+            val code = matches[0].split("=")[1]
             try {
                 build = PermaLinkV1JS.fromPermaLinkCode(code)
             }
@@ -90,7 +90,7 @@ class App : RComponent<RProps, AppState>() {
 
     fun AppState.updateHistory() {
         val permalink = PermaLinkV1JS.toPermaLinkCode(build)
-        window.history.pushState(permalink, build.legion?.name + " " + build.currentLevel.toString(), LegionTD2Builder.basePath + "?b=" + permalink)
+        window.history.pushState(permalink, build.legion?.name + " " + build.currentLevel.toString(), LegionTD2Builder.basePath + LegionTD2Builder.queryString + "b=" + permalink)
         js("if('gtag' in window){gtag('config', LegionTD2Builder.gaId, {'page_path': '/?b='+ permalink})}")
     }
 
