@@ -15,7 +15,10 @@ docker run -i --rm -v `pwd`/data:/data -v `pwd`/steam:/root/Steam attrib/steamcm
 docker build -f Dockerfile-apigen . -t attrib/legiontd2-api-gen
 
 docker run -i --rm -v `pwd`:/home/gradle -v `pwd`/.gradle:/home/gradle/.gradle attrib/legiontd2-api-gen \
-     /bin/bash -c "gradle api-gen:jar && java -jar api-gen/build/libs/api-gen.jar ./data/legion2-td/"
+     gradle api-gen:jar
+
+docker run -i --rm -w /opt -v `pwd`:/opt java:jre \
+     java -jar api-gen/build/libs/api-gen.jar ./data/legion2-td/
 
 git diff-index --quiet HEAD api/src/main/kotlin/ltd2/ltd2.kt
 RETURN=$?
