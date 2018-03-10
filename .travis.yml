@@ -6,7 +6,7 @@ env:
 before_install:
   - export PRODUCTION="true"
   - nvm install $NODE_VERSION
-install: ./gradlew assemble --debug
+#install: ./gradlew assemble --debug
 deploy:
   provider: pages
   skip_cleanup: true
