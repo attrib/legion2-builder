@@ -7,6 +7,7 @@ var config = {
     "entry": {
         "main": "./client_test"
     },
+    "optimization": {},
     "output": {
         "path": "testbundle",
         "filename": "[name].bundle.js",
