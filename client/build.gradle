@@ -68,7 +68,7 @@ kotlinFrontend {
         dependency("react", "^16.2.0")
         dependency("text-encoding", "0.6.4")
         dependency("lz-string", "1.4.4")
-        dependency("d3", "4.12.2")
+        dependency("d3", "4.13.0")
 
         devDependency("es6-shim", "*")
         devDependency("karma-babel-preprocessor", "*")
@@ -78,7 +78,7 @@ kotlinFrontend {
         devDependency("css-loader","0.28.7")
         devDependency("url-loader", "0.6.2")
         devDependency("source-map-loader", "0.2.3")
-        devDependency("extract-text-webpack-plugin", "3.0.2")
+        devDependency("extract-text-webpack-plugin", "4.0.0-alpha.0")
     }
 
     webpackBundle {
