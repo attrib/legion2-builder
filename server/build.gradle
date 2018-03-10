@@ -10,8 +10,6 @@ dependencies {
     compile "com.stanfy:gson-xml-java:0.1.7"
     compile group: 'org.ogce', name: 'xpp3', version: '1.1.6'
     compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
-    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-
 }
 
 compileKotlin {

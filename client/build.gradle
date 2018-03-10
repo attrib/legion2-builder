@@ -43,14 +43,6 @@ compileKotlin2Js {
         metaInfo = true
     }
 }
-compileTestKotlin2Js {
-    kotlinOptions {
-        sourceMap = true
-        sourceMapEmbedSources = "always"
-        moduleKind = "commonjs"
-        metaInfo = true
-    }
-}
 
 kotlin {
     experimental {
