@@ -1,4 +1,6 @@
+config.mode="development";
 if( defined.PRODUCTION ) {
+    config.mode="production";
     const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
     config.optimization = {};
     config.optimization.minimizer = [new UglifyJSPlugin({
