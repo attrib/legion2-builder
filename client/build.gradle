@@ -33,8 +33,6 @@ dependencies {
     compile "org.jetbrains:kotlin-react:$react_version"
     compile "org.jetbrains:kotlin-react-dom:$react_dom_version"
     compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
-
-    testCompile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
 
 compileKotlin2Js {
@@ -47,7 +45,6 @@ compileKotlin2Js {
 }
 compileTestKotlin2Js {
     kotlinOptions {
-        outputFile = "client/build/classes/kotlin/test/client_test.js"
         sourceMap = true
         sourceMapEmbedSources = "always"
         moduleKind = "commonjs"
@@ -71,9 +68,6 @@ kotlinFrontend {
         dependency("d3", "4.13.0")
 
         devDependency("es6-shim", "*")
-        devDependency("karma-babel-preprocessor", "*")
-        devDependency("karma-es6-shim", "*")
-        devDependency("karma", "^1.7.1")
         devDependency("style-loader", "0.19.1")
         devDependency("css-loader","0.28.7")
         devDependency("url-loader", "0.6.2")
@@ -87,21 +81,9 @@ kotlinFrontend {
         sourceMapEnabled = true
     }
 
-    karma {
-//        frameworks = ["qunit", "es6-shim"]
-//        plugins = ["karma-es6-shim"]
-        customConfigFile = "karma.conf.js"
-    }
     define("PRODUCTION", System.getenv("PRODUCTION")=="true")
 }
 
-compileTestKotlin2Js.doLast {
-    copy {
-        from '.'
-        into "build"
-        include("webpack.karma.config.js")
-    }
-}
 /*
 compileKotlin2Js.doLast {
     configurations.compile.each{ File file->
@@ -119,30 +101,6 @@ compileKotlin2Js.doLast {
             copy {
                 from zipTree(file.absolutePath)
                 into "$projectDir/build/lib"
-                include { fileTreeElement ->
-                    def path = fileTreeElement.path
-                    path.endsWith(".js") && (path.startsWith("META-INF/resources") || !path.startsWith("META-INF/"))
-                }
-            }
-        }
-    }
-}
-compileTestKotlin2Js.doLast {
-    configurations.testCompile.each{ File file->
-        if( file.isDirectory() ) {
-            copy {
-                from file.absolutePath
-                into "$projectDir/build/testlib"
-                include { fileTreeElement ->
-                    def path = fileTreeElement.path
-                    path.endsWith(".js") && (path.startsWith("META-INF/resources") || !path.startsWith("META-INF/"))
-                }
-            }
-
-        } else {
-            copy {
-                from zipTree(file.absolutePath)
-                into "$projectDir/build/testlib"
                 include { fileTreeElement ->
                     def path = fileTreeElement.path
                     path.endsWith(".js") && (path.startsWith("META-INF/resources") || !path.startsWith("META-INF/"))
