@@ -1,7 +1,7 @@
 buildscript {
-    ext.kotlinx_html_version = "0.6.8"
-    ext.react_version = "16.2.0-pre.16-kotlin-1.2.0"
-    ext.react_dom_version = "16.2.0-pre.16-kotlin-1.2.0"
+    ext.kotlinx_html_version = "0.6.9"
+    ext.react_version = "16.2.1-pre.15-kotlin-1.2.30"
+    ext.react_dom_version = "16.2.1-pre.15-kotlin-1.2.30"
 
 
     repositories {
@@ -10,7 +10,7 @@ buildscript {
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:0.0.26"
+        classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:0.0.29"
     }
 }
 apply plugin: 'kotlin-platform-js'
@@ -29,7 +29,7 @@ repositories {
 dependencies {
     expectedBy project(":api")
     compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
-    compile("org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version")
+    compile "org.jetbrains.kotlinx:kotlinx-html-js:$kotlinx_html_version"
     compile "org.jetbrains:kotlin-react:$react_version"
     compile "org.jetbrains:kotlin-react-dom:$react_dom_version"
     compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialization_version"
