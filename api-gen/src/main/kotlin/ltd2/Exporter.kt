@@ -26,16 +26,16 @@ fun value2String(type:KType, value:Any?) : String {
     if( value==null && optional) {
         return "null"
     }
-    when(stype) {
-        "String"->return if( value!=null ) "\"$value\"" else ""
-        "AttackMode"->return if( value!=null ) "AttackMode.$value" else "AttackMode.Illegal"
-        "ArmorType"->return if( value!=null ) "ArmorType.$value" else "ArmorType.Illegal"
-        "AttackType"->return if( value!=null ) "AttackType.$value" else "AttackType.Illegal"
-        "UnitClass"->return if( value!=null ) "UnitClass.$value" else "UnitClass.Illegal"
-        "Legion"->return if( value!=null ) "Legion.$value" else "Legion.Illegal"
-        "List<Double>"->return "listOf(${(value as DecimalArray).list.joinToString(",")})"
+    return when(stype) {
+        "String"-> if( value!=null ) "\"$value\"" else "\"\""
+        "AttackMode"-> if( value!=null ) "AttackMode.$value" else "AttackMode.Illegal"
+        "ArmorType"-> if( value!=null ) "ArmorType.$value" else "ArmorType.Illegal"
+        "AttackType"-> if( value!=null ) "AttackType.$value" else "AttackType.Illegal"
+        "UnitClass"-> if( value!=null ) "UnitClass.$value" else "UnitClass.Illegal"
+        "Legion"-> if( value!=null ) "Legion.$value" else "Legion.Illegal"
+        "List<Double>"-> "listOf(${(value as DecimalArray).list.joinToString(",")})"
+        else-> value.toString()
     }
-    return value.toString()
 }
 fun writeClassDef(cls: KClass<*>) {
     println("data class ${cls.simpleName}(")
