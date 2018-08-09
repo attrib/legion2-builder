@@ -1,7 +1,7 @@
 buildscript {
-    ext.kotlinx_html_version = "0.6.9"
-    ext.react_version = "16.2.1-pre.15-kotlin-1.2.30"
-    ext.react_dom_version = "16.2.1-pre.15-kotlin-1.2.30"
+    ext.kotlinx_html_version = "0.6.11"
+    ext.react_version = "16.4.2-pre.38-kotlin-1.2.60"
+    ext.react_dom_version = "16.4.2-pre.38-kotlin-1.2.60"
 
 
     repositories {
@@ -10,7 +10,7 @@ buildscript {
         maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:0.0.29"
+        classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:0.0.36"
     }
 }
 apply plugin: 'kotlin-platform-js'
@@ -53,8 +53,8 @@ kotlin {
 kotlinFrontend {
     sourceMaps = true
     npm {
-        dependency("react-dom", "^16.2.0")
-        dependency("react", "^16.2.0")
+        dependency("react-dom", "^16.4.0")
+        dependency("react", "^16.4.0")
         dependency("text-encoding", "0.6.4")
         dependency("lz-string", "1.4.4")
         dependency("d3", "4.13.0")
