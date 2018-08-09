@@ -154,8 +154,8 @@ data class Global(
             AttackType.Magic -> return attackMagic.list[armorType.ordinal]
             AttackType.Siege -> return attackSiege.list[armorType.ordinal]
             AttackType.Pure -> return attackChaos.list[armorType.ordinal]
+            AttackType.Illegal -> return 0.0
         }
-        throw IllegalStateException()
     }
 }
 data class Globals(@SerializedName("global") val globals:List<Global>)
