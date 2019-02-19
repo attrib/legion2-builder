@@ -444,7 +444,9 @@ object LegionData {
 		UnitDef(ArmorType.Natural, AttackMode.Melee, 0.85, AttackType.Pierce, 0, 97, 0, 0, 175, 2410, 0.0, "Splashes/Lioness.png", "lioness_unit_id", 0, "nomad_legion_id", 0, 0.0, 0, "Lioness", "Well-rounded melee fighter that gets stronger near more expensive fighters", 2, 260, UnitClass.Fighter, "warg_unit_id"),
 		UnitDef(ArmorType.Natural, AttackMode.Melee, 0.85, AttackType.Pierce, 0, 104, 0, 0, 200, 3300, 0.0, "Splashes/AlphaMale.png", "alpha_male_unit_id", 0, "nomad_legion_id", 0, 0.0, 0, "Alpha Male", "Well-rounded melee fighter that gets weaker near more expensive fighters", 2, 285, UnitClass.Fighter, "warg_unit_id"),
 		UnitDef(ArmorType.Fortified, AttackMode.Ranged, 1.11, AttackType.Magic, 0, 60, 0, 0, 135, 900, 0.0, "Splashes/DesertPilgrim.png", "desert_pilgrim_unit_id", 0, "nomad_legion_id", 10, 1.0, 0, "Desert Pilgrim", "Ranged fighter that heals allies", 1, 135, UnitClass.Fighter, null),
-		UnitDef(ArmorType.Fortified, AttackMode.Ranged, 1.11, AttackType.Magic, 0, 170, 0, 0, 255, 2500, 0.0, "Splashes/LostChieftain.png", "lost_chieftain_unit_id", 0, "nomad_legion_id", 14, 1.0, 0, "Lost Chieftain", "Ranged fighter that shields allies", 2, 390, UnitClass.Fighter, "desert_pilgrim_unit_id")
+		UnitDef(ArmorType.Fortified, AttackMode.Ranged, 1.11, AttackType.Magic, 0, 170, 0, 0, 255, 2500, 0.0, "Splashes/LostChieftain.png", "lost_chieftain_unit_id", 0, "nomad_legion_id", 14, 1.0, 0, "Lost Chieftain", "Ranged fighter that shields allies", 2, 390, UnitClass.Fighter, "desert_pilgrim_unit_id"),
+		UnitDef(ArmorType.Arcane, AttackMode.Melee, 1.2, AttackType.Impact, 0, 75, 0, 0, 195, 2550, 0.0, "Splashes/SandBadger.png", "sand_badger_unit_id", 0, "nomad_legion_id", 0, 0.0, 0, "Sand Badger", "Melee tank", 1, 195, UnitClass.Fighter, null),
+		UnitDef(ArmorType.Arcane, AttackMode.Melee, 1.2, AttackType.Impact, 0, 205, 0, 0, 335, 6850, 0.0, "Splashes/IronScales.png", "iron_scales_unit_id", 0, "nomad_legion_id", 0, 0.0, 0, "Iron Scales", "Melee tank", 2, 530, UnitClass.Fighter, "sand_badger_unit_id")
 	)
 	val unitsMap = units.associateBy { it.id }
 
