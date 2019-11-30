@@ -90,7 +90,7 @@ fun RBuilder.legionSelect(build: Build, replayResult: ReplayResult?, selectedPla
                 option {
                     +""
                 }
-                replayResult.playerBuilds.keys.forEach { player ->
+                replayResult.playerBuilds.keys.filter { !it.equals("_closed") && !it.equals("_open") }.forEach { player ->
                     option {
                         attrs.selected = player == selectedPlayer ?: ""
                         +player

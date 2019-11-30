@@ -20,6 +20,10 @@ object ExtractBuilds {
             var workers = 0
             var food = 15
             game.waves.forEach { wave ->
+                // skip missing players for a wave, e.g. _closed, _open
+                if (!wave.playerWaves.containsKey(player.name)) {
+                    return@forEach
+                }
                 val playerWave = wave.playerWaves[player.name]!!
                 val untouchedUnits = field.toMutableMap()
                 playerWave.buildings.entities.forEach { es ->
