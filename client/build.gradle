@@ -53,8 +53,8 @@ kotlin {
 kotlinFrontend {
     sourceMaps = true
     npm {
-        dependency("react-dom", "^16.4.0")
-        dependency("react", "^16.4.0")
+        dependency("react-dom", "~16.4.0")
+        dependency("react", "~16.4.0")
         dependency("text-encoding", "0.6.4")
         dependency("lz-string", "1.4.4")
         dependency("d3", "4.13.0")

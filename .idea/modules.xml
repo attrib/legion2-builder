@@ -2,19 +2,19 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api/api.iml" filepath="$PROJECT_DIR$/.idea/modules/api/api.iml" group="api" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-gen/api-gen.iml" filepath="$PROJECT_DIR$/.idea/modules/api-gen/api-gen.iml" group="api-gen" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-gen/api-gen_main.iml" filepath="$PROJECT_DIR$/.idea/modules/api-gen/api-gen_main.iml" group="api-gen" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-gen/api-gen_test.iml" filepath="$PROJECT_DIR$/.idea/modules/api-gen/api-gen_test.iml" group="api-gen" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api/api_main.iml" filepath="$PROJECT_DIR$/.idea/modules/api/api_main.iml" group="api" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api/api_test.iml" filepath="$PROJECT_DIR$/.idea/modules/api/api_test.iml" group="api" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/client/client.iml" filepath="$PROJECT_DIR$/.idea/modules/client/client.iml" group="client" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/client/client_main.iml" filepath="$PROJECT_DIR$/.idea/modules/client/client_main.iml" group="client" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/client/client_test.iml" filepath="$PROJECT_DIR$/.idea/modules/client/client_test.iml" group="client" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/legiontd2-builder.iml" filepath="$PROJECT_DIR$/.idea/modules/legiontd2-builder.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server.iml" group="server" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server_main.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server_main.iml" group="server" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server_test.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server_test.iml" group="server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api/api.iml" filepath="$PROJECT_DIR$/.idea/modules/api/api.iml" group="legiontd2-builder/api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-gen/api-gen.iml" filepath="$PROJECT_DIR$/.idea/modules/api-gen/api-gen.iml" group="legiontd2-builder/api-gen" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-gen/api-gen_main.iml" filepath="$PROJECT_DIR$/.idea/modules/api-gen/api-gen_main.iml" group="legiontd2-builder/api-gen" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api-gen/api-gen_test.iml" filepath="$PROJECT_DIR$/.idea/modules/api-gen/api-gen_test.iml" group="legiontd2-builder/api-gen" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api/api_main.iml" filepath="$PROJECT_DIR$/.idea/modules/api/api_main.iml" group="legiontd2-builder/api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api/api_test.iml" filepath="$PROJECT_DIR$/.idea/modules/api/api_test.iml" group="legiontd2-builder/api" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/client/client.iml" filepath="$PROJECT_DIR$/.idea/modules/client/client.iml" group="legiontd2-builder/client" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/client/client_main.iml" filepath="$PROJECT_DIR$/.idea/modules/client/client_main.iml" group="legiontd2-builder/client" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/client/client_test.iml" filepath="$PROJECT_DIR$/.idea/modules/client/client_test.iml" group="legiontd2-builder/client" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/legiontd2-builder.iml" filepath="$PROJECT_DIR$/.idea/modules/legiontd2-builder.iml" group="legiontd2-builder" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server.iml" group="legiontd2-builder/server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server_main.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server_main.iml" group="legiontd2-builder/server" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/server/server_test.iml" filepath="$PROJECT_DIR$/.idea/modules/server/server_test.iml" group="legiontd2-builder/server" />
     </modules>
   </component>
 </project>
