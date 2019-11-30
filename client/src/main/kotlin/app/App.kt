@@ -17,10 +17,10 @@ import ltd2.*
 import org.w3c.dom.PopStateEvent
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
-import org.w3c.dom.get
 import parser.ReplayResult
 import react.*
-import react.dom.*
+import react.dom.div
+import react.dom.p
 import kotlin.browser.document
 import kotlin.browser.window
 

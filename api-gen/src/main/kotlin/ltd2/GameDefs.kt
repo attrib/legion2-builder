@@ -7,10 +7,8 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import com.stanfy.gsonxml.GsonXmlBuilder
 import com.stanfy.gsonxml.XmlParserCreator
-import javafx.scene.image.Image
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStreamReader
-import java.nio.file.Paths
 import java.util.zip.ZipFile
 
 enum class ArmorType(val internalName:String) {

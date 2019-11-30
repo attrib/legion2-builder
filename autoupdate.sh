@@ -22,9 +22,23 @@ docker run -i --rm -w /opt -v `pwd`:/opt java:jre \
 
 git diff-index --quiet HEAD api/src/main/kotlin/ltd2/ltd2.kt
 RETURN=$?
-
+COMMIT="false"
 if [ $RETURN -ne 0 ]; then
     git add api/src/main/kotlin/ltd2/ltd2.kt
+    COMMIT="true"
+fi
+
+git diff-index --quiet HEAD image_download.sh
+RETURN=$?
+
+if [ $RETURN -ne 0 ]; then
+    git add image_download.sh
+    /bin/bash image_download.sh
+    git add client/src/main/web/Icons
+    COMMIT="true"
+fi
+
+if [ $COMMIT == "true" ]; then
     git commit -m "Updated to newest version (via autoupdater)"
     git push origin master
 fi

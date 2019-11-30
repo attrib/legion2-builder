@@ -1,18 +1,16 @@
 package builder.ui
 
 import app.format
-import ltd2.Resistance
 import kotlinext.js.invoke
-import kotlinx.html.title
+import ltd2.Resistance
 import react.RBuilder
 import react.dom.div
-import react.dom.img
 
 fun RBuilder.dpsUi(resistence: Resistance) {
     div("tooltip-data") {
         for ((type, value) in resistence.dps) {
             div {
-                IconImg( "Icons/" + type.toString() + ".png", type.toString())
+                IconImg("Icons/$type.png", type.name)
                 +type.toString()
                 +": "
                 +value.format(0)
@@ -31,7 +29,7 @@ fun RBuilder.hpUi(resistence: Resistance) {
     div("tooltip-data") {
         for ((type, value) in resistence.hps) {
             div {
-                IconImg( "Icons/" + type.toString() + ".png", type.toString())
+                IconImg("Icons/$type.png", type.name)
                 +type.toString()
                 +": "
                 +value.toString()

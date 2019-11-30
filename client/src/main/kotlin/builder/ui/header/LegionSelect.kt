@@ -2,15 +2,13 @@ package builder.ui.header
 
 import builder.PermaLinkV1JS
 import builder.ui.IconImg
-import ltd2.Build
-import ltd2.Legion
-import ltd2.LegionData
 import kotlinx.html.InputType
 import kotlinx.html.classes
 import kotlinx.html.js.onChangeFunction
 import kotlinx.html.js.onClickFunction
-import kotlinx.html.title
-import ltd2.PermaLinkV1
+import ltd2.Build
+import ltd2.Legion
+import ltd2.LegionData
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.get
@@ -90,7 +88,7 @@ fun RBuilder.legionSelect(build: Build, replayResult: ReplayResult?, selectedPla
                 option {
                     +""
                 }
-                replayResult.playerBuilds.keys.forEach { player ->
+                replayResult.playerBuilds.keys.filter { !it.equals("_closed") && !it.equals("_open") }.forEach { player ->
                     option {
                         attrs.selected = player == selectedPlayer ?: ""
                         +player

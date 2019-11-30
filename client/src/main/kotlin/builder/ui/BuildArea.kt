@@ -2,10 +2,10 @@ package builder.ui
 
 import builder.data.UnitSelection
 import d3.d3_wrapper
-import ltd2.Build
-import ltd2.UnitState
 import kotlinx.html.id
+import ltd2.Build
 import ltd2.UnitDef
+import ltd2.UnitState
 import react.RBuilder
 import react.dom.a
 import react.dom.div

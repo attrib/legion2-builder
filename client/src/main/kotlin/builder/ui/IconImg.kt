@@ -8,7 +8,7 @@ import react.dom.img
 fun RBuilder.IconImg(iconPath: String, title: String, width: Int? = null, height: Int? = null) {
     val path = LegionTD2Builder.iconsPath + iconPath.replace("Splashes/", "").replace("Icons/", "")
     img(title, path) {
-        attrs.title = "Recall"
+        attrs.title = title
         if (width != null) {
             attrs.width = width.toString() + "px"
         }

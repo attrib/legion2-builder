@@ -1,9 +1,10 @@
 package index
 
-import app.*
+import app.app
 import kotlinext.js.*
-import react.dom.*
-import kotlin.browser.*
+import react.dom.render
+import kotlin.browser.document
+import kotlin.browser.window
 
 @JsModule("lz-string")
 external object LZString {

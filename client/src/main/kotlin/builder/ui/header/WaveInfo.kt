@@ -1,11 +1,11 @@
 package builder.ui.header
 
 import app.format
-import ltd2.UnitDef
-import ltd2.Resistance
 import builder.ui.dpsUi
 import builder.ui.hpUi
 import kotlinx.html.js.onClickFunction
+import ltd2.Resistance
+import ltd2.UnitDef
 import react.RBuilder
 import react.dom.button
 import react.dom.div

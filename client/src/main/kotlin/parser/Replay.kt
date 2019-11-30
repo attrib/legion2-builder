@@ -156,6 +156,9 @@ class Replay(val logFile: LogFile) {
         return snapshot.entities.map {
             val hp = it.attributes["Hp"]!!.toDouble()
             val maxHp = it.attributes["Max Hp"]!!.toDouble()
+            if (!LegionData.unitsMap.containsKey(it.attributes["Type"])) {
+                println("Missing unit data for ${it.attributes["Type"]}")
+            }
             val unitDef = LegionData.unitsMap[it.attributes["Type"]!!]!!
             val value = unitDef.totalValue
             value * hp / maxHp

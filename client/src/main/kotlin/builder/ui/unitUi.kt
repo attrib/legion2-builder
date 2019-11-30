@@ -1,15 +1,14 @@
 package builder.ui
 
 import app.format
-import ltd2.UnitClass
-import ltd2.UnitDef
 import kotlinext.js.invoke
 import kotlinx.html.classes
 import kotlinx.html.js.onClickFunction
+import ltd2.UnitClass
+import ltd2.UnitDef
 import react.RBuilder
 import react.dom.div
 import react.dom.h4
-import react.dom.img
 import react.dom.p
 
 fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit, additionalClasses: String? = null) {
@@ -22,7 +21,7 @@ fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit, additionalClasses: Stri
         attrs.onClickFunction = {
             callback()
         }
-        IconImg( unit.iconPath, unit.id, 64, 64)
+        IconImg( unit.iconPath, unit.name, 64, 64)
         div("tooltip-data") {
             h4 { +unit.name }
             p {
