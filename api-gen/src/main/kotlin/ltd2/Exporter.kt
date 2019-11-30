@@ -27,7 +27,7 @@ fun value2String(type:KType, value:Any?) : String {
         return "null"
     }
     return when(stype) {
-        "String"-> if( value!=null ) "\"$value\"" else "\"\""
+        "String"-> if( value!=null ) "\"${value.toString().replace("\"", "\\\"")}\"" else "\"\""
         "AttackMode"-> if( value!=null ) "AttackMode.$value" else "AttackMode.Illegal"
         "ArmorType"-> if( value!=null ) "ArmorType.$value" else "ArmorType.Illegal"
         "AttackType"-> if( value!=null ) "AttackType.$value" else "AttackType.Illegal"
