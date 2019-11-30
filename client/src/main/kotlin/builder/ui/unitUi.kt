@@ -22,7 +22,7 @@ fun RBuilder.unitUi(unit: UnitDef, callback: () -> Unit, additionalClasses: Stri
         attrs.onClickFunction = {
             callback()
         }
-        IconImg( unit.iconPath, unit.id, 64, 64)
+        IconImg( unit.iconPath, unit.name, 64, 64)
         div("tooltip-data") {
             h4 { +unit.name }
             p {

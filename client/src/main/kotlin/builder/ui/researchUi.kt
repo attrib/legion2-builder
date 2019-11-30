@@ -20,7 +20,7 @@ fun RBuilder.researchUi(researchDef: ResearchDef, callback: () -> Unit, addition
         attrs.onClickFunction = {
             callback()
         }
-        IconImg( researchDef.iconPath, researchDef.id, 64, 64)
+        IconImg( researchDef.iconPath, researchDef.name, 64, 64)
         div("tooltip-data") {
             h4 { +researchDef.name }
             p {
