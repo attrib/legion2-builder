@@ -1,10 +1,10 @@
 package builder.ui.tab
 
 import builder.data.UnitSelection
-import ltd2.Build
-import ltd2.LegionData
 import builder.ui.unitList
 import kotlinx.html.js.onClickFunction
+import ltd2.Build
+import ltd2.LegionData
 import react.RBuilder
 import react.dom.*
 

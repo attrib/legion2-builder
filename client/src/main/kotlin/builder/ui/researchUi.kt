@@ -7,7 +7,6 @@ import ltd2.ResearchDef
 import react.RBuilder
 import react.dom.div
 import react.dom.h4
-import react.dom.img
 import react.dom.p
 
 fun RBuilder.researchUi(researchDef: ResearchDef, callback: () -> Unit, additionalClasses: String? = null, upgradeLevel: Int = 0) {

@@ -1,12 +1,10 @@
 package builder.ui
 
 import app.format
-import ltd2.Resistance
 import kotlinext.js.invoke
-import kotlinx.html.title
+import ltd2.Resistance
 import react.RBuilder
 import react.dom.div
-import react.dom.img
 
 fun RBuilder.dpsUi(resistence: Resistance) {
     div("tooltip-data") {

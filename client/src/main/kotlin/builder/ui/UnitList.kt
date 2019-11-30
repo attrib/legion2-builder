@@ -1,7 +1,10 @@
 package builder.ui
 
 import builder.data.UnitSelection
-import ltd2.*
+import ltd2.Research
+import ltd2.ResearchDef
+import ltd2.UnitDef
+import ltd2.UnitState
 import react.RBuilder
 import react.dom.li
 import react.dom.ul
