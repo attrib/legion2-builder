@@ -324,5 +324,7 @@ wget https://beta.legiontd2.com/images/textures/Icons/SamuraiSoul.png
 wget https://beta.legiontd2.com/images/textures/Icons/Yozora.png
 wget https://beta.legiontd2.com/images/textures/Icons/Arctaire.png
 wget https://beta.legiontd2.com/images/textures/Icons/UpgradeSupply.png
-git checkout Undeploy.png Recall.png button\ active.png
+wget https://beta.legiontd2.com/images/textures/Icons/Undeploy.png
+wget https://beta.legiontd2.com/images/textures/Icons/Recall.png
+git checkout button\ active.png
 cd -
