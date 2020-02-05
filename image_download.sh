@@ -90,10 +90,6 @@ wget https://beta.legiontd2.com/images/textures/Icons/ThickHide.png
 wget https://beta.legiontd2.com/images/textures/Icons/EliteFisherman.png
 wget https://beta.legiontd2.com/images/textures/Icons/Vampire.png
 wget https://beta.legiontd2.com/images/textures/Icons/Vampirism.png
-wget https://beta.legiontd2.com/images/textures/Icons/Sorcerer%28ManaRegen%29.png
-wget https://beta.legiontd2.com/images/textures/Icons/Sorcerer%28SpellDamage%29.png
-wget https://beta.legiontd2.com/images/textures/Icons/Sorcery%28ManaRegen%29.png
-wget https://beta.legiontd2.com/images/textures/Icons/Sorcery%28SpellDamage%29.png
 wget https://beta.legiontd2.com/images/textures/Icons/Invulnerable.png
 wget https://beta.legiontd2.com/images/textures/Icons/Incubation.png
 wget https://beta.legiontd2.com/images/textures/Icons/PrematurelyHatched.png
