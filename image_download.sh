@@ -135,6 +135,7 @@ wget https://beta.legiontd2.com/images/textures/Icons/WintryTouch.png
 wget https://beta.legiontd2.com/images/textures/Icons/FrozenVeil.png
 wget https://beta.legiontd2.com/images/textures/Icons/NimbleFeet.png
 wget https://beta.legiontd2.com/images/textures/Icons/BloodPrice.png
+wget https://beta.legiontd2.com/images/textures/Icons/UnchainedRage.png
 wget https://beta.legiontd2.com/images/textures/Icons/Element.png
 wget https://beta.legiontd2.com/images/textures/Icons/Forsaken.png
 wget https://beta.legiontd2.com/images/textures/Icons/Grove.png
@@ -144,6 +145,7 @@ wget https://beta.legiontd2.com/images/textures/Icons/Atlantean.png
 wget https://beta.legiontd2.com/images/textures/Icons/Mastermind.png
 wget https://beta.legiontd2.com/images/textures/Icons/Nomad.png
 wget https://beta.legiontd2.com/images/textures/Icons/Shrine.png
+wget https://beta.legiontd2.com/images/textures/Icons/Divine.png
 wget https://beta.legiontd2.com/images/textures/Icons/Proton.png
 wget https://beta.legiontd2.com/images/textures/Icons/Atom.png
 wget https://beta.legiontd2.com/images/textures/Icons/AquaSpirit.png
@@ -326,6 +328,8 @@ wget https://beta.legiontd2.com/images/textures/Icons/Hellion.png
 wget https://beta.legiontd2.com/images/textures/Icons/EliteHellion.png
 wget https://beta.legiontd2.com/images/textures/Icons/Nightcrawler.png
 wget https://beta.legiontd2.com/images/textures/Icons/EliteNightcrawler.png
+wget https://beta.legiontd2.com/images/textures/Icons/ChainedFist.png
+wget https://beta.legiontd2.com/images/textures/Icons/Oathbreaker.png
 wget https://beta.legiontd2.com/images/textures/Icons/UpgradeSupply.png
 wget https://beta.legiontd2.com/images/textures/Icons/Undeploy.png
 wget https://beta.legiontd2.com/images/textures/Icons/Recall.png
